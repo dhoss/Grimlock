@@ -17,6 +17,21 @@ requires 'Moose';
 requires 'namespace::autoclean';
 requires 'Config::General'; # This should reflect the config file format you've chosen
                  # See Catalyst::Plugin::ConfigLoader for supported formats
+requires 'Bread::Board';
+requires 'DBIx::Class';
+requires 'Catalyst::Controller::REST';
+requires 'Data::Manager';
+requires 'Catalyst::Plugin::MessageStack';
+requires 'Catalyst::Model::DBIC::Schema';
+requires 'DBIx::Class::DeploymentHandler';
+requires 'Catalyst::View::TT';
+requires 'Catalyst::View::JSON';
+requires 'Catalyst::Plugin::I18N';
+requires 'Catalyst::Plugin::Authentication';
+requires 'Catalyst::Plugin::Session';
+requires 'Catalyst::Plugin::Session::Store::DBIx::Class';
+requires 'Catalyst::Plugin::Session:State::Cookie';
+
 test_requires 'Test::More' => '0.88';
 catalyst;
 
