@@ -28,9 +28,11 @@ requires 'Catalyst::View::TT';
 requires 'Catalyst::View::JSON';
 requires 'Catalyst::Plugin::I18N';
 requires 'Catalyst::Plugin::Authentication';
+requires 'Catalyst::Plugin::Authorization::Roles';
+requires 'Catalyst::Authentication::Store::DBIx::Class';
 requires 'Catalyst::Plugin::Session';
-requires 'Catalyst::Plugin::Session::Store::DBIx::Class';
-requires 'Catalyst::Plugin::Session:State::Cookie';
+requires 'Catalyst::Plugin::Session::Store::DBIC';
+requires 'Catalyst::Plugin::Session::State::Cookie';
 
 test_requires 'Test::More' => '0.88';
 catalyst;
