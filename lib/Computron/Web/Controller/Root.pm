@@ -29,8 +29,6 @@ The root page (/)
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    # Hello World
-    $c->response->body( $c->welcome_message );
 }
 
 =head2 default
@@ -56,6 +54,8 @@ sub end : ActionClass('RenderView') {}
 =head1 AUTHOR
 
 Devin Austin
+
+L<mailto:dhoss@cpan.org>
 
 =head1 LICENSE
 
