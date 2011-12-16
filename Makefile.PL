@@ -35,6 +35,7 @@ requires 'Catalyst::Plugin::Session::Store::DBIC';
 requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Catalyst::View::TT::Bootstrap';
 requires 'DBIx::Class::Candy';
+requires 'DBIx::Class::EncodedColumn::Crypt::Eksblowfish::Bcrypt';
 test_requires 'Test::More' => '0.88';
 catalyst;
 
