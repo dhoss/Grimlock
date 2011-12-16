@@ -34,6 +34,7 @@ requires 'Catalyst::Plugin::Session';
 requires 'Catalyst::Plugin::Session::Store::DBIC';
 requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Catalyst::View::TT::Bootstrap';
+requires 'DBIx::Class::Candy';
 test_requires 'Test::More' => '0.88';
 catalyst;
 
