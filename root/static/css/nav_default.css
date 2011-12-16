@@ -1,0 +1,33 @@
+/* Define the style for the default site navigation here */
+#nav {
+    width: 750px;
+    margin: 0 auto 1.2em;
+    border-bottom: 1px solid #4d3c4b;
+    overflow: hidden;
+}   
+#nav li {
+    float: left;
+    margin-right: -10px;
+}   
+#nav li a {
+    display: block;
+    background: url(../images/catalyst_logo.png) no-repeat right top;
+    padding-right: 25px;
+    color: #900;
+    font: bold small-caps 120% Trebuchet MS, Arial Black, Arial, sans-serif;
+}
+#nav li a span {
+    display: block;
+    background: url(../images/catalyst_logo.png) no-repeat -10px 0;
+    padding: 25px 0 .2em 15px;
+}
+#nav li.active a {
+    background-position: -10px 0;
+    padding: 0 0 0 15px;
+    color: #555;
+    text-decoration: none;
+}
+#nav li.active a span {
+    background-position: right top;
+    padding: 25px 25px .2em 0;
+}

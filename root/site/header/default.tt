@@ -1,0 +1,7 @@
+<p>Your masthead here</p>
+
+[% # Include the navigation
+IF page.nav && page.nav != 'none';
+    PROCESS "site/nav/${page.nav}.tt";
+END;
+~%]

@@ -33,7 +33,7 @@ requires 'Catalyst::Authentication::Store::DBIx::Class';
 requires 'Catalyst::Plugin::Session';
 requires 'Catalyst::Plugin::Session::Store::DBIC';
 requires 'Catalyst::Plugin::Session::State::Cookie';
-
+requires 'Catalyst::View::TT::Bootstrap';
 test_requires 'Test::More' => '0.88';
 catalyst;
 
