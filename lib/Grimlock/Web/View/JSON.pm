@@ -1,15 +1,15 @@
-package Computron::Web::View::JSON;
+package Grimlock::Web::View::JSON;
 
 use strict;
 use base 'Catalyst::View::JSON';
 
 =head1 NAME
 
-Computron::Web::View::JSON - Catalyst JSON View
+Grimlock::Web::View::JSON - Catalyst JSON View
 
 =head1 SYNOPSIS
 
-See L<Computron::Web>
+See L<Grimlock::Web>
 
 =head1 DESCRIPTION
 

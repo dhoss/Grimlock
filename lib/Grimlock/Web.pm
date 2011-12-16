@@ -1,4 +1,4 @@
-package Computron::Web;
+package Grimlock::Web;
 use Moose;
 use namespace::autoclean;
 
@@ -36,7 +36,7 @@ our $VERSION = '0.01';
 # local deployment.
 
 __PACKAGE__->config(
-    name => 'Computron::Web',
+    name => 'Grimlock::Web',
     # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
 );
@@ -47,7 +47,7 @@ __PACKAGE__->setup();
 
 =head1 NAME
 
-Computron::Web - Catalyst based application
+Grimlock::Web - Catalyst based application
 
 =head1 SYNOPSIS
 
@@ -59,7 +59,7 @@ Computron::Web - Catalyst based application
 
 =head1 SEE ALSO
 
-L<Computron::Web::Controller::Root>, L<Catalyst>
+L<Grimlock::Web::Controller::Root>, L<Catalyst>
 
 =head1 AUTHOR
 

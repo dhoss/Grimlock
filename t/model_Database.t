@@ -3,6 +3,6 @@ use warnings;
 use Test::More;
 use Test::More;
 
-BEGIN { use_ok 'Computron::Web::Model::Database' }
+BEGIN { use_ok 'Grimlock::Web::Model::Database' }
 
 done_testing();

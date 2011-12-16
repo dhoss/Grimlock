@@ -1,4 +1,4 @@
-package Computron::Scheam::Result::User;
+package Grimlock::Scheam::Result::User;
 
 use SuiteSetup::Schema::Candy -components => [
   qw(

@@ -1,4 +1,4 @@
-package Computron::Web::Controller::Root;
+package Grimlock::Web::Controller::Root;
 use Moose;
 use namespace::autoclean;
 
@@ -12,7 +12,7 @@ __PACKAGE__->config(namespace => '');
 
 =head1 NAME
 
-Computron::Web::Controller::Root - Root Controller for Computron::Web
+Grimlock::Web::Controller::Root - Root Controller for Grimlock::Web
 
 =head1 DESCRIPTION
 

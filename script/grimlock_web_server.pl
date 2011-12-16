@@ -5,7 +5,7 @@ BEGIN {
 }
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('Computron::Web', 'Server');
+Catalyst::ScriptRunner->run('Grimlock::Web', 'Server');
 
 1;
 

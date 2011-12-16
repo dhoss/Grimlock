@@ -1,4 +1,4 @@
-package Computron::Schema::Result::Entry;
+package Grimlock::Schema::Result::Entry;
 
 use SuiteSetup::Schema::Candy -components => [
   qw(
@@ -45,7 +45,7 @@ column updated_at => {
   set_on_update => 1
 };
 
-belongs_to 'user' => 'Computron::Schema::Result::User', {
+belongs_to 'user' => 'Grimlock::Schema::Result::User', {
   'foreign.userid' => 'self.author',
 },
 {

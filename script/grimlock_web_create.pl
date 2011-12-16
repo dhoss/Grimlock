@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('Computron::Web', 'Create');
+Catalyst::ScriptRunner->run('Grimlock::Web', 'Create');
 
 1;
 

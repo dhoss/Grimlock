@@ -1,4 +1,4 @@
-package Computron::Web::View::HTML;
+package Grimlock::Web::View::HTML;
 
 use strict;
 use base 'Catalyst::View::TT';
@@ -23,11 +23,11 @@ sub template_vars {
 
 =head1 NAME
 
-Computron::Web::View::HTML - Catalyst TT::Bootstrap View
+Grimlock::Web::View::HTML - Catalyst TT::Bootstrap View
 
 =head1 SYNOPSIS
 
-See L<Computron::Web>
+See L<Grimlock::Web>
 
 =head1 DESCRIPTION
 

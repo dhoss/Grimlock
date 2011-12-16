@@ -1,4 +1,4 @@
-package Computron::Schema::Result::Role;
+package Grimlock::Schema::Result::Role;
 
 use SuiteSetup::Schema::Candy -components => [
   qw(
@@ -20,7 +20,7 @@ column name => {
   is_nullable => 0,
 };
 
-has_many 'user_roles' => 'Computron::Schema::Result::UserRole', {
+has_many 'user_roles' => 'Grimlock::Schema::Result::UserRole', {
   'foreign.role' => 'self.roleid',
 },
 {
