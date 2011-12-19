@@ -1,6 +1,6 @@
 package Grimlock::Schema::Result::Entry;
 
-use SuiteSetup::Schema::Candy -components => [
+use Grimlock::Schema::Candy -components => [
   qw(
       InflateColumn::DateTime
       TimeStamp
@@ -49,7 +49,8 @@ belongs_to 'user' => 'Grimlock::Schema::Result::User', {
   'foreign.userid' => 'self.author',
 },
 {
-  on_delete => "cascade"
+  on_delete => "cascade",
+  on_update => "cascade",
 };
 
 1;

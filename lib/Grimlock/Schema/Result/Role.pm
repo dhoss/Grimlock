@@ -1,6 +1,6 @@
 package Grimlock::Schema::Result::Role;
 
-use SuiteSetup::Schema::Candy -components => [
+use Grimlock::Schema::Candy -components => [
   qw(
       InflateColumn::DateTime
       TimeStamp
@@ -14,7 +14,7 @@ primary_column roleid => {
   is_nullable => 0,
 };
 
-column name => {
+unique_column name => {
   data_type => 'varchar',
   size => '50',
   is_nullable => 0,
@@ -22,9 +22,6 @@ column name => {
 
 has_many 'user_roles' => 'Grimlock::Schema::Result::UserRole', {
   'foreign.role' => 'self.roleid',
-},
-{
-  on_delete => "cascade",
 };
 
 1;
