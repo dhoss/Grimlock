@@ -36,6 +36,7 @@ requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Catalyst::View::TT::Bootstrap';
 requires 'DBIx::Class::Candy';
 requires 'DBIx::Class::EncodedColumn::Crypt::Eksblowfish::Bcrypt';
+requires 'DBIx::Class::Helper::Row::ToJSON';
 test_requires 'Test::More' => '0.88';
 catalyst;
 

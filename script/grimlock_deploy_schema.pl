@@ -11,7 +11,7 @@ use lib "$FindBin::Bin/../lib";
 use Grimlock::Schema;
 use Config::JFDI;
  
-my $config = Config::JFDI->new( name =>'Grimlock' );
+my $config = Config::JFDI->new( name =>'Grimlock::Web' );
 my $config_hash  = $config->get;
 my $connect_info = $config_hash->{"Model::Database"}{"connect_info"};
 my $schema       = Grimlock::Schema->connect($connect_info);
@@ -20,6 +20,7 @@ my $dh = DH->new({
   schema           => $schema,
   script_directory => "$FindBin::Bin/../dbicdh",
   databases        => 'PostgreSQL',
+  force_overwrite  => 1,
 });
  
 sub install {
