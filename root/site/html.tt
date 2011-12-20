@@ -3,11 +3,11 @@
 IF c.debug && debug_init.defined; $debug_init; END;
 
 IF page.header && page.header != 'none';
-    header = PROCESS "site/header/${page.header}.tt";
+    header = PROCESS "header/${page.header}.tt";
 END;
 
 IF page.footer && page.header != 'none';
-    footer = PROCESS "site/footer/${page.footer}.tt";
+    footer = PROCESS "footer/${page.footer}.tt";
 END;
 
 ~%]

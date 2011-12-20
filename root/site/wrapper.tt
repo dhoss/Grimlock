@@ -4,9 +4,9 @@ IF page.layout == 'partial';
     content;
 ELSE;
     IF page.layout == 'none';
-        content WRAPPER site/html.tt;
+        content WRAPPER html.tt;
     ELSE;
-        content WRAPPER site/html.tt + "site/layout/${page.layout}.tt";
+        content WRAPPER html.tt + "layout/${page.layout}.tt";
     END;
 END;
 ~%]

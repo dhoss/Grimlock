@@ -4,12 +4,16 @@ use strict;
 use base 'Catalyst::View::TT';
 
 __PACKAGE__->config({
-    PRE_PROCESS        => 'site/shared/base.tt',
-    WRAPPER            => 'site/wrapper.tt',
+    PRE_PROCESS        => 'shared/base.tt',
+    WRAPPER            => 'wrapper.tt',
     TEMPLATE_EXTENSION => '.tt',
+    INCLUDE_PATH       => [
+      Grimlock::Web->path_to('root','site')
+    ],
     TIMER              => 0,
     static_root        => '/static',
-    static_build       => 0
+    static_build       => 0,
+    render_die => 1
 });
 
 sub template_vars {
