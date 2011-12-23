@@ -6,6 +6,7 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller::REST' };
 
 __PACKAGE__->config(
+ 'default'          => 'text/html',
   map => {
     'text/html'        => [ 'View', 'HTML' ],
     'application/json' => [ 'View', 'JSON' ],

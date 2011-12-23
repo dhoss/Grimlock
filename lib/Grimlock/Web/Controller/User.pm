@@ -21,14 +21,25 @@ Catalyst Controller.
 
 =cut
 
-sub index  :Path :Args(0) {
+sub index : Path Args(0) {
   my ( $self, $c ) = @_;
   $c->res->redirect(
-    $c->uri_for_action('/user/login')
-  ) unless $c->user_exists;
+    $c->uri_for_action('/user/list')
+  );
+};
 
+sub list : Chained('/api/base') PathPart('users') Args(0) ActionClass('REST'){
+  my ( $self, $c ) = @_;
 }
 
+sub list_GET {
+  my ( $self, $c ) = @_;
+  $self->status_ok($c,
+    entity => {
+      users => [ $c->model('Database::User')->all ]
+    },
+  );
+}
 
 sub login  : Chained('/api/base') PathPart('user/login') Args(0) ActionClass('REST') {
 }
