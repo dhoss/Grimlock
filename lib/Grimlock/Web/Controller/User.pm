@@ -55,6 +55,29 @@ sub login_GET  {
   $c->stash( template => 'user/login.tt' );
 }
 
+sub create : Chained('/api/base') PathPart('user') Args(0) ActionClass('REST') {}
+
+sub create_GET {
+  my ( $self, $c ) = @_;
+  my $params = $c->req->data || $c->req->params;
+
+  my $user = $c->model('Database::User')->create({
+    name     => $params->{'name'},
+    password => $params->{'password'},
+    roles    => {
+      name => 'user'
+    },
+  });
+  
+  $self->status_created($c,
+    location => $c->req->uri->as_string,
+    entity => {
+      user => $user
+    }
+  );
+
+}
+
 =head1 AUTHOR
 
 Devin Austin

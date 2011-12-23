@@ -33,12 +33,12 @@ requires 'Catalyst::Authentication::Store::DBIx::Class';
 requires 'Catalyst::Plugin::Session';
 requires 'Catalyst::Plugin::Session::Store::DBIC';
 requires 'Catalyst::Plugin::Session::State::Cookie';
-requires 'Catalyst::View::TT::Bootstrap';
+requires 'Catalyst::View::TT';
 requires 'DBIx::Class::Candy';
 requires 'DBIx::Class::EncodedColumn::Crypt::Eksblowfish::Bcrypt';
 requires 'DBIx::Class::Helper::Row::ToJSON';
-requires 'MooseX::Method::Signatures';
 test_requires 'Test::More' => '0.88';
+test_requires 'Test::WWW::Mechanize::PSGI' => '0.35';
 catalyst;
 
 install_script glob('script/*.pl');
