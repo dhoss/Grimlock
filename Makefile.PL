@@ -18,7 +18,7 @@ requires 'namespace::autoclean';
 requires 'Config::General'; # This should reflect the config file format you've chosen
                  # See Catalyst::Plugin::ConfigLoader for supported formats
 requires 'Bread::Board';
-requires 'DBIx::Class';
+requires 'DBIx::Class' => '0.08196';
 requires 'Catalyst::Controller::REST';
 requires 'Data::Manager';
 requires 'Catalyst::Plugin::MessageStack';

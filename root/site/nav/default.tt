@@ -1,5 +1,5 @@
 <ul id="nav">
-    <li><a href="[% c.uri_for>action('/') %]"><span>Home</span></a></li>
+    <li><a href="[% c.uri_for_action('/index') %]"><span>Home</span></a></li>
     [%- UNLESS c.user_exists %]
     <li><a href="[% c.uri_for_action('/user/login') %]"><span>Login</span></a></li>
     <li><a href="[% c.uri_for_action('/entry/create') %]"><span>Create an entry</span></a></li>

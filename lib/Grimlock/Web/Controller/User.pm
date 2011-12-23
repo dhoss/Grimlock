@@ -1,6 +1,8 @@
 package Grimlock::Web::Controller::User;
 use Moose;
 use namespace::autoclean;
+use Try::Tiny;
+use Data::Dumper;
 
 BEGIN { extends 'Grimlock::Web::Controller::API' };
 
@@ -17,16 +19,6 @@ Catalyst Controller.
 =cut
 
 
-=head2 index
-
-=cut
-
-sub index : Path Args(0) {
-  my ( $self, $c ) = @_;
-  $c->res->redirect(
-    $c->uri_for_action('/user/list')
-  );
-};
 
 sub list : Chained('/api/base') PathPart('users') Args(0) ActionClass('REST'){
   my ( $self, $c ) = @_;
@@ -57,20 +49,28 @@ sub login_GET  {
 
 sub create : Chained('/api/base') PathPart('user') Args(0) ActionClass('REST') {}
 
-sub create_GET {
+sub create_POST {
   my ( $self, $c ) = @_;
-  my $params = $c->req->data || $c->req->params;
-
-  my $user = $c->model('Database::User')->create({
-    name     => $params->{'name'},
-    password => $params->{'password'},
-    roles    => {
-      name => 'user'
-    },
-  });
-  
+  my $params ||= $c->req->data || $c->req->params;
+  $c->log->debug("POST PARAMS " . Dumper $params );
+  my $user;
+  try {
+    $user = $c->model('Database::User')->create({
+      name     => $params->{'name'},
+      password => $params->{'password'},
+      user_roles    => [{
+        role => 'user'
+      }],
+    }) || die "Can't create user: $!";
+  } catch {
+    $self->status_bad_request($c,
+      message => $_
+    );
+  };
   $self->status_created($c,
-    location => $c->req->uri->as_string,
+    location => $c->uri_for_action('/user/read', [ 
+      $user->userid
+    ]),
     entity => {
       user => $user
     }
