@@ -2,6 +2,7 @@ package Grimlock::Web::View::HTML;
 
 use strict;
 use base 'Catalyst::View::TT';
+use Grimlock::Web;
 
 __PACKAGE__->config({
     PRE_PROCESS        => 'shared/base.tt',
