@@ -37,6 +37,7 @@ requires 'Catalyst::View::TT::Bootstrap';
 requires 'DBIx::Class::Candy';
 requires 'DBIx::Class::EncodedColumn::Crypt::Eksblowfish::Bcrypt';
 requires 'DBIx::Class::Helper::Row::ToJSON';
+requires 'MooseX::Method::Signatures';
 test_requires 'Test::More' => '0.88';
 catalyst;
 

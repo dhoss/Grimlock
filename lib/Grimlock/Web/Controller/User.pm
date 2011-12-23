@@ -2,16 +2,7 @@ package Grimlock::Web::Controller::User;
 use Moose;
 use namespace::autoclean;
 
-BEGIN {extends 'Catalyst::Controller::REST'; }
-
-## move me to a base controller
-
-__PACKAGE__->config(
-  map => {
-    'text/html' => [ 'View', 'HTML' ],
-    'application/json' => [ 'View', 'JSON' ],
-  }
-);
+BEGIN { extends 'Grimlock::Web::Controller::API' };
 
 =head1 NAME
 
@@ -30,20 +21,19 @@ Catalyst Controller.
 
 =cut
 
-sub index :Path :Args(0) {
-    my ( $self, $c ) = @_;
-    $c->res->redirect(
-      $c->uri_for_action('/user/login')
-    ) unless $c->user_exists;
-
-}
-
-
-sub login : Local ActionClass('REST') {
+sub index  :Path :Args(0) {
   my ( $self, $c ) = @_;
+  $c->res->redirect(
+    $c->uri_for_action('/user/login')
+  ) unless $c->user_exists;
+
 }
 
-sub login_GET {
+
+sub login  : Chained('/api/base') PathPart('user/login') Args(0) ActionClass('REST') {
+}
+
+sub login_GET  {
   my ( $self, $c ) = @_;
   return $self->status_ok({
     entity => {
