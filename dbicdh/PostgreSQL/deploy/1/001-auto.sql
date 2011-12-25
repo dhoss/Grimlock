@@ -1,6 +1,6 @@
 -- 
 -- Created by SQL::Translator::Producer::PostgreSQL
--- Created on Tue Dec 20 14:58:40 2011
+-- Created on Sat Dec 24 20:27:04 2011
 -- 
 ;
 --
@@ -11,6 +11,17 @@ CREATE TABLE "roles" (
   "name" character varying(50) NOT NULL,
   PRIMARY KEY ("roleid"),
   CONSTRAINT "roles_name" UNIQUE ("name")
+);
+
+;
+--
+-- Table: sessions
+--
+CREATE TABLE "sessions" (
+  "sessoinid" character(72) NOT NULL,
+  "session_data" text NOT NULL,
+  "expires" integer NOT NULL,
+  PRIMARY KEY ("sessoinid")
 );
 
 ;
@@ -47,11 +58,12 @@ CREATE INDEX "entries_idx_author" on "entries" ("author");
 -- Table: user_roles
 --
 CREATE TABLE "user_roles" (
-  "user" integer NOT NULL,
-  "role" integer NOT NULL
+  "userid" integer NOT NULL,
+  "roleid" integer NOT NULL,
+  PRIMARY KEY ("userid", "roleid")
 );
-CREATE INDEX "user_roles_idx_role" on "user_roles" ("role");
-CREATE INDEX "user_roles_idx_user" on "user_roles" ("user");
+CREATE INDEX "user_roles_idx_roleid" on "user_roles" ("roleid");
+CREATE INDEX "user_roles_idx_userid" on "user_roles" ("userid");
 
 ;
 --
@@ -63,10 +75,10 @@ ALTER TABLE "entries" ADD FOREIGN KEY ("author")
   REFERENCES "users" ("userid") ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE;
 
 ;
-ALTER TABLE "user_roles" ADD FOREIGN KEY ("role")
-  REFERENCES "roles" ("roleid") ON DELETE RESTRICT ON UPDATE CASCADE DEFERRABLE;
+ALTER TABLE "user_roles" ADD FOREIGN KEY ("roleid")
+  REFERENCES "roles" ("roleid") ON DELETE RESTRICT DEFERRABLE;
 
 ;
-ALTER TABLE "user_roles" ADD FOREIGN KEY ("user")
+ALTER TABLE "user_roles" ADD FOREIGN KEY ("userid")
   REFERENCES "users" ("userid") ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE;
 

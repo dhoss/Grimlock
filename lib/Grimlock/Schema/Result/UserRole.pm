@@ -8,18 +8,18 @@ use Grimlock::Schema::Candy -components => [
       )
 ];
 
-column user => {
+column userid => {
   data_type => 'int',
   is_nullable => 0,
 };
 
-column  role => {
+column  roleid => {
   data_type => 'int',
   is_nullable => 0,
 };
 
 belongs_to 'user' => 'Grimlock::Schema::Result::User', {
-  'foreign.userid' => 'self.user',
+  'foreign.userid' => 'self.userid',
 },
 {
   on_delete => 'cascade',
@@ -27,11 +27,13 @@ belongs_to 'user' => 'Grimlock::Schema::Result::User', {
 };
 
 belongs_to 'role' => 'Grimlock::Schema::Result::Role', {
-  'foreign.roleid' => 'self.role',
+  'foreign.roleid' => 'self.roleid',
 },
 {
   on_delete => 'restrict',
 };
+
+primary_key ("userid", "roleid");
 
 1;
 

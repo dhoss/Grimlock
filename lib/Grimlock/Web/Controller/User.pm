@@ -58,10 +58,10 @@ sub create_POST {
     $user = $c->model('Database::User')->create({
       name     => $params->{'name'},
       password => $params->{'password'},
-      user_roles    => [{
-        role => 'user'
-      }],
+    })->add_to_roles({
+      name => 'user'
     }) || die "Can't create user: $!";
+    
   } catch {
     $self->status_bad_request($c,
       message => $_

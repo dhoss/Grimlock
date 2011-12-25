@@ -86,6 +86,7 @@ translator:
         DBIx::Class::DeploymentHandler::VersionStorage::Standard::VersionResult: __VERSION
         Grimlock::Schema::Result::Entry: Entry
         Grimlock::Schema::Result::Role: Role
+        Grimlock::Schema::Result::Session: Session
         Grimlock::Schema::Result::User: User
         Grimlock::Schema::Result::UserRole: UserRole
       source_registrations:
@@ -158,7 +159,6 @@ translator:
           resultset_class: DBIx::Class::ResultSet
           schema: *1
           source_name: Entry
-          sqlt_deploy_callback: default_sqlt_deploy_hook
         Role: !!perl/hash:DBIx::Class::ResultSource::Table
           _columns:
             name:
@@ -196,7 +196,32 @@ translator:
           resultset_class: DBIx::Class::ResultSet
           schema: *1
           source_name: Role
-          sqlt_deploy_callback: default_sqlt_deploy_hook
+        Session: !!perl/hash:DBIx::Class::ResultSource::Table
+          _columns:
+            expires:
+              data_type: int
+            session_data:
+              data_type: text
+            sessoinid:
+              data_type: char
+              is_nullable: 0
+              size: 72
+          _columns_info_loaded: 0
+          _ordered_columns:
+            - sessoinid
+            - session_data
+            - expires
+          _primaries: &4
+            - sessoinid
+          _relationships: {}
+          _unique_constraints:
+            primary: *4
+          name: sessions
+          result_class: Grimlock::Schema::Result::Session
+          resultset_attributes: {}
+          resultset_class: DBIx::Class::ResultSet
+          schema: *1
+          source_name: Session
         User: !!perl/hash:DBIx::Class::ResultSource::Table
           _columns:
             created_at:
@@ -241,7 +266,7 @@ translator:
             - password
             - created_at
             - updated_at
-          _primaries: &4
+          _primaries: &5
             - userid
           _relationships:
             entries:
@@ -265,7 +290,7 @@ translator:
                 foreign.user: self.userid
               source: Grimlock::Schema::Result::UserRole
           _unique_constraints:
-            primary: *4
+            primary: *5
             users_name:
               - name
           name: users
@@ -274,54 +299,55 @@ translator:
           resultset_class: DBIx::Class::ResultSet
           schema: *1
           source_name: User
-          sqlt_deploy_callback: default_sqlt_deploy_hook
         UserRole: !!perl/hash:DBIx::Class::ResultSource::Table
           _columns:
-            role:
-              _inflate_info:
-                deflate: !!perl/code '{ "DUMMY" }'
-                inflate: !!perl/code '{ "DUMMY" }'
+            roleid:
               data_type: int
               is_nullable: 0
-            user:
-              _inflate_info:
-                deflate: !!perl/code '{ "DUMMY" }'
-                inflate: !!perl/code '{ "DUMMY" }'
+            userid:
               data_type: int
               is_nullable: 0
           _columns_info_loaded: 0
           _ordered_columns:
-            - user
-            - role
+            - userid
+            - roleid
+          _primaries: &6
+            - userid
+            - roleid
           _relationships:
             role:
               attrs:
-                accessor: filter
+                accessor: single
+                fk_columns:
+                  roleid: 1
                 is_foreign_key_constraint: 1
                 on_delete: restrict
                 undef_on_null_fk: 1
               class: Grimlock::Schema::Result::Role
               cond:
-                foreign.roleid: self.role
+                foreign.roleid: self.roleid
               source: Grimlock::Schema::Result::Role
             user:
               attrs:
-                accessor: filter
+                accessor: single
+                fk_columns:
+                  userid: 1
                 is_foreign_key_constraint: 1
                 on_delete: cascade
                 on_update: cascade
                 undef_on_null_fk: 1
               class: Grimlock::Schema::Result::User
               cond:
-                foreign.userid: self.user
+                foreign.userid: self.userid
               source: Grimlock::Schema::Result::User
+          _unique_constraints:
+            primary: *6
           name: user_roles
           result_class: Grimlock::Schema::Result::UserRole
           resultset_attributes: {}
           resultset_class: DBIx::Class::ResultSet
           schema: *1
           source_name: UserRole
-          sqlt_deploy_callback: default_sqlt_deploy_hook
         __VERSION: !!perl/hash:DBIx::Class::ResultSource::Table
           _columns:
             ddl:
@@ -342,20 +368,19 @@ translator:
             - version
             - ddl
             - upgrade_sql
-          _primaries: &5
+          _primaries: &7
             - id
           _relationships: {}
           _unique_constraints:
             dbix_class_deploymenthandler_versions_version:
               - version
-            primary: *5
+            primary: *7
           name: dbix_class_deploymenthandler_versions
           result_class: DBIx::Class::DeploymentHandler::VersionStorage::Standard::VersionResult
           resultset_attributes: {}
           resultset_class: DBIx::Class::DeploymentHandler::VersionStorage::Standard::VersionResultSet
           schema: *1
           source_name: __VERSION
-          sqlt_deploy_callback: default_sqlt_deploy_hook
       storage: !!perl/hash:DBIx::Class::Storage::DBI
         _connect_info:
           - AutoCommit: 1
@@ -369,16 +394,16 @@ translator:
           - dbi:Pg:dbname=grimlock;port=5433
           - grimlock
           - lairdo
-          - &6
+          - &8
             AutoCommit: 1
             PrintError: 0
             RaiseError: 1
             ShowErrorStatement: 1
-            quote_names: 1
-        _dbic_connect_attributes: *6
-        _in_dbh_do: 0
+        _dbic_connect_attributes: *8
+        _in_do_block: 0
         _sql_maker: ~
-        _sql_maker_opts: {}
+        _sql_maker_opts:
+          quote_names: 1
         savepoints: []
         schema: *1
         transaction_depth: 0
