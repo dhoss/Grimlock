@@ -65,4 +65,15 @@ sub insert {
 
   return $self;
 }
+
+sub has_role {
+  my ( $self, $role ) = @_;
+  return $self->user_roles->search_related('role',
+    {
+      name => $role
+    }
+  )->count;
+}
+
+
 1;
