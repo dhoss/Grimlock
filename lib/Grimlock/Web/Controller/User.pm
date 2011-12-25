@@ -55,28 +55,52 @@ sub create_POST {
   $c->log->debug("POST PARAMS " . Dumper $params );
   my $user;
   try {
+
     $user = $c->model('Database::User')->create({
       name     => $params->{'name'},
       password => $params->{'password'},
-    })->add_to_roles({
-      name => 'user'
     }) || die "Can't create user: $!";
     
+    $self->status_created($c,
+      location => $c->uri_for_action('/user/read', [ 
+        $user->userid
+      ]),
+      entity => {
+        user => $user
+      }
+    );
+ 
   } catch {
+
     $self->status_bad_request($c,
       message => $_
     );
+ 
   };
-  $self->status_created($c,
-    location => $c->uri_for_action('/user/read', [ 
-      $user->userid
-    ]),
-    entity => {
-      user => $user
-    }
-  );
-
+ 
 }
+
+sub read : Chained('/api/base') PathPart('') Args(1) {
+  my ( $self, $c, $userid ) = @_;
+  my $user = $c->model('Database::User')->find($userid);
+  $c->stash( user => $user );
+}
+
+sub read_GET {
+  my ( $self, $c ) = @_;
+
+  if ( my $user = $c->stash->{'user'} ) {
+    return $self->status_ok($c, 
+      entity => {
+        user => $user
+      }
+    );
+  }
+  return $self->status_bad_request($c,
+    message => "Can't find user with that id"
+  );
+}
+
 
 =head1 AUTHOR
 

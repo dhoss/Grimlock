@@ -8,6 +8,8 @@ use Grimlock::Schema::Candy -components => [
       )
 ];
 
+resultset_class 'Grimlock::Schema::ResultSet::User';
+
 primary_column userid => {
   data_type => 'bigserial',
   is_auto_increment => 1,
@@ -48,10 +50,19 @@ has_many 'entries' => 'Grimlock::Schema::Result::Entry', {
 };
 
 has_many 'user_roles' => 'Grimlock::Schema::Result::UserRole', {
-  'foreign.user' => 'self.userid'
+  'foreign.userid' => 'self.userid'
 };
 
 many_to_many 'roles' => 'user_roles', 'role';
 
+sub insert {
+  my ( $self, @args ) = @_;
+  
+  my $guard = $self->result_source->schema->txn_scope_guard;
+  $self->next::method(@args);
+  $self->add_to_roles({ name => "user" });
+  $guard->commit;
 
+  return $self;
+}
 1;
