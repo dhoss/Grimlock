@@ -24,6 +24,6 @@ my $res = $mech->post('/user',
   }
 );
 ok $res->is_success;
-
+$mech->get_ok('/user/1');
 $mech->get_ok('/users' );
 done_testing();

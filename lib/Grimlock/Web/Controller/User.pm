@@ -80,7 +80,7 @@ sub create_POST {
  
 }
 
-sub read : Chained('/api/base') PathPart('') Args(1) {
+sub read : Chained('/api/base') PathPart('user') Args(1) {
   my ( $self, $c, $userid ) = @_;
   my $user = $c->model('Database::User')->find($userid);
   $c->stash( user => $user );
