@@ -18,9 +18,15 @@ Catalyst Controller.
 
 =cut
 
+sub base : Chained('/api/base') PathPart('') CaptureArgs(0) {}
 
+sub load_user : Chained('base') PathPart('user') CaptureArgs(1) {
+  my ( $self, $c, $userid ) = @_;
+  my $user = $c->model('Database::User')->find($userid);
+  $c->stash( user => $user );
+}
 
-sub list : Chained('/api/base') PathPart('users') Args(0) ActionClass('REST'){
+sub list : Chained('base') PathPart('users') Args(0) ActionClass('REST'){
   my ( $self, $c ) = @_;
 }
 
@@ -33,7 +39,7 @@ sub list_GET {
   );
 }
 
-sub login  : Chained('/api/base') PathPart('user/login') Args(0) ActionClass('REST') {
+sub login  : Chained('base') PathPart('login') Args(0) ActionClass('REST') {
 }
 
 sub login_GET  {
@@ -47,7 +53,7 @@ sub login_GET  {
   $c->stash( template => 'user/login.tt' );
 }
 
-sub create : Chained('/api/base') PathPart('user') Args(0) ActionClass('REST') {}
+sub create : Chained('base') PathPart('user') Args(0) ActionClass('REST') {}
 
 sub create_POST {
   my ( $self, $c ) = @_;
@@ -62,7 +68,7 @@ sub create_POST {
     }) || die "Can't create user: $!";
     
     $self->status_created($c,
-      location => $c->uri_for_action('/user/read', [ 
+      location => $c->uri_for_action('/user/browse', [ 
         $user->userid
       ]),
       entity => {
@@ -80,27 +86,55 @@ sub create_POST {
  
 }
 
-sub read : Chained('/api/base') PathPart('user') Args(1) {
-  my ( $self, $c, $userid ) = @_;
-  my $user = $c->model('Database::User')->find($userid);
-  $c->stash( user => $user );
-}
-
-sub read_GET {
+sub browse : Chained('load_user') PathPart('') Args(0) ActionClass('REST') {
   my ( $self, $c ) = @_;
-
-  if ( my $user = $c->stash->{'user'} ) {
-    return $self->status_ok($c, 
-      entity => {
-        user => $user
-      }
+  if ( !( my $user = $c->stash->{'user'} ) ) {
+    return $self->status_bad_request($c,
+      message => "Can't find user with that id"
     );
   }
-  return $self->status_bad_request($c,
-    message => "Can't find user with that id"
+
+}
+
+sub browse_GET {
+  my ( $self, $c ) = @_;
+  my $user => $c->stash->{'user'};  
+  return $self->status_ok($c, 
+    entity => {
+      user => $user
+    }
   );
 }
 
+
+sub browse_PUT {
+  my ( $self, $c ) = @_;
+  my $user = $c->stash->{'user'};
+  $c->log->debug("INSIDE UPDATE PUT");
+  try { 
+    my $params ||= $c->req->data || $c->req->params;
+    $c->log->debug("PARAMS : " . Dumper $params);
+    my @columns = $user->columns;
+     
+    for my $column ( @columns ) {
+      for my $key ( keys %{ $params } ) {  
+        if ( defined $params->{$column} ) {
+          $user->$column($params->{$key});
+        }
+      }
+    }
+    $user->update || die $!;
+    $self->status_ok($c, 
+      entity => {
+        user => $user 
+      }
+    );
+  } catch {
+    $self->status_bad_request($c, 
+      message => $_
+    );
+  };
+}
 
 =head1 AUTHOR
 
