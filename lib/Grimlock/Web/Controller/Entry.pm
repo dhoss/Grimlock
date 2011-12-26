@@ -32,6 +32,7 @@ sub create : Chained('/api/base') PathPart('entry') Args(0) {}
 
 sub create_GET {
   my ( $self, $c ) = @_;
+ 
   $self->status_ok({
     $c, entity => {}
   });
@@ -39,6 +40,7 @@ sub create_GET {
 
 sub create_POST { 
   my ( $self, $c ) = @_;
+   
   my $params = $c->req->data || $c->req->params;
   my $user = $c->user->obj;
   my $entry = $user->create_related('entries', {
