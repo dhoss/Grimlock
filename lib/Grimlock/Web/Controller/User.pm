@@ -39,7 +39,7 @@ sub list_GET {
   );
 }
 
-sub login  : Chained('base') PathPart('login') Args(0) ActionClass('REST') {
+sub login  : Chained('base') PathPart('user/login') Args(0) ActionClass('REST') {
 }
 
 sub login_GET  {
@@ -51,6 +51,28 @@ sub login_GET  {
   }) if $c->user_exists;
   
   $c->stash( template => 'user/login.tt' );
+}
+
+sub login_POST {
+  my ( $self, $c ) = @_;
+  my $params ||= $c->req->data || $c->req->params;
+
+  if ( $c->authenticate({ 
+        name => $params->{'name'},
+        password => $params->{'password'}
+      })
+  ) {
+        return $self->status_ok($c,
+          location => $c->req->referer->as_string,
+          entity => {
+            message => "Logged in successfully"
+          }
+        );
+  }
+  
+  return $self->status_bad_request($c,
+    message => "incorrect username/password"
+  );
 }
 
 sub create : Chained('base') PathPart('user') Args(0) ActionClass('REST') {}
@@ -110,10 +132,11 @@ sub browse_GET {
 sub browse_PUT {
   my ( $self, $c ) = @_;
   my $user = $c->stash->{'user'};
-  $c->log->debug("INSIDE UPDATE PUT");
+  return $self->status_bad_request($c, 
+    message => "You don't have permission to modify this user"
+  ) unless $user->has_role('admin') || ( $user->userid == $c->user->obj->userid );
   try { 
     my $params ||= $c->req->data || $c->req->params;
-    $c->log->debug("PARAMS : " . Dumper $params);
     my @columns = $user->columns;
      
     for my $column ( @columns ) {

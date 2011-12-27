@@ -5,6 +5,7 @@ use Grimlock::Schema::Candy -components => [
       InflateColumn::DateTime
       TimeStamp
       Helper::Row::ToJSON
+      EncodedColumn
       )
 ];
 

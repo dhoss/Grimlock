@@ -16,7 +16,10 @@ BEGIN { $ENV{'CATALYST_WEB_CONFIG_LOCAL_SUFFIX'} = 'test' };
 fixtures_ok 'basic'
   => 'installed the basic fixtures from configuration files';
 
-my $mech = Test::WWW::Mechanize::PSGI->new( app =>  Grimlock::Web->psgi_app(@_)  );
+my $mech = Test::WWW::Mechanize::PSGI->new( 
+  app =>  Grimlock::Web->psgi_app(@_),
+  cookie_jar => {}
+);
 
 my $res = $mech->post('/user', 
   Content_Type => 'application/x-www-form-urlencoded',
@@ -28,6 +31,21 @@ my $res = $mech->post('/user',
 ok $res->is_success;
 $mech->get_ok('/user/2');
 $mech->get_ok('/users' );
+ok !($mech->put( '/user/2',
+  Content_Type => 'application/x-www-form-urlencoded',
+  Content => 'name=fartnuts'  
+)->is_success), "should fail since we aren't logged in";
+
+$mech->post('/user/login',
+  Content_Type => 'application/x-www-form-urlencoded',
+  Content => {
+    name => 'herpy',
+    password => 'derp'
+  }
+);
+
+ok $mech->success, "login works";
+
 ok $mech->put( '/user/2',
   Content_Type => 'application/x-www-form-urlencoded',
   Content => 'name=fartnuts'  
