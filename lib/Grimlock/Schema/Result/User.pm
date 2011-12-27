@@ -25,11 +25,11 @@ unique_column name => {
 
 column password => {
   data_type => 'char',
-  size => 59,
+  size => 60,
   is_nullable => 0,
   encode_column => 1,
   encode_class  => 'Crypt::Eksblowfish::Bcrypt',
-  encode_args   => { key_nul => 0, cost => 8 },
+  encode_args   => { key_nul => 1, cost => 8 },
   encode_check_method => 'check_password',
 };
 

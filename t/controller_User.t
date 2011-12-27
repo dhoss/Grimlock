@@ -29,9 +29,10 @@ my $res = $mech->post('/user',
   }
 );
 ok $res->is_success;
-$mech->get_ok('/user/2');
+$mech->get_ok('/user/1');
+diag $mech->content;
 $mech->get_ok('/users' );
-ok !($mech->put( '/user/2',
+ok !($mech->put( '/user/1',
   Content_Type => 'application/x-www-form-urlencoded',
   Content => 'name=fartnuts'  
 )->is_success), "should fail since we aren't logged in";
@@ -46,11 +47,11 @@ $mech->post('/user/login',
 
 ok $mech->success, "login works";
 
-ok $mech->put( '/user/2',
+ok $mech->put( '/user/1',
   Content_Type => 'application/x-www-form-urlencoded',
   Content => 'name=fartnuts'  
 )->is_success;
 
-$mech->get_ok('/user/2');
+$mech->get_ok('/user/1');
 $mech->content_contains("fartnuts");
 done_testing();

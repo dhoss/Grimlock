@@ -10,14 +10,6 @@
   ],
   'fixture_sets' => {
     'basic' => [
-      'User' => [
-        [
-          'name', 'password'
-        ],
-        [ 
-          'herp', 'derp'
-        ]
-      ]
     ]
   }
 };
