@@ -56,14 +56,13 @@ sub login_GET  {
 sub login_POST {
   my ( $self, $c ) = @_;
   my $params ||= $c->req->data || $c->req->params;
-
   if ( $c->authenticate({ 
         name => $params->{'name'},
         password => $params->{'password'}
       })
   ) {
         return $self->status_ok($c,
-          location => $c->req->referer->as_string,
+          location => $c->req->uri->as_string,
           entity => {
             message => "Logged in successfully"
           }
