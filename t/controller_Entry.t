@@ -21,4 +21,16 @@ my $mech = Test::WWW::Mechanize::PSGI->new(
   cookie_jar => {}
 );
 
+# try to create entry without auth
+$mech->post('/entry', 
+  Content_Type => 'application/x-www-form-urlencoded',
+  Content => {
+    title => 'test',
+    body => 'derp'
+  }
+);
+
+ok !$mech->success, "doesn't work for unauthed users";
+
+
 done_testing();
