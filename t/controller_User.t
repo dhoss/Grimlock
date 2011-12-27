@@ -1,12 +1,11 @@
 use strict;
 use warnings;
 use Test::More;
-use HTTP::Request::Common;
-
+use HTTP::Request::Common qw(DELETE);
+use Grimlock::Web;
 use Test::WWW::Mechanize::PSGI;
 use FindBin qw( $Bin );
 use lib "$Bin/../t/lib";
-use Grimlock::Web;
 use Data::Dumper;
 use Test::DBIx::Class qw(:resultsets);
 
@@ -34,7 +33,6 @@ ok $res->is_success;
 
 # retrieve created user
 $mech->get_ok('/user/1');
-diag $mech->content;
 
 # retrieve user listing
 $mech->get_ok('/users' );
@@ -68,4 +66,6 @@ $mech->content_contains("fartnuts");
 
 # delete user, unauthenticated
 $mech->get_ok('/user/logout');
+ok !( $mech->request ( DELETE "/user/1" )->is_success ), "deleted user";
+
 done_testing();

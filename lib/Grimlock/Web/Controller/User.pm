@@ -170,6 +170,26 @@ sub browse_PUT {
   };
 }
 
+sub browse_DELETE {
+  my ( $self, $c ) = @_;
+  my $user = $c->stash->{'user'};
+  return $self->status_bad_request($c,
+    message => "you don't have permissions to do that"
+  ) unless $user->has_role('admin') || ( $user->userid == $c->user->obj->userid );
+  try {
+    $user->delete || die $!;
+    $self->status_ok($c,
+      entity => {
+        message => "Deleted user"
+      }
+    );
+  } catch {
+    $self->status_bad_request($c,
+      message => "Deleted user."
+    );
+  };
+}
+
 =head1 AUTHOR
 
 Devin Austin
