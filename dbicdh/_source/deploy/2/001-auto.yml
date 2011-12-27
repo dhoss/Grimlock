@@ -161,7 +161,7 @@ schema:
         - deferrable: 1
           expression: ''
           fields:
-            - sessoinid
+            - sessionid
           match_type: ''
           name: ''
           on_delete: ''
@@ -174,7 +174,7 @@ schema:
         expires:
           data_type: int
           default_value: ~
-          is_nullable: 0
+          is_nullable: 1
           is_primary_key: 0
           is_unique: 0
           name: expires
@@ -184,20 +184,20 @@ schema:
         session_data:
           data_type: text
           default_value: ~
-          is_nullable: 0
+          is_nullable: 1
           is_primary_key: 0
           is_unique: 0
           name: session_data
           order: 2
           size:
             - 0
-        sessoinid:
+        sessionid:
           data_type: char
           default_value: ~
           is_nullable: 0
           is_primary_key: 1
           is_unique: 0
-          name: sessoinid
+          name: sessionid
           order: 1
           size:
             - 72
@@ -489,19 +489,21 @@ translator:
           _columns:
             expires:
               data_type: int
+              is_nullable: 1
             session_data:
               data_type: text
-            sessoinid:
+              is_nullable: 1
+            sessionid:
               data_type: char
               is_nullable: 0
               size: 72
           _columns_info_loaded: 0
           _ordered_columns:
-            - sessoinid
+            - sessionid
             - session_data
             - expires
           _primaries: &4
-            - sessoinid
+            - sessionid
           _relationships: {}
           _unique_constraints:
             primary: *4
@@ -671,7 +673,7 @@ translator:
           schema: *1
           source_name: __VERSION
       storage: !!perl/hash:DBIx::Class::Storage::DBI::Pg
-        _conn_pid: 39737
+        _conn_pid: 40689
         _connect_info:
           - AutoCommit: 1
             dsn: dbi:Pg:dbname=grimlock;port=5433

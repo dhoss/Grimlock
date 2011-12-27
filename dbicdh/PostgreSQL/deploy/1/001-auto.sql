@@ -1,6 +1,6 @@
 -- 
 -- Created by SQL::Translator::Producer::PostgreSQL
--- Created on Sat Dec 24 20:27:04 2011
+-- Created on Tue Dec 27 13:47:59 2011
 -- 
 ;
 --
@@ -18,10 +18,10 @@ CREATE TABLE "roles" (
 -- Table: sessions
 --
 CREATE TABLE "sessions" (
-  "sessoinid" character(72) NOT NULL,
-  "session_data" text NOT NULL,
+  "sessionid" character(72) NOT NULL,
+  "session_data" text,
   "expires" integer NOT NULL,
-  PRIMARY KEY ("sessoinid")
+  PRIMARY KEY ("sessionid")
 );
 
 ;
@@ -31,7 +31,7 @@ CREATE TABLE "sessions" (
 CREATE TABLE "users" (
   "userid" serial NOT NULL,
   "name" character varying(200) NOT NULL,
-  "password" character(59) NOT NULL,
+  "password" character(60) NOT NULL,
   "created_at" timestamp NOT NULL,
   "updated_at" timestamp,
   PRIMARY KEY ("userid"),

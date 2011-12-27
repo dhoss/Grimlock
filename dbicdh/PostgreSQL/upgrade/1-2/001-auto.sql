@@ -4,7 +4,7 @@
 BEGIN;
 
 ;
-ALTER TABLE users ALTER COLUMN password TYPE character(60);
+ALTER TABLE sessions ALTER COLUMN expires DROP NOT NULL;
 
 ;
 
