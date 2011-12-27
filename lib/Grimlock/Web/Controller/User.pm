@@ -62,7 +62,6 @@ sub login_POST {
       })
   ) {
         return $self->status_ok($c,
-          location => $c->req->uri->as_string,
           entity => {
             message => "Logged in successfully"
           }
