@@ -16,7 +16,23 @@ Catalyst Controller.
 
 =cut
 
-sub create : Chained('/api/base') PathPart('entry') Args(0) ActionClass('REST') {
+
+sub base : Chained('/api/base') PathPart('') CaptureArgs(0) {}
+
+sub load_entry : Chained('base') PathPart('') CaptureArgs(1) {
+  my ( $self, $c, $entry_title ) = @_;
+  my $entry = $c->model('Database::Entry')->find(
+  {
+    title => $entry_title 
+  },
+  {
+    key => "entries_title"
+  });
+  $c->stash( entry => $entry );
+}
+
+
+sub create : Chained('base') PathPart('entry') Args(0) ActionClass('REST') {
   my ( $self, $c ) = @_;
   return $self->status_bad_request($c,
     message => "You must be logged in to create an entry"
@@ -47,6 +63,25 @@ sub create_POST {
       entry => $entry
     }
   );
+}
+
+sub browse : Chained('load_entry') PathPart('') Args(0) ActionClass('REST') {
+  my ( $self, $c ) = @_;
+  my $entry = $c->stash->{'entry'};
+  return $self->status_bad_request($c,
+    message => "No such post"
+  ) unless $entry;
+}
+
+sub browse_GET {
+  my ( $self, $c ) = @_;
+  my $entry = $c->stash->{'entry'};
+  return $self->status_ok($c,
+    entity => {
+      entry => $entry
+    }
+  );
+
 }
 
 =head1 AUTHOR

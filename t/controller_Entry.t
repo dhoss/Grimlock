@@ -32,5 +32,27 @@ $mech->post('/entry',
 
 ok !$mech->success, "doesn't work for unauthed users";
 
+# create a post authed now
+$mech->post('/user/login',
+  Content_Type => 'application/x-www-form-urlencoded',
+  Content => {
+    name => 'herp',
+    password => 'derp'
+  }
+);
+
+ok $mech->success, "logged in ok";
+
+$mech->post('/entry',
+ Content_Type => 'application/x-www-form-urlencoded',
+  Content => {
+    title => 'test',
+    body => 'derp'
+  }
+);
+
+ok $mech->success, "POST worked";
+$mech->get_ok('/test');
+$mech->content_contains("derp");
 
 done_testing();

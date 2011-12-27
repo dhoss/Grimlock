@@ -3,7 +3,7 @@ use base qw( DBIx::Class::Schema );
 
 __PACKAGE__->load_namespaces();
 
-our $VERSION = 2;
+our $VERSION = 3;
 
 1;
 

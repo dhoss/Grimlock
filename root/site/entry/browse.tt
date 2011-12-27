@@ -1,0 +1,2 @@
+<h2>[% entry.title %]</h2>
+<div id="body">[% entry.body %]</div>

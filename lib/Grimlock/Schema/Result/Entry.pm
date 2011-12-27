@@ -15,7 +15,7 @@ primary_column entryid => {
   extra => { unsigned => 1 },
 };
 
-column title => {
+unique_column title => {
   data_type => 'varchar',
   size => 200,
   is_nullable => 0,
