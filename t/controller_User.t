@@ -65,4 +65,7 @@ ok $mech->put( '/user/1',
 # get updated user, verify content is correct
 $mech->get_ok('/user/1');
 $mech->content_contains("fartnuts");
+
+# delete user, unauthenticated
+$mech->get_ok('/user/logout');
 done_testing();

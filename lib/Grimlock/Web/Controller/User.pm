@@ -73,6 +73,19 @@ sub login_POST {
   );
 }
 
+sub logout  : Chained('base') PathPart('user/logout') Args(0) ActionClass('REST') {
+}
+
+sub logout_GET {
+  my ( $self, $c ) = @_;
+  $c->logout;
+  $self->status_ok($c,
+    entity => { 
+      message => "logged out successfully"
+    }
+  );
+}
+
 sub create : Chained('base') PathPart('user') Args(0) ActionClass('REST') {}
 
 sub create_POST {
