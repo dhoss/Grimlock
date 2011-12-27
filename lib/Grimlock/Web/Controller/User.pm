@@ -185,7 +185,7 @@ sub browse_DELETE {
     );
   } catch {
     $self->status_bad_request($c,
-      message => "Deleted user."
+      message => $_
     );
   };
 }

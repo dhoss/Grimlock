@@ -66,6 +66,16 @@ $mech->content_contains("fartnuts");
 
 # delete user, unauthenticated
 $mech->get_ok('/user/logout');
-ok !( $mech->request ( DELETE "/user/1" )->is_success ), "deleted user";
+ok !( $mech->request ( DELETE "/user/1" )->is_success ), "deleted user doesn't work without auth";
 
+# delete, now authed
+$mech->post('/user/login',
+  Content_Type => 'application/x-www-form-urlencoded',
+  Content => {
+    name => 'fartnuts',
+    password => 'derp'
+  }
+);
+ok $mech->success;
+ok $mech->request ( DELETE "/user/1" )->is_success, "deleting works"; 
 done_testing();
