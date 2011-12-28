@@ -46,7 +46,7 @@ ok $mech->success, "logged in ok";
 $mech->post('/entry',
  Content_Type => 'application/x-www-form-urlencoded',
   Content => {
-    title => 'test',
+    title => 'test title with spaces!',
     body => 'derp'
   }
 );
