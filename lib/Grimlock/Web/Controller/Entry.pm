@@ -23,10 +23,7 @@ sub load_entry : Chained('base') PathPart('') CaptureArgs(1) {
   my ( $self, $c, $entry_title ) = @_;
   my $entry = $c->model('Database::Entry')->find(
   {
-    title => $entry_title 
-  },
-  {
-    key => "entries_title"
+    display_title => $entry_title 
   });
   $c->stash( entry => $entry );
 }

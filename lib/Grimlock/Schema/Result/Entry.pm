@@ -68,7 +68,6 @@ sub insert {
   $title =~ s{(\W+|\s+|\_)}{-}g;
   chomp $title if $title =~ m/\W$/;
   $self->display_title($title);
-  warn $title;
   $self->next::method(@args);
   
   $guard->commit;
