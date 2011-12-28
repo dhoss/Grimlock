@@ -6,7 +6,6 @@ use HTML::Scrubber;
 has 'scrubber' => (
   is => 'ro',
   isa => 'HTML::Scrubber',
-  required => 1,
   lazy => 1,
   builder => '_build_scrubber',
   handles => [qw( scrub deny )],

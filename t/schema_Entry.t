@@ -11,8 +11,10 @@ my $user;
 my $entry;
 ok $user = User->create({ name => 'herp', password => 'derp' }), "found our user " . $user->name;
 ok $entry = $user->create_related('entries', {
-    title => "title with spaces and metacharacters___!",
-    body => "huehuheuhuehue"
+    title => "title with spaces and metacharacters___! <script>alert('and javascript');</script>",
+    body => "huehuheuhuehue <marquee>huehuehue</marquee>"
   }), "Created entry " . $entry->title;
 ok ( ( $entry->display_title !~ m/(\s+|\_)/g ) && ( $entry->display_title =~ m/[a-zA-Z0-9\-]/g )), "title created properly";
+ok $entry->title !~ m{<script>alert('and javascript');</script>}, "no scripts here";
+ok $entry->body !~ m{<marquee>huehuehue</marquee>}, "no shit tags here";
 done_testing;

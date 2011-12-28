@@ -8,6 +8,8 @@ use Grimlock::Schema::Candy -components => [
       )
 ];
 
+
+
 primary_column entryid => {
   data_type => 'bigserial',
   is_nullable => 0,
@@ -59,11 +61,16 @@ belongs_to 'user' => 'Grimlock::Schema::Result::User', {
   on_update => "cascade",
 };
 
+use Moo;
+with 'Grimlock::ScrubsEntry';
+
 sub insert {
   my ( $self, @args ) = @_;
 
   my $guard = $self->result_source->schema->txn_scope_guard;
- 
+  for my $column ( qw( title body ) ) {
+    $self->$column( $self->scrub($self->$column) );
+  }
   my $title = $self->title;
   $title =~ s{(\W+|\s+|\_)}{-}g;
   chomp $title if $title =~ m/\W$/;
@@ -73,5 +80,6 @@ sub insert {
   $guard->commit;
   return $self;
 }
+
 
 1;
