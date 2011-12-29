@@ -8,7 +8,7 @@ use Grimlock::Schema::Candy -components => [
       )
 ];
 
-
+use HTML::Scrubber;
 
 primary_column entryid => {
   data_type => 'bigserial',
@@ -61,16 +61,19 @@ belongs_to 'user' => 'Grimlock::Schema::Result::User', {
   on_update => "cascade",
 };
 
-use Moo;
-with 'Grimlock::ScrubsEntry';
 
 sub insert {
   my ( $self, @args ) = @_;
 
+  # move me to a filter class
+  my $scrubber = HTML::Scrubber->new(allow => [ qw[ p b i u hr br ] ] ); 
   my $guard = $self->result_source->schema->txn_scope_guard;
   for my $column ( qw( title body ) ) {
-    $self->$column( $self->scrub($self->$column) );
+    my $scrubbed = $scrubber->scrub($self->$column);
+    $self->$column( $scrubbed );
   }
+
+  # move me to a filter class
   my $title = $self->title;
   $title =~ s{(\W+|\s+|\_)}{-}g;
   chomp $title if $title =~ m/\W$/;

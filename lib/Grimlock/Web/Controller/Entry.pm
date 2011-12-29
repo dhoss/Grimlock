@@ -1,6 +1,7 @@
 package Grimlock::Web::Controller::Entry;
 use Moose;
 use namespace::autoclean;
+use Try::Tiny;
 
 BEGIN {extends 'Grimlock::Web::Controller::API'; }
 
@@ -49,17 +50,24 @@ sub create_POST {
    
   my $params = $c->req->data || $c->req->params;
   my $user = $c->user->obj;
-  my $entry = $user->create_related('entries', {
-      title => $params->{'title'},
-      body  => $params->{'body'}
-  });
-
-  $self->status_created($c, 
-    location => $c->req->uri->as_string,
-    entity   => {
-      entry => $entry
-    }
-  );
+  my $entry;
+  try {
+    $entry = $user->create_related('entries', {
+        title => $params->{'title'},
+        body  => $params->{'body'}
+    }) || die $!;
+ 
+    $self->status_created($c, 
+      location => $c->req->uri->as_string,
+      entity   => {
+        entry => $entry
+      }
+    );
+  } catch {
+    return $self->status_bad_request($c,
+      message => $_
+    );
+  };
 }
 
 sub browse : Chained('load_entry') PathPart('') Args(0) ActionClass('REST') {

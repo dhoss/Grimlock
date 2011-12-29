@@ -46,13 +46,14 @@ ok $mech->success, "logged in ok";
 $mech->post('/entry',
  Content_Type => 'application/x-www-form-urlencoded',
   Content => {
-    title => 'test title with spaces!',
+    title => 'test title with spaces! <script>alert("and javascript!")</script>',
     body => 'derp'
   }
 );
 
 ok $mech->success, "POST worked";
 $mech->get_ok('/test-title-with-spaces-');
-$mech->content_contains("derp");
+ok $mech->content_lacks('<script>alert("and javascript!")</script>'), "no scripts here";
+ok $mech->content_contains("derp"), "content is correct";
 
 done_testing();
