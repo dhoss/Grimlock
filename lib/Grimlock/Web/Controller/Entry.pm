@@ -70,6 +70,47 @@ sub create_POST {
   };
 }
 
+sub reply : Chained('load_entry') PathPart('reply') Args(0) ActionClass('REST') {
+  my ( $self, $c ) = @_;
+  my $entry = $c->stash->{'entry'};
+  return $self->status_bad_request($c,
+    message => "No such post"
+  ) unless $entry;
+}
+
+sub reply_GET {
+  my ( $self, $c ) = @_;
+  
+  $self->status_ok($c, 
+    entity => {}
+  );
+}
+
+sub reply_POST {
+  my ( $self, $c ) = @_;
+  my $params ||= $c->req->data || $c->req->params;
+  my $entry = $c->stash->{'entry'};
+  my $reply;
+  try {
+    $reply = $entry->create_related('children', {
+      parent => $entry,
+      title => $params->{'title'},
+      body => $params->{'body'}
+    }) or die $!;
+    return $self->status_created($c,
+      location => $c->uri_for_action('/entry/browse', [ $reply->entryid ] ),
+      entity   => {
+        reply => $reply
+      }
+    );
+  } catch {
+    $self->status_bad_request($c,
+      message => $_
+    );
+  };
+}
+      
+
 sub browse : Chained('load_entry') PathPart('') Args(0) ActionClass('REST') {
   my ( $self, $c ) = @_;
   my $entry = $c->stash->{'entry'};

@@ -52,7 +52,7 @@ $mech->post('/entry',
 );
 
 ok $mech->success, "POST worked";
-$mech->get_ok('/test-title-with-spaces-');
+$mech->get_ok('test-title-with-spaces-');
 ok $mech->content_lacks('<script>alert("and javascript!")</script>'), "no scripts here";
 ok $mech->content_contains("derp"), "content is correct";
 

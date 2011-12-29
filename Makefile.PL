@@ -38,6 +38,7 @@ requires 'Catalyst::View::TT';
 requires 'DBIx::Class::Candy';
 requires 'DBIx::Class::EncodedColumn::Crypt::Eksblowfish::Bcrypt';
 requires 'DBIx::Class::Helper::Row::ToJSON';
+requires 'DBICx::MaterializedPath' => '0.03';
 test_requires 'Test::More' => '0.88';
 test_requires 'Test::WWW::Mechanize::PSGI' => '0.35';
 catalyst;
