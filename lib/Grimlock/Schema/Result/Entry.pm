@@ -14,6 +14,8 @@ use HTML::Scrubber;
 __PACKAGE__->path_column("path");
 __PACKAGE__->path_separator(".");
 
+resultset_class 'Grimlock::Schema::ResultSet::Entry';
+
 primary_column entryid => {
   data_type => 'bigserial',
   is_nullable => 0,
