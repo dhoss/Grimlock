@@ -11,9 +11,6 @@ use Grimlock::Schema::Candy -components => [
 
 use HTML::Scrubber;
 
-__PACKAGE__->path_column("path");
-__PACKAGE__->path_separator(".");
-
 resultset_class 'Grimlock::Schema::ResultSet::Entry';
 
 primary_column entryid => {
@@ -42,9 +39,10 @@ column path => {
 };
 
 column parent => {
-  data_type => 'bigserial',
+  data_type => 'bigint',
   is_nullable => 1,
   extra => { unsigned => 1 },
+  is_foreign_key => 1
 };
 
 column body => {
@@ -71,7 +69,7 @@ column updated_at => {
   set_on_update => 1
 };
 
-belongs_to 'user' => 'Grimlock::Schema::Result::User', {
+belongs_to 'author' => 'Grimlock::Schema::Result::User', {
   'foreign.userid' => 'self.author',
 },
 {
@@ -80,16 +78,18 @@ belongs_to 'user' => 'Grimlock::Schema::Result::User', {
 };
 
 belongs_to 'parent' => __PACKAGE__, {
-  'foreign.entryid' => 'self.parent'
+  'foreign.entryid' => 'self.parent',
 },
 {
-  cascade_delete => 1,
-  cascade_update => 1,
+  join_type => 'LEFT'
 };
 
 has_many 'children' => __PACKAGE__, {
   'foreign.parent' => 'self.entryid'
 };
+
+__PACKAGE__->mk_classdata( path_column => "path" );
+__PACKAGE__->mk_classdata( path_separator => "." );
 
 sub insert {
   my ( $self, @args ) = @_;

@@ -92,13 +92,16 @@ sub reply_POST {
   my $entry = $c->stash->{'entry'};
   my $reply;
   try {
-    $reply = $entry->create_related('children', {
+    $c->log->debug("GOT TO CREATE IN REPLY");
+    $reply = $c->model('Database::Entry')->create({
+      author => $c->user->obj->userid,
       parent => $entry,
       title => $params->{'title'},
       body => $params->{'body'}
     }) or die $!;
+    $c->log->debug("AFTER CREATE IN REPLY");
     return $self->status_created($c,
-      location => $c->uri_for_action('/entry/browse', [ $reply->entryid ] ),
+      location => $c->uri_for_action('/entry/browse', [ $reply->parent->title ] ),
       entity   => {
         reply => $reply
       }

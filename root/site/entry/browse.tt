@@ -1,2 +1,12 @@
+[% BLOCK entry_body %]
 <h2>[% entry.title %]</h2>
 <div id="body">[% entry.body %]</div>
+<div class="reply-block">[% entry.children.count %] replies</div>
+[% END %]
+
+
+[% PROCESS entry_body %]
+
+[% FOR reply IN entry.grandchildren %]
+  [% PROCESS entry_body entry=reply %]
+[% END %]

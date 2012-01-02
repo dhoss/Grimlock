@@ -56,4 +56,15 @@ $mech->get_ok('test-title-with-spaces-');
 ok $mech->content_lacks('<script>alert("and javascript!")</script>'), "no scripts here";
 ok $mech->content_contains("derp"), "content is correct";
 
+$mech->post('/test-title-with-spaces-/reply',
+ Content_Type => 'application/x-www-form-urlencoded',
+  Content => {
+    title => 'reply test',
+    body => 'derpen'
+  }
+);
+
+ok $mech->success, "reply post works ok";
+
+
 done_testing();

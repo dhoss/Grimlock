@@ -14,7 +14,13 @@ ok $entry = $user->create_related('entries', {
     title => "title with spaces and metacharacters___! <script>alert('and javascript');</script>",
     body => "huehuheuhuehue <marquee>huehuehue</marquee>"
   }), "Created entry " . $entry->title;
-ok ( ( $entry->display_title !~ m/(\s+|\_)/g ) && ( $entry->display_title =~ m/[a-zA-Z0-9\-]/g )), "title created properly";
+ok ( $entry->display_title !~ m/(\s+|\_)/g ) && ( $entry->display_title =~ m/[a-zA-Z0-9\-]/g ), "title created properly";
 ok $entry->title !~ m{<script>alert('and javascript');</script>}, "no scripts here";
 ok $entry->body !~ m{<marquee>huehuehue</marquee>}, "no shit tags here";
+ok my $reply = Entry->create({
+  author => $user,
+  parent => $entry, 
+  title  => 'reply test',
+  body   => 'derp'
+}), "created reply ok";
 done_testing;
