@@ -10,7 +10,10 @@ use Data::Dumper;
 use Test::DBIx::Class qw(:resultsets);
 
 
-BEGIN { $ENV{'CATALYST_WEB_CONFIG_LOCAL_SUFFIX'} = 'test' };
+BEGIN { 
+  $ENV{'CATALYST_CONFIG_LOCAL_SUFFIX'} = 'test';
+  $ENV{'DBIC_TRACE'} = 1;
+};
 
 # create role records
 fixtures_ok 'user'
@@ -40,6 +43,8 @@ $mech->post('/user/login',
     password => 'derp'
   }
 );
+
+BAIL_OUT "can't log in" unless $mech->success;
 
 ok $mech->success, "logged in ok";
 
