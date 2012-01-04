@@ -9,6 +9,8 @@ use Grimlock::Schema::Candy -components => [
       )
 ];
 
+use Text::Password::Pronounceable;
+
 resultset_class 'Grimlock::Schema::ResultSet::User';
 
 primary_column userid => {
@@ -46,6 +48,12 @@ column updated_at => {
   set_on_update => 1,
 };
 
+unique_column email => {
+  data_type => 'varchar',
+  size      => 255,
+  is_nullable => 1,
+};
+
 has_many 'entries' => 'Grimlock::Schema::Result::Entry', {
   'foreign.author' => 'self.userid',
 };
@@ -76,5 +84,9 @@ sub has_role {
   )->count;
 }
 
+sub generate_random_pass {
+  my $self = shift;
+  Text::Password::Pronounceable->generate(6,10);
+}
 
 1;

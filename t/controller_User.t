@@ -10,7 +10,10 @@ use Data::Dumper;
 use Test::DBIx::Class qw(:resultsets);
 
 
-BEGIN { $ENV{'CATALYST_WEB_CONFIG_LOCAL_SUFFIX'} = 'test' };
+BEGIN { 
+  $ENV{'GRIMLOCK_WEB_CONFIG_LOCAL_SUFFIX'} = 'test';
+  $ENV{EMAIL_SENDER_TRANSPORT} = 'Test' 
+};
 
 # create role records
 fixtures_ok 'basic'
@@ -27,6 +30,7 @@ my $res = $mech->post('/user',
   Content => {
     name => 'herpy',
     password => 'derp',
+    email   => 'herp@derp.com'
   }
 );
 ok $res->is_success;
@@ -48,7 +52,7 @@ $mech->post('/user/login',
   Content_Type => 'application/x-www-form-urlencoded',
   Content => {
     name => 'herpy',
-    password => 'derp'
+    password => 'derp',
   }
 );
 
@@ -78,4 +82,16 @@ $mech->post('/user/login',
 );
 ok $mech->success;
 ok $mech->request ( DELETE "/user/1" )->is_success, "deleting works"; 
+
+$mech->post('/forgot_password', 
+   Content_Type => 'application/x-www-form-urlencoded',
+   Content => {
+     email => 'herp@derp.com'
+   }
+);
+
+ok $mech->success, "post to forgot password action works";
+my @deliveries = Email::Sender::Simple->default_transport->deliveries;
+diag Dumper \@deliveries;
+
 done_testing();

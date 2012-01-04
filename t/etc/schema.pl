@@ -13,8 +13,8 @@
     ],
     'user' => [
       'User' => [
-        ['name', 'password'],
-        ['herp', 'derp'],
+        ['name', 'password', 'email'],
+        ['herp', 'derp', 'herp@derp.com'],
       ],
     ],
   }
