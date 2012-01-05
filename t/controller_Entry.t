@@ -11,7 +11,6 @@ use Test::DBIx::Class qw(:resultsets);
 
 # this doesn't do shit for some reason
 BEGIN { 
-  $ENV{'GRIMLOCK_WEB_CONFIG_LOCAL_SUFFIX'} = "test";
   $ENV{'DBIC_TRACE'} = 1;
 };
 

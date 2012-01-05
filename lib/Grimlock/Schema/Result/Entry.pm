@@ -14,7 +14,7 @@ use HTML::Scrubber;
 resultset_class 'Grimlock::Schema::ResultSet::Entry';
 
 primary_column entryid => {
-  data_type => 'bigserial',
+  data_type => 'int',
   is_nullable => 0,
   is_auto_increment => 1,
   extra => { unsigned => 1 },

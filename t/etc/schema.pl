@@ -1,6 +1,6 @@
 {
   'schema_class' => 'Grimlock::Schema',
-  'connect_info' => ['dbi:Pg:dbname=grimlock_test;port=5433', 'grimlock', 'lairdo'],
+  'connect_info' => ['dbi:SQLite:grimlock.db', '', ''],
   'force_drop_table' => 1,
   'resultsets' => [
     'User',

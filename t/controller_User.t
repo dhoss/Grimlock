@@ -11,7 +11,6 @@ use Test::DBIx::Class qw(:resultsets);
 
 
 BEGIN { 
-  $ENV{'GRIMLOCK_WEB_CONFIG_LOCAL_SUFFIX'} = 'test';
   $ENV{EMAIL_SENDER_TRANSPORT} = 'Test' 
 };
 

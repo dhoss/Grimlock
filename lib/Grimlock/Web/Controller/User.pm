@@ -98,6 +98,7 @@ sub create_POST {
     $user = $c->model('Database::User')->create({
       name     => $params->{'name'},
       password => $params->{'password'},
+      email    => $params->{'email'} || "",
     }) || die "Can't create user: $!";
     
     $self->status_created($c,
@@ -188,6 +189,50 @@ sub browse_DELETE {
       message => $_
     );
   };
+}
+
+sub forgot_password : Chained('base') PathPart('forgot_password') Args(0) ActionClass('REST') {}
+
+sub forgot_password_GET {
+  my ( $self, $c ) = @_;
+  return $self->status_ok( $c,
+    entity => {}
+  );
+}
+
+sub forgot_password_POST {
+  my ( $self, $c ) = @_;
+  my $params ||= $c->req->data || $c->req->params;
+  if ( my $email = $params->{'email'} ) {
+    my $user = $c->model('Database::User')->find({ email => $email }, { key => 'users_email' });
+    $c->log->error("No such user $email") unless $user;
+    my $new_pass = $user->generate_random_pass;
+    $user->password($new_pass)->update;
+    my $mail_object = $c->model('Email')->create({
+        to      => $user->email,
+        subject => "New Password",
+        body    => qq{
+        Hi } . $user->name . qq{,
+        Your new password is } . $new_pass
+    });
+
+    try { 
+      $mail_object->send || die "Can't send email $!";
+      return $self->status_ok($c,
+        entity => {
+          message => "Your password has been sent."
+      });
+    } catch { 
+      return $self->status_bad_request($c,
+        message => $_
+      );
+    };
+
+  }
+
+  return $self->status_bad_request($c,
+    message => "Email must be provided"
+  );
 }
 
 =head1 AUTHOR

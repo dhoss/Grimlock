@@ -14,7 +14,7 @@ use Text::Password::Pronounceable;
 resultset_class 'Grimlock::Schema::ResultSet::User';
 
 primary_column userid => {
-  data_type => 'bigserial',
+  data_type => 'int',
   is_auto_increment => 1,
   is_nullable => 0,
 };

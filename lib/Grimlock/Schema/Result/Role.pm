@@ -9,7 +9,7 @@ use Grimlock::Schema::Candy -components => [
 ];
 
 primary_column roleid => {
-  data_type => 'bigserial',
+  data_type => 'int',
   is_auto_increment => 1,
   is_nullable => 0,
 };
