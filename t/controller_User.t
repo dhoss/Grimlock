@@ -80,7 +80,7 @@ $mech->post('/user/login',
   }
 );
 ok $mech->success;
-ok $mech->request ( DELETE "/user/1" )->is_success, "deleting works"; 
+
 
 $mech->post('/forgot_password', 
    Content_Type => 'application/x-www-form-urlencoded',
@@ -91,6 +91,7 @@ $mech->post('/forgot_password',
 
 ok $mech->success, "post to forgot password action works";
 my @deliveries = Email::Sender::Simple->default_transport->deliveries;
-diag Dumper \@deliveries;
+ok scalar @deliveries > 0, "there was an actual delivery";
 
+ok $mech->request ( DELETE "/user/1" )->is_success, "deleting works"; 
 done_testing();

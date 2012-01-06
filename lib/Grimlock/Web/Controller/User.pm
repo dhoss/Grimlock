@@ -203,21 +203,23 @@ sub forgot_password_GET {
 sub forgot_password_POST {
   my ( $self, $c ) = @_;
   my $params ||= $c->req->data || $c->req->params;
-  if ( my $email = $params->{'email'} ) {
+  $c->log->debug(Dumper $params); 
+  my $email = $params->{'email'};
+  if ( $email ) {
     my $user = $c->model('Database::User')->find({ email => $email }, { key => 'users_email' });
     $c->log->error("No such user $email") unless $user;
     my $new_pass = $user->generate_random_pass;
-    $user->password($new_pass)->update;
-    my $mail_object = $c->model('Email')->create({
+    $user->password($new_pass);
+    $user->update;
+    try {
+      $c->model('Email')->send({
+        from    => $c->config->{'Model::Email'}{'from'} || 'dhoss@mail.dhoss.net',
         to      => $user->email,
         subject => "New Password",
         body    => qq{
         Hi } . $user->name . qq{,
         Your new password is } . $new_pass
-    });
-
-    try { 
-      $mail_object->send || die "Can't send email $!";
+      }) || die "Can't send email $!";
       return $self->status_ok($c,
         entity => {
           message => "Your password has been sent."
@@ -228,11 +230,11 @@ sub forgot_password_POST {
       );
     };
 
-  }
-
-  return $self->status_bad_request($c,
+  } else {
+    return $self->status_bad_request($c,
     message => "Email must be provided"
-  );
+   );
+ }
 }
 
 =head1 AUTHOR
