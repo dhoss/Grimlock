@@ -40,17 +40,19 @@ sub list_GET {
 }
 
 sub login  : Chained('base') PathPart('user/login') Args(0) ActionClass('REST') {
+  my ( $self, $c, ) = @_;
+  
+  $c->stash( template => 'user/login.tt' );
 }
 
 sub login_GET  {
   my ( $self, $c ) = @_;
-  return $self->status_ok({
+  return $self->status_ok($c, {
     entity => {
       user => $c->user->obj->userid
     }
   }) if $c->user_exists;
   
-  $c->stash( template => 'user/login.tt' );
 }
 
 sub login_POST {
@@ -61,15 +63,18 @@ sub login_POST {
         password => $params->{'password'}
       })
   ) {
-        return $self->status_ok($c,
-          entity => {
-            message => "Logged in successfully"
-          }
+        $c->log->debug("TEMPLATE " . $c->stash->{template});
+        $c->res->redirect(
+          $c->uri_for_action(
+            '/user/browse', [ $c->user->obj->userid ]
+          )
         );
   }
-  
-  return $self->status_bad_request($c,
-    message => "incorrect username/password"
+   $c->log->debug("TEMPLATE " . $c->stash->{template});
+
+  $c->flash( message => "Incorrect credentials" );
+  $c->res->redirect(
+    $c->uri_for_action('/user/login')
   );
 }
 
@@ -203,7 +208,6 @@ sub forgot_password_GET {
 sub forgot_password_POST {
   my ( $self, $c ) = @_;
   my $params ||= $c->req->data || $c->req->params;
-  $c->log->debug(Dumper $params); 
   my $email = $params->{'email'};
   if ( $email ) {
     my $user = $c->model('Database::User')->find({ email => $email }, { key => 'users_email' });

@@ -31,3 +31,8 @@
     background-position: right top;
     padding: 25px 25px .2em 0;
 }
+
+#nav li span.search {
+  padding: 25px 0 2em 15px;
+  display: block
+}

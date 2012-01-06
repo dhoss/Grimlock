@@ -64,8 +64,12 @@ END;
     [%~ IF page.body.id %] id="[% page.body.id %]"[% END =%]
     class="[% page.body.classes.join(' ') %] IE IE7">
  <![endif]-->
+
     [% # Drop in the header if appropriate
     header %]
+    [% IF message %]
+ <div id="message"><h2>[% message %]</h2></div>
+   [% END %]
     <div class="[% page.content_class %]">[% content %]</div>
     [% footer;
 
