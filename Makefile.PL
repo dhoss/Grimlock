@@ -43,6 +43,7 @@ requires 'Email::Sender::Simple';
 requires 'DBICx::MaterializedPath' => '0.03';
 test_requires 'Test::More' => '0.88';
 test_requires 'Test::WWW::Mechanize::PSGI' => '0.35';
+test_requires 'Test::DBIx::Class' => '0.28';
 catalyst;
 
 install_script glob('script/*.pl');

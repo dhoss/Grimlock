@@ -1,6 +1,6 @@
 {
   'schema_class' => 'Grimlock::Schema',
-  'connect_info' => ['dbi:SQLite:grimlock.db', '', ''],
+  'connect_info' => ['dbi:SQLite:dbname=grimlock.db', '', ''],
   'force_drop_table' => 1,
   'resultsets' => [
     'User',

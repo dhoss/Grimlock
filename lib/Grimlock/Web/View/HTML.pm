@@ -3,7 +3,7 @@ package Grimlock::Web::View::HTML;
 use strict;
 use base 'Catalyst::View::TT';
 use Grimlock::Web;
-
+use Data::Dumper;
 __PACKAGE__->config({
     PRE_PROCESS        => 'shared/base.tt',
     WRAPPER            => 'wrapper.tt',
@@ -28,7 +28,6 @@ sub template_vars {
 
 sub process {
     my ( $self, $c, $stash_key ) = @_;
- 
     my $output;
     eval {
         $output = $self->serialize( $c, $c->stash->{$stash_key} );

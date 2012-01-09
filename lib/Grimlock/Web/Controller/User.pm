@@ -23,6 +23,7 @@ sub base : Chained('/api/base') PathPart('') CaptureArgs(0) {}
 sub load_user : Chained('base') PathPart('user') CaptureArgs(1) {
   my ( $self, $c, $userid ) = @_;
   my $user = $c->model('Database::User')->find($userid);
+  $c->log->debug("FOUND IN LOAD" . $user->name);
   $c->stash( user => $user );
 }
 
@@ -70,7 +71,6 @@ sub login_POST {
           )
         );
   }
-   $c->log->debug("TEMPLATE " . $c->stash->{template});
 
   $c->flash( message => "Incorrect credentials" );
   $c->res->redirect(
@@ -127,17 +127,20 @@ sub create_POST {
 
 sub browse : Chained('load_user') PathPart('') Args(0) ActionClass('REST') {
   my ( $self, $c ) = @_;
-  if ( !( my $user = $c->stash->{'user'} ) ) {
+  my $user = $c->stash->{'user'} ;
+  $c->log->debug("USER IN BROWSE ACITON " . Dumper $user);
+  $c->stash( user => $user );
+}
+
+sub browse_GET {
+  my ( $self, $c ) = @_;
+  my $user = $c->stash->{'user'};  
+  if ( !$user ) {
     return $self->status_bad_request($c,
       message => "Can't find user with that id"
     );
   }
 
-}
-
-sub browse_GET {
-  my ( $self, $c ) = @_;
-  my $user => $c->stash->{'user'};  
   return $self->status_ok($c, 
     entity => {
       user => $user
@@ -164,7 +167,8 @@ sub browse_PUT {
       }
     }
     $user->update || die $!;
-    $self->status_ok($c, 
+    $c->log->debug("USER IN UPDATE" . $user->name);
+    return $self->status_ok($c, 
       entity => {
         user => $user 
       }
