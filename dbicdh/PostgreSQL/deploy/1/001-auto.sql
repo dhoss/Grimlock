@@ -1,6 +1,6 @@
 -- 
 -- Created by SQL::Translator::Producer::PostgreSQL
--- Created on Tue Jan 10 16:12:44 2012
+-- Created on Tue Jan 10 16:18:22 2012
 -- 
 ;
 --

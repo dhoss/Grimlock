@@ -22,7 +22,7 @@ sub base : Chained('/api/base') PathPart('') CaptureArgs(0) {}
 
 sub load_user : Chained('base') PathPart('user') CaptureArgs(1) {
   my ( $self, $c, $userid ) = @_;
-  my $user = $c->model('Database::User')->find($userid);
+  my $user = $c->model('Database::User')->find($userid, { prefetch => 'entries' });
   $c->log->debug("FOUND IN LOAD" . $user->name);
   $c->stash( user => $user );
 }
