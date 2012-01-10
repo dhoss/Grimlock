@@ -128,7 +128,6 @@ sub create_POST {
 sub browse : Chained('load_user') PathPart('') Args(0) ActionClass('REST') {
   my ( $self, $c ) = @_;
   my $user = $c->stash->{'user'} ;
-  $c->log->debug("USER IN BROWSE ACITON " . Dumper $user);
   $c->stash( user => $user );
 }
 

@@ -10,7 +10,7 @@ __PACKAGE__->config(
   map => {
     'text/html'                         => [ 'View', 'HTML' ],
     'application/json'                  => [ 'View', 'JSON' ],
-    'application/x-www-form-urlencoded' => [ 'View', 'HTML' ],
+    'text/x-data-dumper'                => [ 'Data::Serializer', 'Data::Dumper' ],
   }
 );
 
