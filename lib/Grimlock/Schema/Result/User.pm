@@ -89,6 +89,11 @@ sub entry_count {
   return $self->entries->count;
 }
 
+sub reply_count {
+  my $self = shift;
+  return $self->entries->search({ parent => { '!=', undef }})->count;
+}
+
 sub generate_random_pass {
   my $self = shift;
   Text::Password::Pronounceable->generate(6,10);

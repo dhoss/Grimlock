@@ -7,4 +7,5 @@
 <div id="user-stats">
 <p>Stats:</p>
 <p>Posts: [% user.entry_count %]</p>
+<p>Replies: [% user.reply_count %]</p>
 </div>
