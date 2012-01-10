@@ -2,7 +2,8 @@
     <li><a href="[% c.uri_for_action('/index') %]"><span>Home</span></a></li>
     [%- UNLESS c.user_exists %]
     <li><a href="[% c.uri_for_action('/user/login') %]"><span>Login</span></a></li>
-    [% ELSE %]
+    [% END %]
+    [% IF c.user_exists %]
     <li><a href="[% c.uri_for_action('/entry/create') %]"><span>Create an entry</span></a></li>
     [%- END %]
     <li><span class="search">Search:<input type="text" name="q" /></span></li>

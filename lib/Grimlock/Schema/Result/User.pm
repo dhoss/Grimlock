@@ -84,6 +84,11 @@ sub has_role {
   )->count;
 }
 
+sub entry_count {
+  my $self = shift;
+  return $self->entries->count;
+}
+
 sub generate_random_pass {
   my $self = shift;
   Text::Password::Pronounceable->generate(6,10);
