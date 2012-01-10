@@ -38,6 +38,6 @@ DEFAULT page.body.scripts     = [];
 DEFAULT page.content_class    = 'content';
 
 # Include global macros/vars/set up per implementation
-TRY; PROCESS site/global.tt; CATCH file; END;
+TRY; PROCESS global.tt; CATCH file; END;
 
 ~%]

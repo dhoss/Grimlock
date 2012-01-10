@@ -104,8 +104,9 @@ sub create_POST {
       password => $params->{'password'},
       email    => $params->{'email'} || "",
     }) || die "Can't create user: $!";
+    $c->authenticate({ name => $user->name, password => $user->password });
     
-    $self->status_created($c,
+    return $self->status_created($c,
       location => $c->uri_for_action('/user/browse', [ 
         $user->userid
       ]),
@@ -117,7 +118,7 @@ sub create_POST {
  
   } catch {
 
-    $self->status_bad_request($c,
+    return $self->status_bad_request($c,
       message => $_
     );
  
