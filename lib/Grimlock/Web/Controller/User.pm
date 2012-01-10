@@ -64,7 +64,6 @@ sub login_POST {
         password => $params->{'password'}
       })
   ) {
-        $c->log->debug("TEMPLATE " . $c->stash->{template});
         $c->res->redirect(
           $c->uri_for_action(
             '/user/browse', [ $c->user->obj->userid ]
@@ -111,7 +110,8 @@ sub create_POST {
         $user->userid
       ]),
       entity => {
-        user => $user
+        user => $user,
+        message => "User created successfully!"
       }
     );
  
