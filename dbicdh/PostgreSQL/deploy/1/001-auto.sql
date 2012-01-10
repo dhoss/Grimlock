@@ -1,6 +1,6 @@
 -- 
 -- Created by SQL::Translator::Producer::PostgreSQL
--- Created on Tue Dec 27 13:47:59 2011
+-- Created on Tue Jan 10 14:37:21 2012
 -- 
 ;
 --
@@ -20,7 +20,7 @@ CREATE TABLE "roles" (
 CREATE TABLE "sessions" (
   "sessionid" character(72) NOT NULL,
   "session_data" text,
-  "expires" integer NOT NULL,
+  "expires" integer,
   PRIMARY KEY ("sessionid")
 );
 
@@ -34,7 +34,9 @@ CREATE TABLE "users" (
   "password" character(60) NOT NULL,
   "created_at" timestamp NOT NULL,
   "updated_at" timestamp,
+  "email" character varying(255),
   PRIMARY KEY ("userid"),
+  CONSTRAINT "users_email" UNIQUE ("email"),
   CONSTRAINT "users_name" UNIQUE ("name")
 );
 
@@ -45,13 +47,20 @@ CREATE TABLE "users" (
 CREATE TABLE "entries" (
   "entryid" serial NOT NULL,
   "title" character varying(200) NOT NULL,
+  "display_title" character varying(200) NOT NULL,
+  "path" character varying(255),
+  "parent" bigint,
   "body" text NOT NULL,
   "author" integer NOT NULL,
   "created_at" timestamp NOT NULL,
   "updated_at" timestamp,
-  PRIMARY KEY ("entryid")
+  PRIMARY KEY ("entryid"),
+  CONSTRAINT "entries_display_title" UNIQUE ("display_title"),
+  CONSTRAINT "entries_title" UNIQUE ("title")
 );
 CREATE INDEX "entries_idx_author" on "entries" ("author");
+CREATE INDEX "entries_idx_parent" on "entries" ("parent");
+CREATE INDEX "tree_data" on "entries" ("parent");
 
 ;
 --
@@ -75,8 +84,12 @@ ALTER TABLE "entries" ADD FOREIGN KEY ("author")
   REFERENCES "users" ("userid") ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE;
 
 ;
+ALTER TABLE "entries" ADD FOREIGN KEY ("parent")
+  REFERENCES "entries" ("entryid") ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE;
+
+;
 ALTER TABLE "user_roles" ADD FOREIGN KEY ("roleid")
-  REFERENCES "roles" ("roleid") ON DELETE RESTRICT DEFERRABLE;
+  REFERENCES "roles" ("roleid") DEFERRABLE;
 
 ;
 ALTER TABLE "user_roles" ADD FOREIGN KEY ("userid")

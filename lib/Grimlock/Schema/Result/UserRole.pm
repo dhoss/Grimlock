@@ -18,19 +18,16 @@ column  roleid => {
   is_nullable => 0,
 };
 
-belongs_to 'user' => 'Grimlock::Schema::Result::User', {
-  'foreign.userid' => 'self.userid',
-},
+belongs_to 'user' => 'Grimlock::Schema::Result::User', 'userid',
 {
-  on_delete => 'cascade',
-  on_update => 'cascade',
+  cascade_delete => 1,
+  cascade_update => 1
 };
 
-belongs_to 'role' => 'Grimlock::Schema::Result::Role', {
-  'foreign.roleid' => 'self.roleid',
-},
-{
-  on_delete => 'restrict',
+belongs_to 'role' => 'Grimlock::Schema::Result::Role', 'roleid',
+{ 
+  cascade_delete => 1,
+  cascade_update => 1
 };
 
 primary_key ("userid", "roleid");

@@ -73,15 +73,17 @@ belongs_to 'author' => 'Grimlock::Schema::Result::User', {
   'foreign.userid' => 'self.author',
 },
 {
-  on_delete => "cascade",
-  on_update => "cascade",
+  cascade_delete => 1,
+  cascade_update => 1
 };
 
 belongs_to 'parent' => __PACKAGE__, {
   'foreign.entryid' => 'self.parent',
 },
 {
-  join_type => 'LEFT'
+  join_type => 'LEFT',
+  cascade_delete => 1,
+  cascade_update => 1
 };
 
 has_many 'children' => __PACKAGE__, {
