@@ -19,7 +19,7 @@ my $schema       = Grimlock::Schema->connect($connect_info);
 my $dh = DH->new({
   schema           => $schema,
   script_directory => "$FindBin::Bin/../dbicdh",
-  databases        => 'PostgreSQL',
+  databases        => ['PostgreSQL', 'SQLite' ],
   force_overwrite  => 1,
 });
  

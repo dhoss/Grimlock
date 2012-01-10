@@ -1,0 +1,865 @@
+---
+schema:
+  procedures: {}
+  tables:
+    entries:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - entryid
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - display_title
+          match_type: ''
+          name: entries_display_title
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+        - deferrable: 1
+          expression: ''
+          fields:
+            - title
+          match_type: ''
+          name: entries_title
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+        - deferrable: 1
+          expression: ''
+          fields:
+            - author
+          match_type: ''
+          name: entries_fk_author
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - userid
+          reference_table: users
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - parent
+          match_type: ''
+          name: entries_fk_parent
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - entryid
+          reference_table: entries
+          type: FOREIGN KEY
+      fields:
+        author:
+          data_type: int
+          default_value: ~
+          extra:
+            unsigned: 1
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: author
+          order: 7
+          size:
+            - 0
+        body:
+          data_type: text
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: body
+          order: 6
+          size:
+            - 0
+        created_at:
+          data_type: datetime
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: created_at
+          order: 8
+          size:
+            - 0
+        display_title:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: display_title
+          order: 3
+          size:
+            - 200
+        entryid:
+          data_type: int
+          default_value: ~
+          extra:
+            unsigned: 1
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: entryid
+          order: 1
+          size:
+            - 0
+        parent:
+          data_type: bigint
+          default_value: ~
+          extra:
+            unsigned: 1
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: parent
+          order: 5
+          size:
+            - 0
+        path:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: path
+          order: 4
+          size:
+            - 255
+        title:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: title
+          order: 2
+          size:
+            - 200
+        updated_at:
+          data_type: datetime
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: updated_at
+          order: 9
+          size:
+            - 0
+      indices:
+        - fields:
+            - author
+          name: entries_idx_author
+          options: []
+          type: NORMAL
+        - fields:
+            - parent
+          name: entries_idx_parent
+          options: []
+          type: NORMAL
+        - fields:
+            - parent
+          name: tree_data
+          options: []
+          type: NORMAL
+      name: entries
+      options: []
+      order: 4
+    roles:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - roleid
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - name
+          match_type: ''
+          name: roles_name
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+      fields:
+        name:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: name
+          order: 2
+          size:
+            - 50
+        roleid:
+          data_type: int
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: roleid
+          order: 1
+          size:
+            - 0
+      indices: []
+      name: roles
+      options: []
+      order: 1
+    sessions:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - sessionid
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+      fields:
+        expires:
+          data_type: int
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: expires
+          order: 3
+          size:
+            - 0
+        session_data:
+          data_type: text
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: session_data
+          order: 2
+          size:
+            - 0
+        sessionid:
+          data_type: char
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: sessionid
+          order: 1
+          size:
+            - 72
+      indices: []
+      name: sessions
+      options: []
+      order: 2
+    user_roles:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - userid
+            - roleid
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - roleid
+          match_type: ''
+          name: user_roles_fk_roleid
+          on_delete: RESTRICT
+          on_update: ''
+          options: []
+          reference_fields:
+            - roleid
+          reference_table: roles
+          type: FOREIGN KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - userid
+          match_type: ''
+          name: user_roles_fk_userid
+          on_delete: CASCADE
+          on_update: CASCADE
+          options: []
+          reference_fields:
+            - userid
+          reference_table: users
+          type: FOREIGN KEY
+      fields:
+        roleid:
+          data_type: int
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: roleid
+          order: 2
+          size:
+            - 0
+        userid:
+          data_type: int
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: userid
+          order: 1
+          size:
+            - 0
+      indices:
+        - fields:
+            - roleid
+          name: user_roles_idx_roleid
+          options: []
+          type: NORMAL
+        - fields:
+            - userid
+          name: user_roles_idx_userid
+          options: []
+          type: NORMAL
+      name: user_roles
+      options: []
+      order: 5
+    users:
+      constraints:
+        - deferrable: 1
+          expression: ''
+          fields:
+            - userid
+          match_type: ''
+          name: ''
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: PRIMARY KEY
+        - deferrable: 1
+          expression: ''
+          fields:
+            - email
+          match_type: ''
+          name: users_email
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+        - deferrable: 1
+          expression: ''
+          fields:
+            - name
+          match_type: ''
+          name: users_name
+          on_delete: ''
+          on_update: ''
+          options: []
+          reference_fields: []
+          reference_table: ''
+          type: UNIQUE
+      fields:
+        created_at:
+          data_type: datetime
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: created_at
+          order: 4
+          size:
+            - 0
+        email:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 1
+          name: email
+          order: 6
+          size:
+            - 255
+        name:
+          data_type: varchar
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 1
+          name: name
+          order: 2
+          size:
+            - 200
+        password:
+          data_type: char
+          default_value: ~
+          is_nullable: 0
+          is_primary_key: 0
+          is_unique: 0
+          name: password
+          order: 3
+          size:
+            - 60
+        updated_at:
+          data_type: datetime
+          default_value: ~
+          is_nullable: 1
+          is_primary_key: 0
+          is_unique: 0
+          name: updated_at
+          order: 5
+          size:
+            - 0
+        userid:
+          data_type: int
+          default_value: ~
+          is_auto_increment: 1
+          is_nullable: 0
+          is_primary_key: 1
+          is_unique: 0
+          name: userid
+          order: 1
+          size:
+            - 0
+      indices: []
+      name: users
+      options: []
+      order: 3
+  triggers: {}
+  views: {}
+translator:
+  add_drop_table: 0
+  filename: ~
+  no_comments: 0
+  parser_args:
+    package: &1 !!perl/hash:Grimlock::Schema
+      class_mappings:
+        DBIx::Class::DeploymentHandler::VersionStorage::Standard::VersionResult: __VERSION
+        Grimlock::Schema::Result::Entry: Entry
+        Grimlock::Schema::Result::Role: Role
+        Grimlock::Schema::Result::Session: Session
+        Grimlock::Schema::Result::User: User
+        Grimlock::Schema::Result::UserRole: UserRole
+      source_registrations:
+        Entry: !!perl/hash:DBIx::Class::ResultSource::Table
+          _columns:
+            author:
+              _inflate_info:
+                deflate: !!perl/code '{ "DUMMY" }'
+                inflate: !!perl/code '{ "DUMMY" }'
+              data_type: int
+              extra:
+                unsigned: 1
+              is_nullable: 0
+            body:
+              data_type: text
+              is_nullable: 0
+            created_at:
+              _ic_dt_method: datetime
+              _inflate_info:
+                deflate: !!perl/code '{ "DUMMY" }'
+                inflate: !!perl/code '{ "DUMMY" }'
+              data_type: datetime
+              dynamic_default_on_create: get_timestamp
+              is_nullable: 0
+            display_title:
+              data_type: varchar
+              is_nullable: 0
+              size: 200
+            entryid:
+              data_type: int
+              extra:
+                unsigned: 1
+              is_auto_increment: 1
+              is_nullable: 0
+            parent:
+              _inflate_info:
+                deflate: !!perl/code '{ "DUMMY" }'
+                inflate: !!perl/code '{ "DUMMY" }'
+              data_type: bigint
+              extra:
+                unsigned: 1
+              is_foreign_key: 1
+              is_nullable: 1
+            path:
+              data_type: varchar
+              is_nullable: 1
+              size: 255
+            title:
+              data_type: varchar
+              is_nullable: 0
+              size: 200
+            updated_at:
+              _ic_dt_method: datetime
+              _inflate_info:
+                deflate: !!perl/code '{ "DUMMY" }'
+                inflate: !!perl/code '{ "DUMMY" }'
+              data_type: datetime
+              dynamic_default_on_create: get_timestamp
+              dynamic_default_on_update: get_timestamp
+              is_nullable: 1
+          _columns_info_loaded: 0
+          _ordered_columns:
+            - entryid
+            - title
+            - display_title
+            - path
+            - parent
+            - body
+            - author
+            - created_at
+            - updated_at
+          _primaries: &2
+            - entryid
+          _relationships:
+            author:
+              attrs:
+                accessor: filter
+                is_foreign_key_constraint: 1
+                on_delete: cascade
+                on_update: cascade
+                undef_on_null_fk: 1
+              class: Grimlock::Schema::Result::User
+              cond:
+                foreign.userid: self.author
+              source: Grimlock::Schema::Result::User
+            children:
+              attrs:
+                accessor: multi
+                cascade_copy: 1
+                cascade_delete: 1
+                join_type: LEFT
+              class: Grimlock::Schema::Result::Entry
+              cond:
+                foreign.parent: self.entryid
+              source: Grimlock::Schema::Result::Entry
+            parent:
+              attrs:
+                accessor: filter
+                is_foreign_key_constraint: 1
+                join_type: LEFT
+                undef_on_null_fk: 1
+              class: Grimlock::Schema::Result::Entry
+              cond:
+                foreign.entryid: self.parent
+              source: Grimlock::Schema::Result::Entry
+          _unique_constraints:
+            entries_display_title:
+              - display_title
+            entries_title:
+              - title
+            primary: *2
+          name: entries
+          result_class: Grimlock::Schema::Result::Entry
+          resultset_attributes: {}
+          resultset_class: Grimlock::Schema::ResultSet::Entry
+          schema: *1
+          source_name: Entry
+        Role: !!perl/hash:DBIx::Class::ResultSource::Table
+          _columns:
+            name:
+              data_type: varchar
+              is_nullable: 0
+              size: 50
+            roleid:
+              data_type: int
+              is_auto_increment: 1
+              is_nullable: 0
+          _columns_info_loaded: 0
+          _ordered_columns:
+            - roleid
+            - name
+          _primaries: &3
+            - roleid
+          _relationships:
+            user_roles:
+              attrs:
+                accessor: multi
+                cascade_copy: 1
+                cascade_delete: 1
+                join_type: LEFT
+              class: Grimlock::Schema::Result::UserRole
+              cond:
+                foreign.role: self.roleid
+              source: Grimlock::Schema::Result::UserRole
+          _unique_constraints:
+            primary: *3
+            roles_name:
+              - name
+          name: roles
+          result_class: Grimlock::Schema::Result::Role
+          resultset_attributes: {}
+          resultset_class: DBIx::Class::ResultSet
+          schema: *1
+          source_name: Role
+        Session: !!perl/hash:DBIx::Class::ResultSource::Table
+          _columns:
+            expires:
+              data_type: int
+              is_nullable: 1
+            session_data:
+              data_type: text
+              is_nullable: 1
+            sessionid:
+              data_type: char
+              is_nullable: 0
+              size: 72
+          _columns_info_loaded: 0
+          _ordered_columns:
+            - sessionid
+            - session_data
+            - expires
+          _primaries: &4
+            - sessionid
+          _relationships: {}
+          _unique_constraints:
+            primary: *4
+          name: sessions
+          result_class: Grimlock::Schema::Result::Session
+          resultset_attributes: {}
+          resultset_class: DBIx::Class::ResultSet
+          schema: *1
+          source_name: Session
+        User: !!perl/hash:DBIx::Class::ResultSource::Table
+          _columns:
+            created_at:
+              _ic_dt_method: datetime
+              _inflate_info:
+                deflate: !!perl/code '{ "DUMMY" }'
+                inflate: !!perl/code '{ "DUMMY" }'
+              data_type: datetime
+              dynamic_default_on_create: get_timestamp
+              is_nullable: 0
+            email:
+              data_type: varchar
+              is_nullable: 1
+              size: 255
+            name:
+              data_type: varchar
+              is_nullable: 0
+              size: 200
+            password:
+              data_type: char
+              encode_args:
+                cost: 8
+                key_nul: 1
+              encode_check_method: check_password
+              encode_class: Crypt::Eksblowfish::Bcrypt
+              encode_column: 1
+              is_nullable: 0
+              size: 60
+            updated_at:
+              _ic_dt_method: datetime
+              _inflate_info:
+                deflate: !!perl/code '{ "DUMMY" }'
+                inflate: !!perl/code '{ "DUMMY" }'
+              data_type: datetime
+              dynamic_default_on_create: get_timestamp
+              dynamic_default_on_update: get_timestamp
+              is_nullable: 1
+            userid:
+              data_type: int
+              is_auto_increment: 1
+              is_nullable: 0
+          _columns_info_loaded: 0
+          _ordered_columns:
+            - userid
+            - name
+            - password
+            - created_at
+            - updated_at
+            - email
+          _primaries: &5
+            - userid
+          _relationships:
+            entries:
+              attrs:
+                accessor: multi
+                cascade_copy: 1
+                cascade_delete: 1
+                join_type: LEFT
+              class: Grimlock::Schema::Result::Entry
+              cond:
+                foreign.author: self.userid
+              source: Grimlock::Schema::Result::Entry
+            user_roles:
+              attrs:
+                accessor: multi
+                cascade_copy: 1
+                cascade_delete: 1
+                join_type: LEFT
+              class: Grimlock::Schema::Result::UserRole
+              cond:
+                foreign.userid: self.userid
+              source: Grimlock::Schema::Result::UserRole
+          _unique_constraints:
+            primary: *5
+            users_email:
+              - email
+            users_name:
+              - name
+          name: users
+          result_class: Grimlock::Schema::Result::User
+          resultset_attributes: {}
+          resultset_class: Grimlock::Schema::ResultSet::User
+          schema: *1
+          source_name: User
+        UserRole: !!perl/hash:DBIx::Class::ResultSource::Table
+          _columns:
+            roleid:
+              data_type: int
+              is_nullable: 0
+            userid:
+              data_type: int
+              is_nullable: 0
+          _columns_info_loaded: 0
+          _ordered_columns:
+            - userid
+            - roleid
+          _primaries: &6
+            - userid
+            - roleid
+          _relationships:
+            role:
+              attrs:
+                accessor: single
+                fk_columns:
+                  roleid: 1
+                is_foreign_key_constraint: 1
+                on_delete: restrict
+                undef_on_null_fk: 1
+              class: Grimlock::Schema::Result::Role
+              cond:
+                foreign.roleid: self.roleid
+              source: Grimlock::Schema::Result::Role
+            user:
+              attrs:
+                accessor: single
+                fk_columns:
+                  userid: 1
+                is_foreign_key_constraint: 1
+                on_delete: cascade
+                on_update: cascade
+                undef_on_null_fk: 1
+              class: Grimlock::Schema::Result::User
+              cond:
+                foreign.userid: self.userid
+              source: Grimlock::Schema::Result::User
+          _unique_constraints:
+            primary: *6
+          name: user_roles
+          result_class: Grimlock::Schema::Result::UserRole
+          resultset_attributes: {}
+          resultset_class: DBIx::Class::ResultSet
+          schema: *1
+          source_name: UserRole
+        __VERSION: !!perl/hash:DBIx::Class::ResultSource::Table
+          _columns:
+            ddl:
+              data_type: text
+              is_nullable: 1
+            id:
+              data_type: int
+              is_auto_increment: 1
+            upgrade_sql:
+              data_type: text
+              is_nullable: 1
+            version:
+              data_type: varchar
+              size: 50
+          _columns_info_loaded: 0
+          _ordered_columns:
+            - id
+            - version
+            - ddl
+            - upgrade_sql
+          _primaries: &7
+            - id
+          _relationships: {}
+          _unique_constraints:
+            dbix_class_deploymenthandler_versions_version:
+              - version
+            primary: *7
+          name: dbix_class_deploymenthandler_versions
+          result_class: DBIx::Class::DeploymentHandler::VersionStorage::Standard::VersionResult
+          resultset_attributes: {}
+          resultset_class: DBIx::Class::DeploymentHandler::VersionStorage::Standard::VersionResultSet
+          schema: *1
+          source_name: __VERSION
+      storage: !!perl/hash:DBIx::Class::Storage::DBI
+        _connect_info:
+          - AutoCommit: 1
+            dsn: dbi:SQLite:dbname=grimlock.db
+            password: ~
+            quote_names: 1
+            user: ~
+        _dbh_details: {}
+        _dbh_gen: 0
+        _dbi_connect_info:
+          - dbi:SQLite:dbname=grimlock.db
+          - ~
+          - ~
+          - &8
+            AutoCommit: 1
+            PrintError: 0
+            RaiseError: 1
+            ShowErrorStatement: 1
+        _dbic_connect_attributes: *8
+        _in_do_block: 0
+        _sql_maker: ~
+        _sql_maker_opts:
+          quote_names: 1
+        savepoints: []
+        schema: *1
+        transaction_depth: 0
+    sources:
+      - Role
+      - Session
+      - Entry
+      - UserRole
+      - User
+  parser_type: SQL::Translator::Parser::DBIx::Class
+  producer_args: {}
+  producer_type: SQL::Translator::Producer::YAML
+  show_warnings: 0
+  trace: 0
+  version: 0.11010
