@@ -5,7 +5,6 @@ use warnings;
  
 use feature ":5.10";
  
-use aliased 'DBIx::Class::DeploymentHandler' => 'DH';
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use Grimlock::Schema;
@@ -16,32 +15,16 @@ my $config_hash  = $config->get;
 my $connect_info = $config_hash->{"Model::Database"}{"connect_info"};
 my $schema       = Grimlock::Schema->connect($connect_info);
  
-my $dh = DH->new({
-  schema           => $schema,
-  script_directory => "$FindBin::Bin/../dbicdh",
-  databases        => ['PostgreSQL', 'SQLite' ],
-  force_overwrite  => 1,
-});
- 
 sub install {
-  $dh->prepare_install;
-  $dh->install;
+  $schema->deploy;
 }
  
 sub upgrade {
-  die "Please update the version in Schema.pm"
-    if ( $dh->version_storage->version_rs->search({version => $dh->schema_version})->count );
- 
-  die "We only support positive integers for versions around these parts."
-    unless $dh->schema_version =~ /^\d+$/;
- 
-  $dh->prepare_deploy;
-  $dh->prepare_upgrade;
-  $dh->upgrade;
+  say "work in progress";
 }
  
 sub current_version {
-  say $dh->database_version;
+  say "work in progress"
 }
  
 sub help {
