@@ -21,7 +21,7 @@ unique_column name => {
 };
 
 has_many 'user_roles' => 'Grimlock::Schema::Result::UserRole', {
-  'foreign.role' => 'self.roleid',
+  'foreign.roleid' => 'self.roleid',
 };
 
 1;

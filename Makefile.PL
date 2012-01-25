@@ -24,7 +24,6 @@ requires 'Catalyst::Controller::REST';
 requires 'Data::Manager';
 requires 'Catalyst::Plugin::MessageStack';
 requires 'Catalyst::Model::DBIC::Schema';
-requires 'DBIx::Class::DeploymentHandler';
 requires 'Catalyst::View::TT';
 requires 'Catalyst::View::JSON';
 requires 'Catalyst::Plugin::I18N';
