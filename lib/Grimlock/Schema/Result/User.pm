@@ -8,7 +8,7 @@ use Grimlock::Schema::Candy -components => [
       EncodedColumn
       )
 ];
-
+use Data::Dumper;
 use Text::Password::Pronounceable;
 
 resultset_class 'Grimlock::Schema::ResultSet::User';
@@ -97,6 +97,12 @@ sub reply_count {
 sub generate_random_pass {
   my $self = shift;
   Text::Password::Pronounceable->generate(6,10);
+}
+
+sub create_entry {
+  my ( $self, $params ) = @_;
+  warn Dumper $params;
+  $self->create_related('entry', $params);
 }
 
 1;

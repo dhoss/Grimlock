@@ -69,6 +69,12 @@ column updated_at => {
   set_on_update => 1
 };
 
+column published => {
+  data_type => 'tinyint',
+  is_nullable => 0,
+  default     => 0
+};
+
 belongs_to 'author' => 'Grimlock::Schema::Result::User', {
   'foreign.userid' => 'self.author',
 },
