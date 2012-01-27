@@ -104,7 +104,9 @@ sub create_POST {
       password => $params->{'password'},
       email    => $params->{'email'} || "",
     }) || die "Can't create user: $!";
-    $c->authenticate({ name => $user->name, password => $user->password });
+
+    $c->authenticate({ name => $user->name, password => $user->password }) 
+      || die "Can't authenticate: $!";
     
     return $self->status_created($c,
       location => $c->uri_for_action('/user/browse', [ 

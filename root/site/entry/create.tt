@@ -1,0 +1,8 @@
+<h2>Create an entry</h2>
+<form method="POST" action="[% c.uri_for_action('/entry/create') %]">
+<div id="form-entry-title">Title: <input type="text" name="title" /></div>
+<div id="form-entry-body">
+<textarea name="body" rows=15 cols=45></textarea>
+</div>
+<div id="form-entry-publish">Publish? <input type="checkbox" name="publish" /></div>
+<div id="form-entry-submit"><input type="submit" value="Save entry" /></div>

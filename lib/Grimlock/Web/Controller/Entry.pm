@@ -40,9 +40,10 @@ sub create : Chained('base') PathPart('entry') Args(0) ActionClass('REST') {
 sub create_GET {
   my ( $self, $c ) = @_;
  
-  $self->status_ok({
-    $c, entity => {}
-  });
+  $self->status_ok(
+    $c, 
+    entity => {}
+  );
 }
 
 sub create_POST { 
