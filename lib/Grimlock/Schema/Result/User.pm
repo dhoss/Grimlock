@@ -101,7 +101,6 @@ sub generate_random_pass {
 
 sub create_entry {
   my ( $self, $params ) = @_;
-  warn Dumper $params;
   $self->add_to_entries($params);
 }
 
