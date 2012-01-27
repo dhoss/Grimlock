@@ -71,8 +71,7 @@ column updated_at => {
 
 column published => {
   data_type => 'tinyint',
-  is_nullable => 0,
-  default     => 0
+  default => 0
 };
 
 belongs_to 'author' => 'Grimlock::Schema::Result::User', {
