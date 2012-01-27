@@ -32,33 +32,37 @@ sub load_entry : Chained('base') PathPart('') CaptureArgs(1) {
 
 sub create : Chained('base') PathPart('entry') Args(0) ActionClass('REST') {
   my ( $self, $c ) = @_;
-  return $self->status_bad_request($c,
-    message => "You must be logged in to create an entry"
-  ) unless $c->user_exists;
 }
 
 sub create_GET {
   my ( $self, $c ) = @_;
- 
-  $self->status_ok(
-    $c, 
-    entity => {}
-  );
+  unless ( $c->user_exists ) { 
+    return $self->status_bad_request($c,
+      message => "You must be logged in to create an entry"
+    );
+  }
+  $self->status_ok( $c, entity => {} );
 }
 
 sub create_POST { 
   my ( $self, $c ) = @_;
-   
+  unless ( $c->user_exists ) { 
+    return $self->status_bad_request($c,
+      message => "You must be logged in to create an entry"
+    );
+  }
+ 
   my $params = $c->req->data || $c->req->params;
   my $user = $c->user->obj;
   my $entry;
   try {
+    $params->{'publish'} = 1 if $params->{'publish'} eq 'on';
     $entry = $user->create_entry($params) || die $!;
  
-    return $self->status_created($c, 
+    $self->status_created($c, 
       location => $c->req->uri->as_string,
       entity   => {
-        message => "Entry created",
+        message => "Entry created!",
         entry => $entry
       }
     );

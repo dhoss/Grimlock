@@ -1,5 +1,5 @@
 [% IF user %]
-<div><a href="[% c.uri_for_action('/user/browse', [ user.userid ]) %]">Go to your profile &raquo;</a></div>
+<div><a href="[% c.uri_for_action('/user/browse', [ c.user.userid ]) %]">Go to your profile &raquo;</a></div>
 [% END %]
 <h2>Sign Up</h2>
 <div><p>* required</p></div>

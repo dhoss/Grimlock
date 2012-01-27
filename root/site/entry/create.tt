@@ -4,5 +4,5 @@
 <div id="form-entry-body">
 <textarea name="body" rows=15 cols=45></textarea>
 </div>
-<div id="form-entry-publish">Publish? <input type="checkbox" name="publish" /></div>
+<div id="form-entry-publish">Publish? <input type="checkbox" name="published" /></div>
 <div id="form-entry-submit"><input type="submit" value="Save entry" /></div>
