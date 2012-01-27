@@ -1,0 +1,4 @@
+<h2>[% user.name %]'s entries</h2>
+[% FOR entry IN entries %]
+<div class="user-entry"><a href="[% c.uri_for_action('/entry/browse', [ entry.entryid ] ) %]">[% entry.title %]</a></div>
+[% END %]

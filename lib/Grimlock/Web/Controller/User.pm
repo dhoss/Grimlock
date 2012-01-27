@@ -104,9 +104,7 @@ sub create_POST {
       password => $params->{'password'},
       email    => $params->{'email'} || "",
     }) || die "Can't create user: $!";
-
-    $c->authenticate({ name => $user->name, password => $user->password }) 
-      || die "Can't authenticate: $!";
+    $c->authenticate({ name => $user->name, password => $user->password });
     
     return $self->status_created($c,
       location => $c->uri_for_action('/user/browse', [ 
@@ -246,6 +244,26 @@ sub forgot_password_POST {
    );
  }
 }
+
+
+sub entries :  Chained('load_user') PathPart('entries') Args(0) ActionClass('REST') {
+  my ( $self, $c ) = @_;
+
+}
+
+sub entries_GET {
+  my ( $self, $c ) = @_;
+  my $user = $c->stash->{'user'};
+  $c->log->debug("USER " . Dumper $user);
+  my $entry_rs = $user->entries;
+  return $self->status_ok($c,
+    entity => {
+      entries => [$entry_rs->all],
+      user    => $user
+    }
+  );
+}
+
 
 =head1 AUTHOR
 
