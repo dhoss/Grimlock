@@ -53,14 +53,12 @@ sub create_POST {
   my $user = $c->user->obj;
   my $entry;
   try {
-    $entry = $user->create_related('entries', {
-        title => $params->{'title'},
-        body  => $params->{'body'}
-    }) || die $!;
+    $entry = $user->create_entry($params) || die $!;
  
-    $self->status_created($c, 
+    return $self->status_created($c, 
       location => $c->req->uri->as_string,
       entity   => {
+        message => "Entry created",
         entry => $entry
       }
     );
