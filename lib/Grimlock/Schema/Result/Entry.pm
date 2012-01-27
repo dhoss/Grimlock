@@ -142,5 +142,9 @@ sub sqlt_deploy_hook {
   $sqlt_table->add_index(name => 'tree_data', fields => ['parent']);
 }
 
+sub reply_count {
+  my $self = shift;
+  return $self->children->count;
+}
 
 1;

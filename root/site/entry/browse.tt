@@ -1,7 +1,7 @@
 [% BLOCK entry_body %]
 <h2>[% entry.title %]</h2>
 <div id="body">[% entry.body %]</div>
-<div class="reply-block">[% entry.children.count %] replies</div>
+<div class="reply-block">[% entry.reply_count %] replies</div>
 [% END %]
 
 
