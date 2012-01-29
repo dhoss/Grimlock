@@ -40,6 +40,8 @@ requires 'DBIx::Class::Helper::Row::ToJSON';
 requires 'Text::Password::Pronounceable';
 requires 'Email::Sender::Simple';
 requires 'DBICx::MaterializedPath' => '0.03';
+requires 'Template::Plugin::Filter::String::Truncate' => '0.02';
+requires 'DateTime::Format::Pg';
 test_requires 'Test::More' => '0.88';
 test_requires 'Test::WWW::Mechanize::PSGI' => '0.35';
 test_requires 'Test::DBIx::Class' => '0.28';

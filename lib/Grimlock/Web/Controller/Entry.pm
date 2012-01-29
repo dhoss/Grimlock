@@ -56,7 +56,7 @@ sub create_POST {
   my $user = $c->user->obj;
   my $entry;
   try {
-    $params->{'publish'} = 1 if $params->{'publish'} eq 'on';
+    $params->{'published'} = 1 if $params->{'published'} eq 'on';
     $entry = $user->create_entry($params) || die $!;
  
     $self->status_created($c, 

@@ -1,0 +1,16 @@
+[% USE Filter.String.Truncate %]
+[% BLOCK entry_body %]
+<h1><a href="[% c.uri_for_action('/entry/browse', [ entry.display_title ]) %]">[% entry.title %]</a></h1>
+<div class="entry-body">[% entry.body %]</div>
+<div class="info-block">
+posted by <a href="[% c.uri_for_action('/user/browse', [ entry.author.name ] ) %]">[% entry.author.name %]</a>
+on [% entry.created_at.ymd %]
+<a href="[% c.uri_for_action('/entry/reply', [ entry.display_title ]) %]">comments ([% entry.reply_count %])</a></div>
+[% END %]
+
+
+[% PROCESS entry_body %]
+
+[% FOR reply IN entry.grandchildren %]
+  [% PROCESS entry_body entry=reply %]
+[% END %]

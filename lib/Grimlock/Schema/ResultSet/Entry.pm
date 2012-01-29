@@ -10,7 +10,10 @@ sub front_page_entries {
       published => 1
     }, 
     {
-      rows => $limit || 50
+      rows => $limit || 50,
+      order_by => { 
+        -desc => 'created_at'
+      },
     }
   );
 }
