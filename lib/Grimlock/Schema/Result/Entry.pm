@@ -2,7 +2,6 @@ package Grimlock::Schema::Result::Entry;
 
 use Grimlock::Schema::Candy -components => [
   qw(
-      InflateColumn::DateTime
       TimeStamp
       Helper::Row::ToJSON
       +DBICx::MaterializedPath
@@ -145,6 +144,13 @@ sub sqlt_deploy_hook {
 sub reply_count {
   my $self = shift;
   return $self->children->count;
+}
+
+sub created_at {
+  my $self = shift;
+  my $created_at = $self->next::method(@_);
+  my $date_time = $created_at->month_name . " ". $created_at->day_name . " " .  $created_at->hms(':');
+  return $date_time;
 }
 
 1;

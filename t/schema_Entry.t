@@ -23,4 +23,6 @@ ok my $reply = Entry->create({
   title  => 'reply test',
   body   => 'derp'
 }), "created reply ok";
+diag $entry->created_at;
+ok $entry->created_at =~ /\w \w \d+:\d+:\d/, "created_at rendered properly";
 done_testing;
