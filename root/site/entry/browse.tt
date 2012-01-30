@@ -5,11 +5,13 @@
 posted by <a href="[% c.uri_for_action('/user/browse', [ entry.author.name ] ) %]">[% entry.author.name %]</a>
 on [% entry.created_at %]
 <a href="[% c.uri_for_action('/entry/reply', [ entry.display_title ]) %]">comments ([% entry.reply_count %])</a></div>
+
+<div id="replies">
+<ul>
+[% FOR reply IN entry.children %]
+  <li>[% PROCESS entry_body entry=reply %]</li>
 [% END %]
-
-
+</ul>
+</div>
+[% END %]
 [% PROCESS entry_body %]
-
-[% FOR reply IN entry.grandchildren %]
-  [% PROCESS entry_body entry=reply %]
-[% END %]

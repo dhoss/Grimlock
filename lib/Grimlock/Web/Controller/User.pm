@@ -21,8 +21,11 @@ Catalyst Controller.
 sub base : Chained('/api/base') PathPart('') CaptureArgs(0) {}
 
 sub load_user : Chained('base') PathPart('user') CaptureArgs(1) {
-  my ( $self, $c, $userid ) = @_;
-  my $user = $c->model('Database::User')->find($userid, { prefetch => 'entries' });
+  my ( $self, $c, $username ) = @_;
+  my $user = $c->model('Database::User')->find({
+    name => $username
+  }, 
+  { prefetch => 'entries' });
   $c->log->debug("FOUND IN LOAD" . $user->name);
   $c->stash( user => $user );
 }
@@ -107,7 +110,7 @@ sub create_POST {
     $c->set_authenticated($c->find_user({ name => $user->name}));
     
     return $self->status_created($c,
-      location => $c->uri_for_action('/user/browse', [ $user->userid ]),
+      location => $c->uri_for_action('/user/browse', [ $user->name ]),
       entity => {
         user => $user,
         message => "User created successfully!"
@@ -252,8 +255,8 @@ sub entries :  Chained('load_user') PathPart('entries') Args(0) ActionClass('RES
 sub entries_GET {
   my ( $self, $c ) = @_;
   my $user = $c->stash->{'user'};
-  $c->log->debug("USER " . Dumper $user);
   my $entry_rs = $user->entries;
+  $c->log->debug("User " . Dumper $user);
   return $self->status_ok($c,
     entity => {
       entries => [$entry_rs->all],

@@ -25,6 +25,9 @@ sub load_entry : Chained('base') PathPart('') CaptureArgs(1) {
   my $entry = $c->model('Database::Entry')->find(
   {
     display_title => $entry_title 
+  },
+  {
+    prefetch => 'children'
   });
   $c->stash( entry => $entry );
 }
@@ -75,17 +78,19 @@ sub create_POST {
 
 sub reply : Chained('load_entry') PathPart('reply') Args(0) ActionClass('REST') {
   my ( $self, $c ) = @_;
-  my $entry = $c->stash->{'entry'};
-  return $self->status_bad_request($c,
-    message => "No such post"
-  ) unless $entry;
 }
 
 sub reply_GET {
   my ( $self, $c ) = @_;
-  
-  $self->status_ok($c, 
-    entity => {}
+  my $entry = $c->stash->{'entry'};
+  return $self->status_bad_request($c,
+    message => "No such post"
+  ) unless $entry;
+
+  return $self->status_ok($c, 
+    entity => {
+      entry => $entry
+    }
   );
 }
 
@@ -93,6 +98,10 @@ sub reply_POST {
   my ( $self, $c ) = @_;
   my $params ||= $c->req->data || $c->req->params;
   my $entry = $c->stash->{'entry'};
+  return $self->status_bad_request($c,
+    message => "No such post"
+  ) unless $entry;
+
   my $reply;
   try {
     $c->log->debug("GOT TO CREATE IN REPLY");
@@ -100,17 +109,18 @@ sub reply_POST {
       author => $c->user->obj->userid,
       parent => $entry,
       title => $params->{'title'},
-      body => $params->{'body'}
+      body => $params->{'body'},
+      published => 1,
     }) or die $!;
     $c->log->debug("AFTER CREATE IN REPLY");
     return $self->status_created($c,
-      location => $c->uri_for_action('/entry/browse', [ $reply->parent->title ] ),
+      location => $c->uri_for_action('/entry/browse', [ $reply->display_title ] ),
       entity   => {
         reply => $reply
       }
     );
   } catch {
-    $self->status_bad_request($c,
+    return $self->status_bad_request($c,
       message => $_
     );
   };

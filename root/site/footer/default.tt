@@ -1,8 +1,11 @@
 <p>Your footer here</p>
 [% IF c.debug %]
 <pre>
-[%- USE Dumper;
-Dumper.dump(c.user.obj);
+[%- USE Dumper %]
+USER: [%
+Dumper.dump(c.user.obj)
+%]
+STASH: [%
 Dumper.dump(c.stash) %]
 </pre>
 [%
