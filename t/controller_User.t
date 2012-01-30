@@ -35,13 +35,16 @@ my $res = $mech->post('/user',
 ok $res->is_success;
 
 # retrieve created user
-$mech->get_ok('/user/1');
+$mech->get_ok('/user/herpy');
 
 # retrieve user listing
 $mech->get_ok('/users' );
 
+# logout since creating a user logs us in
+$mech->get_ok('user/logout');
+
 # attempt to update a user without authing
-ok !($mech->put( '/user/1',
+ok !($mech->put( '/user/herpy',
   Content_Type => 'application/x-www-form-urlencoded',
   Content => 'name=fartnuts'  
 )->is_success), "should fail since we aren't logged in";
@@ -58,19 +61,19 @@ $mech->post('/user/login',
 ok $mech->success, "login works";
 
 # update a user (authenticated)
-ok $mech->put( '/user/1',
+ok $mech->put( '/user/herpy',
   Content_Type => 'application/x-www-form-urlencoded',
   Content => 'name=fartnuts'  
 )->is_success;
 
 # get updated user, verify content is correct
-$mech->get_ok('/user/1');
+$mech->get_ok('/user/fartnuts');
 diag $mech->content;
 $mech->content_contains("fartnuts");
 
 # delete user, unauthenticated
 $mech->get_ok('/user/logout');
-ok !( $mech->request ( DELETE "/user/1" )->is_success ), "deleted user doesn't work without auth";
+ok !( $mech->request ( DELETE "/user/fartnuts" )->is_success ), "deleted user doesn't work without auth";
 
 # delete, now authed
 $mech->post('/user/login',
@@ -94,5 +97,5 @@ ok $mech->success, "post to forgot password action works";
 my @deliveries = Email::Sender::Simple->default_transport->deliveries;
 ok scalar @deliveries > 0, "there was an actual delivery";
 
-ok $mech->request ( DELETE "/user/1" )->is_success, "deleting works"; 
+ok $mech->request ( DELETE "/user/fartnuts" )->is_success, "deleting works"; 
 done_testing();

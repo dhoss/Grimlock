@@ -21,11 +21,16 @@ Catalyst Controller.
 sub base : Chained('/api/base') PathPart('') CaptureArgs(0) {}
 
 sub load_user : Chained('base') PathPart('user') CaptureArgs(1) {
-  my ( $self, $c, $username ) = @_;
-  my $user = $c->model('Database::User')->find({
-    name => $username
-  }, 
-  { prefetch => 'entries' });
+  my ( $self, $c, $uid) = @_;
+  my $user = $c->model('Database::User')->find(
+    {
+      name => $uid
+    }, 
+    {
+      userid => $uid
+    },
+    { prefetch => 'entries' }
+  );
   $c->log->debug("FOUND IN LOAD" . $user->name);
   $c->stash( user => $user );
 }
