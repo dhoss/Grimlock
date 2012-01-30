@@ -5,7 +5,7 @@
     [% END %]
     [% IF c.user_exists %]
     <li><a href="[% c.uri_for_action('/entry/create') %]"><span>Create an entry</span></a></li>
-    <li><a href="[% c.uri_for_actin('/user/entries', c.user.userid) %]">View your posts</a>
+    <li><a href="[% c.uri_for_action('/user/entries', [c.user.userid] )  %]"><span>View your posts</span></a>
     [%- END %]
     <li><span class="search">Search:<input type="text" name="q" /></span></li>
 </ul>
