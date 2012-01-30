@@ -1,3 +1,5 @@
+package Grimlock;
+
 =head1 NAME
 
 Grimlock - KING OF CMS
@@ -44,4 +46,4 @@ L<http://www.imdb.com/title/tt0092106/>
 
 =cut
 
-
+1;
