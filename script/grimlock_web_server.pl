@@ -11,11 +11,11 @@ Catalyst::ScriptRunner->run('Grimlock::Web', 'Server');
 
 =head1 NAME
 
-computron_web_server.pl - GRIMLOCK TEST SERVER
+grimlock_web_server.pl - GRIMLOCK TEST SERVER
 
 =head1 SYNOPSIS
 
-computron_web_server.pl [options]
+grimlock_web_server.pl [options]
 
    -d --debug           SHOW ERROR MESSAGE WHEN MAKE DUMB MISTAKE
    -f --fork            MAKE NEW PROCESS FOR REQUEST
