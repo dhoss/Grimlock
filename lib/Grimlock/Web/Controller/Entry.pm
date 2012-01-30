@@ -108,7 +108,7 @@ sub reply_POST {
     $reply = $c->model('Database::Entry')->create({
       author => $c->user->obj->userid,
       parent => $entry,
-      title => $params->{'title'},
+      title => 'RE:' . $entry->title,
       body => $params->{'body'},
       published => 1,
     }) or die $!;
@@ -116,7 +116,9 @@ sub reply_POST {
     return $self->status_created($c,
       location => $c->uri_for_action('/entry/browse', [ $reply->display_title ] ),
       entity   => {
-        reply => $reply
+        message => "Reply posted!",
+        reply => $reply,
+        entry => $reply->parent
       }
     );
   } catch {
