@@ -59,6 +59,7 @@ column created_at => {
   data_type => 'datetime',
   is_nullable => 0,
   set_on_create => 1,
+  accessor => '_created_at'
 };
 
 column updated_at => {
@@ -148,8 +149,12 @@ sub reply_count {
 
 sub created_at {
   my $self = shift;
-  my $created_at = $self->next::method(@_);
-  my $date_time = $created_at->month_name . " ". $created_at->day_name . " " .  $created_at->hms(':');
+  my $created_at = $self->_created_at;
+  my $date_time = $created_at->month_name . " "  . 
+                  $created_at->day        . ", " . 
+                  $created_at->year       . " at " .   
+                  $created_at->hms        . " "  .
+                  $created_at->time_zone->name;
   return $date_time;
 }
 
