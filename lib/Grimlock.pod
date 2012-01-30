@@ -1,0 +1,47 @@
+=head1 NAME
+
+Grimlock - KING OF CMS
+
+=head1 SYNOPSIS
+
+ME GRIMLOCK SAY YOU MUST MAKE DATABASE
+
+  dbicadmin -Ilib --schema=Grimlock::Schema   --connect='["dbi:SQLite:grimlock.db", "", ""]' --deploy
+
+OR FOR DATABASE THAT NO SUCK 
+
+  dbicadmin -Ilib --schema=Grimlock::Schema   --connect='["dbi:Pg:dbname=grimlock", "grimlock", "king!"]' --deploy
+
+NOW RUN TEST SERVER 
+
+  perl grimlock_web_server.pl
+
+IF NO EXPLODE, GRIMLOCK SAVE BLOG FOR YOU
+
+=head1 DESCRIPTION
+
+ME GRIMLOCK NO LIKE HAVING TO RUN APACHE TO USE BLOG LIKE MOVABLE TYPE.  ME GRIMLOCK ALSO HATE WORDPRESS, STUPID REMOTE SHELL WITH WEB BLOG FEATURE.
+
+SO ME GRIMLOCK MAKE THIS BLOG SO I CAN WRITE ABOUT PETRO RABBITS, KICKING BUTT, AND MUNCHING METAL.
+
+ME GRIMLOCK KING!
+
+=head1 LICENSE
+
+ME GRIMLOCK WANT SHARE BEAUTIFUL SOFTWARE ME WRITE WITH WORLD.  ME GRIMLOCK SAY THIS SOFTWARE RELEASE UNDER ARTISTIC LICENSE.
+
+SEE L<perlartistic>.
+
+=head1 AUTHOR
+
+ME, GRIMLOCK!
+
+GRIMLOCK NO USE EMAIL, EMAIL BORING. EMAIL THIS GUY INSTEAD: L<mailto:dhoss@cpan.org>
+
+=head1 SEE ALSO
+
+L<http://www.imdb.com/title/tt0092106/>
+
+=cut
+
+
