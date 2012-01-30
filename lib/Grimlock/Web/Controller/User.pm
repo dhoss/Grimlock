@@ -104,12 +104,10 @@ sub create_POST {
       password => $params->{'password'},
       email    => $params->{'email'} || "",
     }) || die "Can't create user: $!";
-    $c->authenticate({ name => $user->name, password => $user->password });
+    $c->set_authenticated($c->find_user({ name => $user->name}));
     
     return $self->status_created($c,
-      location => $c->uri_for_action('/user/browse', [ 
-        $user->userid
-      ]),
+      location => $c->uri_for_action('/user/browse', [ $user->userid ]),
       entity => {
         user => $user,
         message => "User created successfully!"
