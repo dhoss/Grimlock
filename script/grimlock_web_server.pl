@@ -11,33 +11,27 @@ Catalyst::ScriptRunner->run('Grimlock::Web', 'Server');
 
 =head1 NAME
 
-computron_web_server.pl - Catalyst Test Server
+computron_web_server.pl - GRIMLOCK TEST SERVER
 
 =head1 SYNOPSIS
 
 computron_web_server.pl [options]
 
-   -d --debug           force debug mode
-   -f --fork            handle each request in a new process
-                        (defaults to false)
-   -? --help            display this help and exits
-   -h --host            host (defaults to all)
-   -p --port            port (defaults to 3000)
-   -k --keepalive       enable keep-alive connections
-   -r --restart         restart when files get modified
-                        (defaults to false)
-   -rd --restart_delay  delay between file checks
-                        (ignored if you have Linux::Inotify2 installed)
-   -rr --restart_regex  regex match files that trigger
-                        a restart when modified
-                        (defaults to '\.yml$|\.yaml$|\.conf|\.pm$')
-   --restart_directory  the directory to search for
-                        modified files, can be set multiple times
-                        (defaults to '[SCRIPT_DIR]/..')
-   --follow_symlinks    follow symlinks in search directories
-                        (defaults to false. this is a no-op on Win32)
-   --background         run the process in the background
-   --pidfile            specify filename for pid file
+   -d --debug           SHOW ERROR MESSAGE WHEN MAKE DUMB MISTAKE
+   -f --fork            MAKE NEW PROCESS FOR REQUEST
+                        (DEFAULT NO TRUE)
+   -? --help            SHOW HELP PAGE FOR DUMMY WHO NO CAN REMEMBER HOW GRIMLOCK WORK
+   -h --host            NAME OF COMPUTER TO RUN GRIMLOCK BEAUTIFUL BLOG SOFTWARE
+   -p --port            NUMBER OF THINGY TO MAKE CONNECTION TO GRIMLOCK BLOG
+   -k --keepalive       SPARE CONNECTION PUNY LIFE
+   -r --restart         RESTART WHEN GET FRUSTRATED AND SMASH FILES
+                        (DEFAULT NO TRUE)
+   -rd --restart_delay  SLOW RESTART BLOG WHEN SMASH FILES
+                  
+   -rr --restart_regex  RESTART WHEN THINGIES THAT MATCH ARE SMASHED
+                        ('\.yml$|\.yaml$|\.conf|\.pm$' ARE THINGIES)
+   --background         MAKE GRIMLOCK BLOG SHUT UP AND WORK QUIET IN BACKGROUND BEHIND SCENES
+   --pidfile            NAME PROCESS FILE THINGY SO YOU CAN KILL GRIMLOCK BLOG LATER WHEN BORED
 
  See also:
    perldoc Catalyst::Manual
@@ -45,16 +39,17 @@ computron_web_server.pl [options]
 
 =head1 DESCRIPTION
 
-Run a Catalyst Testserver for this application.
+RUN GRIMLOCK BEAUTIFUL BLOG SOFTWARE IN DEVELOPER MODE
 
 =head1 AUTHORS
 
-Catalyst Contributors, see Catalyst.pm
+ME, GRIMLOCK!
 
 =head1 COPYRIGHT
 
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
+ME GRIMLOCK WANT SHARE BEAUTIFUL SOFTWARE ME WRITE WITH WORLD.  ME GRIMLOCK SAY THIS SOFTWARE RELEASE UNDER ARTISTIC LICENSE.
+
+SEE L<perlartistic>.
 
 =cut
 
