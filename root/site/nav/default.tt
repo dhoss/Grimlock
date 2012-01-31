@@ -4,8 +4,7 @@
     <li><a href="[% c.uri_for_action('/user/login') %]"><span>Login</span></a></li>
     [% END %]
     [% IF c.user_exists %]
-    <li><a href="[% c.uri_for_action('/entry/create') %]"><span>Create an entry</span></a></li>
-    <li><a href="[% c.uri_for_action('/user/entries', [c.user.name] )  %]"><span>View your posts</span></a>
+      [% INCLUDE 'nav/authed.tt' %]    
     [%- END %]
     <li><span class="search">Search:<input type="text" name="q" /></span></li>
 </ul>

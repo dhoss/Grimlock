@@ -1,66 +1,41 @@
-/* Reset styles */
-body {
-    color: #000;
-    background:#FFF;
+#desc {
+    margin-bottom: 20px;
+    border-bottom: 1px dotted #333;
 }
-body,
-h1, h2, h3, h4, h5, h6,
-div, p, blockquote, code, pre, th, td,
-ol, ul, li, dl, dt, dd,
-form, fieldset, legend, input, textarea {
-    margin: 0;
+#desc span {
+    background: #a3350d;
+    padding :2px;
+    color:# f27243;
+}
+
+.yui3-panel {
+    outline: none;
+}
+.yui3-panel-content .yui3-widget-hd {
+    font-weight: bold;
+}
+.yui3-panel-content .yui3-widget-bd {
+    padding: 15px;
+}
+.yui3-panel-content label {
+    margin-right: 30px;
+}
+.yui3-panel-content fieldset {
+    border: none;
     padding: 0;
 }
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-fieldset, img {
-    border:0;
-}
-strong, em, code, th, td {
-    font-style: normal;
-    font-weight: normal;
-}
-li {
-    list-style: none;
-}
-h1, h2, h3, h4, h5, h6 {
+.yui3-panel-content input[type="text"] {
+    border: none;
+    border: 1px solid #ccc;
+    padding: 3px 7px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
     font-size: 100%;
-    font-weight: normal;
+    width: 200px;
 }
 
-div#replies ul li {
-  padding-left: 1em;
+#addRow {
+    margin-top: 10px;
 }
 
-/* Layout style */
-.content {
-    width: 750px;
-    overflow: hidden;
-    margin-left: auto;
-    margin-right: auto;
-}
-.float_container {
-    overflow: hidden;
-}
-.main_column {
-    width: 425px;
-}
-.support_column {
-    width: 300px;
-}
-.column {
-    width: 365px;
-}
-
-/* Miscellaneous useful styles */
-.hide  { display: none !important }
-.left  { display: inline; float: left }
-.right { display: inline; float: right }
-.clear { clear: both }
-
-/* cursor styles */
-.clickable   { cursor: pointer; cursor: hand; }
-.unclickable { cursor: default !important; }
-.movable     { cursor: move; }

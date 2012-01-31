@@ -32,17 +32,17 @@ DEFAULT page.footer = 'default';
 DEFAULT page.language = c.config.language || 'en';
 DEFAULT page.head             = {};
 DEFAULT page.head.stylesheets = [
-    'http://yui.yahooapis.com/combo?3.0.0/build/cssfonts/fonts-min.css&3.0.0/build/cssreset/reset-min.css&3.0.0/build/cssbase/base-min.css'
+  'http://yui.yahooapis.com/combo?3.4.1/build/cssreset/reset-min.css&amp;3.4.1/build/cssfonts/fonts-min.css&amp;3.4.1/build/cssbase/base-min.css'
 ];
-DEFAULT page.head.scripts     = [];
+DEFAULT page.head.scripts     = [ 'http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js'
+];
 DEFAULT page.body             = {};
 DEFAULT page.body.classes     = ['yui-skin-sam'];
 DEFAULT page.body.scripts     = [
-    'http://yui.yahooapis.com/combo?3.0.0/build/yui/yui-min.js'
-];
+   ];
 DEFAULT page.content_class    = 'content';
 
 # Include global macros/vars/set up per implementation
-TRY; PROCESS site/global.tt; CATCH file; END;
+TRY; PROCESS global.tt; CATCH file; END;
 
 ~%]

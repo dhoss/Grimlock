@@ -259,7 +259,6 @@ sub entries_GET {
   my ( $self, $c ) = @_;
   my $user = $c->stash->{'user'};
   my $entry_rs = $user->entries;
-  $c->log->debug("User " . Dumper $user);
   return $self->status_ok($c,
     entity => {
       entries => [$entry_rs->all],
@@ -267,6 +266,17 @@ sub entries_GET {
     }
   );
 }
+
+sub manage_entries : Chained('load_user') PathPart('entries/manage') Args(0) ActionClass('REST') {
+  my ( $self, $c ) = @_;
+
+}
+
+sub manage_entries_GET {
+  my ( $self, $c ) = @_;
+  $self->entries_GET($c);
+}
+
 
 
 =head1 AUTHOR
