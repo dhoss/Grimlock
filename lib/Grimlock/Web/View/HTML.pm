@@ -20,10 +20,45 @@ __PACKAGE__->config({
 sub template_vars {
     my $self = shift;
     return (
-        $self->NEXT::template_vars(@_),
+        $self->next::method(@_),
         static_root  => $self->{static_root},
         static_build => $self->{static_build}
     );
+}
+
+sub new {
+    my ( $class, $c, $arguments ) = @_;
+    my $formats = $class->config->{formats};
+
+    return $class->next::method( $c, $arguments ) unless ref $formats eq 'HASH';
+
+    $class->config->{FILTERS} ||= {};
+
+    my $filters = $class->config->{FILTERS};
+
+    foreach my $key ( keys %$formats ) {
+        if ( $key eq 'date' ) {
+            foreach my $date_key ( keys %{$formats->{$key}} ) {
+                $filters->{"${key}_$date_key"} = sub {
+                    my $date = shift;
+                    return unless defined $date;
+                    unless ( blessed $date and $date->can("stringify") ) {
+                        $date = DateTime::Format::DateParse->parse_datetime($date);
+                    }
+                    unless ( $date ) { return $date; }
+                    $date->set_locale($class->config->{default_locale})
+                        if defined $class->config->{default_locale};
+                    # Only apply a timezone if we have a complete date.
+                    unless ( "$date" =~ /T00:00:00$/ ) {
+                        $date->set_time_zone( $class->config->{default_tz} || 'America/Los_Angeles' );
+                    }
+                    $date->strftime($formats->{$key}->{$date_key});
+                };
+            }
+        }
+    }
+
+    return $class->next::method( $c, $arguments );
 }
 
 sub process {
@@ -50,7 +85,7 @@ sub serialize {
 
 =head1 NAME
 
-Grimlock::Web::View::HTML - Catalyst TT::Bootstrap View
+Grimlock::Web::View::HTML - Catalyst TT::Bootstrap::YUI View
 
 =head1 SYNOPSIS
 

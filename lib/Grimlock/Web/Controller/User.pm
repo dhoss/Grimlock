@@ -103,7 +103,6 @@ sub create : Chained('base') PathPart('user') Args(0) ActionClass('REST') {}
 sub create_POST {
   my ( $self, $c ) = @_;
   my $params ||= $c->req->data || $c->req->params;
-  $c->log->debug("POST PARAMS " . Dumper $params );
   my $user;
   try {
 
@@ -173,7 +172,6 @@ sub browse_PUT {
       }
     }
     $user->update || die $!;
-    $c->log->debug("USER IN UPDATE" . $user->name);
     return $self->status_ok($c, 
       entity => {
         user => $user 

@@ -1,5 +1,5 @@
 <p>Your footer here</p>
-[% IF c.debug %]
+[% IF c.config.show_debug %]
 <pre>
 [%- USE Dumper %]
 USER: [%
