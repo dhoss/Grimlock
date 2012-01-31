@@ -10,7 +10,7 @@ END;
 # /root/static structure or explicit URIs.  Assumes 
 MACRO static(res, versioned, query) BLOCK;
     uri_params = query || {};
-    IF res.match('^https?://');
+    IF res.match('^https?://') || res.match('^/');
         res;
     ELSIF versioned && static_build;
         uri_params.ver = uri_params.ver || static_build;
@@ -24,20 +24,25 @@ END;
 IF !page || !ref(page) == 'HASH';
     page = {};
 END;
-DEFAULT page.title  = 'Computron::Web';
+DEFAULT page.title  = c.config.name || 'Grimlock::Web';
 DEFAULT page.layout = 'default';
 DEFAULT page.header = 'default';
 DEFAULT page.nav    = 'default';
 DEFAULT page.footer = 'default';
+DEFAULT page.language = c.config.language || 'en';
 DEFAULT page.head             = {};
-DEFAULT page.head.stylesheets = [];
+DEFAULT page.head.stylesheets = [
+    'http://yui.yahooapis.com/combo?3.0.0/build/cssfonts/fonts-min.css&3.0.0/build/cssreset/reset-min.css&3.0.0/build/cssbase/base-min.css'
+];
 DEFAULT page.head.scripts     = [];
 DEFAULT page.body             = {};
-DEFAULT page.body.classes     = [];
-DEFAULT page.body.scripts     = [];
+DEFAULT page.body.classes     = ['yui-skin-sam'];
+DEFAULT page.body.scripts     = [
+    'http://yui.yahooapis.com/combo?3.0.0/build/yui/yui-min.js'
+];
 DEFAULT page.content_class    = 'content';
 
 # Include global macros/vars/set up per implementation
-TRY; PROCESS global.tt; CATCH file; END;
+TRY; PROCESS site/global.tt; CATCH file; END;
 
 ~%]
