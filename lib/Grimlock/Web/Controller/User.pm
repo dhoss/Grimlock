@@ -261,7 +261,7 @@ sub entries_GET {
   my $entry_rs = $user->entries;
   return $self->status_ok($c,
     entity => {
-      entries => [$entry_rs->all],
+      entries => $entry_rs->all,
       user    => $user
     }
   );

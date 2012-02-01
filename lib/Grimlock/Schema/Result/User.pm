@@ -104,4 +104,26 @@ sub create_entry {
   $self->add_to_entries($params);
 }
 
+sub TO_JSON {
+  my $self = shift;
+  return {
+    created_at => $self->created_at . "",
+    updated_at => $self->updated_at . "",
+    entries => $self->entries_TO_JSON,
+    %{ $self->next::method },
+  };
+}
+
+sub entries_TO_JSON {
+  my $self = shift;
+  my $entry_rs = $self->entries;
+  my @entry_collection;
+  push @entry_collection, {
+    entryid => $_->entryid,
+    title   => $_->title,
+  } for $entry_rs->all;
+  
+  return \@entry_collection;
+}
+
 1;

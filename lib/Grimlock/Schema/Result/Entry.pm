@@ -158,4 +158,38 @@ sub created_at {
   return $date_time;
 }
 
+
+sub TO_JSON {
+  my $self = shift;
+  return {
+    reply_count => $self->reply_count,
+    children => $self->children_TO_JSON,
+    parent   => $self->parent,
+    %{ $self->next::method },
+  }
+}
+
+sub children_TO_JSON {
+  my $self = shift;
+  my $children_rs = $self->children;
+  my @child_collection;
+  push @child_collection, {
+    entryid => $_->entryid,
+    title   => $_->title,
+    display_title => $_->display_title,
+    path    => $_->path,
+    parent  => $_->parent,
+    body    => $_->body,
+    author  => $_->author,
+    created_at => $_->created_at . "",
+    updated_at => $_->updated_at . "",
+    published => $_->published,
+    reply_count => $_->reply_count,
+    children => $_->children_TO_JSON,
+    parent   => $_->parent,
+  } for $children_rs->all;
+  
+  return \@child_collection;
+}
+
 1;
