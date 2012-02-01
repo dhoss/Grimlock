@@ -14,13 +14,13 @@ YUI().use("datasource-io", "datasource-jsonschema", "datatable-datasource", func
     }
   });
 
-  var cols = ["title"];
+  var cols = ["entryid", "title", "created_at"];
 
   dataSource.plug(Y.Plugin.DataSourceJSONSchema, {
     schema: {
       resultListLocator: "data_table",
       resultFields: [
-         "title" 
+         "entryid", "title", "created_at"
       ]
     }
   });
