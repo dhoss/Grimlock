@@ -261,7 +261,7 @@ sub entries_GET {
   my $entry_rs = $user->entries;
   return $self->status_ok($c,
     entity => {
-      entries => $entry_rs->all,
+      entries => [ $entry_rs->all ],
       user    => $user
     }
   );
@@ -274,7 +274,14 @@ sub manage_entries : Chained('load_user') PathPart('entries/manage') Args(0) Act
 
 sub manage_entries_GET {
   my ( $self, $c ) = @_;
-  $self->entries_GET($c);
+  my $user = $c->stash->{'user'};
+  my $entry_rs = $user->entries;
+  return $self->status_ok($c,
+    entity => {
+      data_table => [ $entry_rs->all ],
+    }
+  );
+
 }
 
 

@@ -4,13 +4,11 @@ use strict;
 use base 'Catalyst::View::JSON';
 use JSON::XS ();
 use Try::Tiny;
-use Data::Dumper;
- 
+
 sub encode_json {
     my($self, $c, $data) = @_;
     my $encoder = JSON::XS->new->ascii->pretty->allow_nonref->convert_blessed->allow_blessed;
     my $d = $encoder->encode($data);
-    $c->log->debug("ENCODED $d");
     return $d;
 }
  
