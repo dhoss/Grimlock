@@ -4,33 +4,48 @@
 <div id="entries"></div>
 </div>
 <script type="text/javascript">
-YUI().use('datatable', function (Y) {
+YUI().use("datasource-io", "datasource-jsonschema", "datatable-datasource", function(Y) {
+  var dataSource = new Y.DataSource.IO({
+    source:'[% c.uri_for_action('/user/entries', [ c.user.name ]) %]',
+    ioConfig: {
+      headers: {
+        'Accept': 'application/json'
+      }
+    }
+  });
 
-        var cols = ['entryid', 'title', 'body', 'published'];
-        var data = new Y.DataSource.Get({
-          source: "[% c.uri_for_action('/user/entries', [ c.user.name ] ) %]"
-        });
+  var cols = ["Title"];
 
-        data.plug(Y.Plugin.DataSourceJSONSchema, {
-          schema: {
-            resultListLocator: "query.results.Result",
-            resultFields: [ "ID", "Title", "Body", "Published" ]
-          }
-       });
-        
-       var table = new Y.DataTable.Base({
-         columnset: cols,
-         summary: "Entries for [% c.user.name %]"
-       });
-       
-       table.plug(Y.Plugin.DataTableDataSource, {
-         datasource: data
-       })
+  dataSource.plug(Y.Plugin.DataSourceJSONSchema, {
+    schema: {
+      resultListLocator: "entries",
+      resultFields: [
+          {key:"Title", locator:"*[local-name() ='Title']"},
+      ]
+    }
+  });
 
-      table.render("#entries");
-      table.datasource.load({
-        request: "content-type=application/json"
-      });
-      
+  dataSource.sendRequest({    
+    callback: {
+      success: function (e) {
+          Y.log(e);
+      }
+    }
+  });
+  
+  var table = new Y.DataTable.Base({
+    columnset: cols,
+    summary: "Entries",
+    caption: "Entry listing"
+  });
+
+  table.plug(Y.Plugin.DataTableDataSource, {
+    datasource: dataSource,
+    initialRequest: ""
+  });
+
+  dataSource.after("response", function() {
+    table.render("#entries")}
+  );
 });
 </script>
