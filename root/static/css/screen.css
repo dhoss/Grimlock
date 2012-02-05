@@ -14,14 +14,14 @@
 /*  define images to be used in TD cell formatters for Edit / Delete  */
 	
 	.cell-delete {
-	    background: url("../../delete.png") no-repeat scroll center center transparent;
+	    background: url("/static/images/delete.png") no-repeat scroll center center transparent;
 	    cursor: pointer;
 	    height: 8px;
 	    width: 8px;
 	}		
 
 	.cell-edit {
-	    background: url("../../b_edit.png") no-repeat scroll center center transparent;
+	    background: url("/static/images/b_edit.png") no-repeat scroll center center transparent;
 	    cursor: pointer;
 	    height: 8px;
 	    width: 8px;
