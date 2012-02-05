@@ -1,41 +1,33 @@
-#desc {
-    margin-bottom: 20px;
-    border-bottom: 1px dotted #333;
-}
-#desc span {
-    background: #a3350d;
-    padding :2px;
-    color:# f27243;
-}
+/*	Define align-center, left, right cell classes for cell alignment   */
+	.yui3-skin-sam .yui3-datatable td.align-right {
+		text-align:right;
+	}
 
-.yui3-panel {
-    outline: none;
-}
-.yui3-panel-content .yui3-widget-hd {
-    font-weight: bold;
-}
-.yui3-panel-content .yui3-widget-bd {
-    padding: 15px;
-}
-.yui3-panel-content label {
-    margin-right: 30px;
-}
-.yui3-panel-content fieldset {
-    border: none;
-    padding: 0;
-}
-.yui3-panel-content input[type="text"] {
-    border: none;
-    border: 1px solid #ccc;
-    padding: 3px 7px;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    font-size: 100%;
-    width: 200px;
-}
+	.yui3-skin-sam .yui3-datatable td.align-left {
+		text-align:left;
+	}
 
-#addRow {
-    margin-top: 10px;
-}
+	.yui3-skin-sam .yui3-datatable td.align-center {
+		text-align:center;
+	}
+
+/*  define images to be used in TD cell formatters for Edit / Delete  */
+	
+	.cell-delete {
+	    background: url("../../delete.png") no-repeat scroll center center transparent;
+	    cursor: pointer;
+	    height: 8px;
+	    width: 8px;
+	}		
+
+	.cell-edit {
+	    background: url("../../b_edit.png") no-repeat scroll center center transparent;
+	    cursor: pointer;
+	    height: 8px;
+	    width: 8px;
+	}		
+
+	#dtable table tr td {
+		cursor: pointer;
+	}
 

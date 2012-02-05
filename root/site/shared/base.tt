@@ -6,6 +6,19 @@ MACRO ref(var) BLOCK;
     var_ref.match('^([A-Z]+)\\(0x[0-9a-f]+\\)$').0;
 END;
 
+MACRO load_scripts(scripts) BLOCK;
+ scripts = scripts.unique;
+    FOREACH script IN page.body.scripts;
+        NEXT UNLESS script;
+        script = script.match('^https?://|/') ?
+                        script :
+                        static('scripts/' _ script, undef, 1); ~%]
+        <script type="text/javascript" src="[% script %]"></script>
+    [%~
+    END;
+END;
+
+
 # Wraps c.uri_for to point to static resources either inside the
 # /root/static structure or explicit URIs.  Assumes 
 MACRO static(res, versioned, query) BLOCK;
@@ -32,14 +45,15 @@ DEFAULT page.footer = 'default';
 DEFAULT page.language = c.config.language || 'en';
 DEFAULT page.head             = {};
 DEFAULT page.head.stylesheets = [
-  'http://yui.yahooapis.com/combo?3.4.1/build/cssreset/reset-min.css&amp;3.4.1/build/cssfonts/fonts-min.css&amp;3.4.1/build/cssbase/base-min.css'
+  'http://yui.yahooapis.com/3.5.0pr2/build/cssfonts/fonts-min.css'
 ];
-DEFAULT page.head.scripts     = [ 'http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js'
+DEFAULT page.head.scripts     = [ 
 ];
 DEFAULT page.body             = {};
 DEFAULT page.body.classes     = ['yui-skin-sam'];
 DEFAULT page.body.scripts     = [
-   ];
+ 'http://yui.yahooapis.com/3.5.0pr2/build/yui/yui-min.js'
+];
 DEFAULT page.content_class    = 'content';
 
 # Include global macros/vars/set up per implementation
