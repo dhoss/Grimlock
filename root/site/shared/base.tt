@@ -45,12 +45,13 @@ DEFAULT page.footer = 'default';
 DEFAULT page.language = c.config.language || 'en';
 DEFAULT page.head             = {};
 DEFAULT page.head.stylesheets = [
-  'http://yui.yahooapis.com/3.5.0pr2/build/cssfonts/fonts-min.css'
+  'http://yui.yahooapis.com/3.5.0pr2/build/cssfonts/fonts-min.css',
+  static('css/screen.css'),
 ];
 DEFAULT page.head.scripts     = [ 
 ];
 DEFAULT page.body             = {};
-DEFAULT page.body.classes     = ['yui-skin-sam'];
+DEFAULT page.body.classes     = ['yui3-skin-sam'];
 DEFAULT page.body.scripts     = [
  'http://yui.yahooapis.com/3.5.0pr2/build/yui/yui-min.js'
 ];
