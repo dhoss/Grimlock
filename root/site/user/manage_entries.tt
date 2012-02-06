@@ -3,6 +3,147 @@
 <div id="div_table"></div>
 <script type="text/javascript">
 YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource", function (Y) {
+// -------------------------
+//  Define a few DataTable helper methods
+//    NOTE: These only work with the 3.5.0PR release of DataTable  
+// -------------------------
+
+	/**
+	 Method to take an existing TD or TR Node element as input "target" and scan 
+	 the dataset (ModelList) for the underlying data record (a Model).
+	 
+	 @method getRecord
+	 @param target {Node} Either a TR or TD Node
+	 @returns {Model} Data record or false (or -1 if not found)
+	 **/
+	//FIXME: if target is numeric or string, not working yet ... Node only works
+	Y.DataTable.prototype.getRecord = function( target ) {
+		var rs = this.get('data')
+			tag = target.get('tagName').toLowerCase();
+			
+		var row = ( tag === 'td' ) ? target.ancestor() : ( tag === 'tr' ) ? target : null;
+		if ( !row ) return false;
+		
+		if ( Y.Lang.isNumber(row) ) 		// assume row is rowindex
+			return rs.item(row) || false;
+			
+		else if ( row instanceof Y.Node || Y.Lang.isString(row) ) {
+			var crow = ( Y.Lang.isString(row) ) ? row : row.get('id');	// matches based on DOM id
+			var rec = -1;
+			rs.some( function(item) {
+				if ( item.get('clientId') === crow ) {
+					rec = item;
+					return true;
+				}
+			});
+			return rec;
+		}				
+		return false;
+	}
+
+
+	/**
+	 Helper method to return the column's key property associated with the current TD.
+	 Uses DataTable's current method of identifying a class on TD as "yui3-datatable-col-XXX" 
+	 where XXX is the column 'key' (or 'name')
+	 
+	 @method getDTColumnKey
+	 @param tdTarget {Node} The TD cell to return column key to
+	 @returns ckey {String} column key name		  
+	 **/
+	Y.DataTable.prototype.getCellColumnKey = function( tdTarget ) {
+		var DT_COL_CLASS = this.getClassName('col');
+		var regex = new RegExp( DT_COL_CLASS+'-(.*)'),		// currently creates /yui3-datatable-col-(.*) to grab column key
+			tdclass = tdTarget.get('className').split(" "),
+			ckey    = -1;
+		
+	//
+	//  Scan through the TD class(es), checking for a match
+	//	
+		Y.Array.some( tdclass, function(item){
+			var mitem = item.match( regex );
+			if ( mitem && mitem[1] ) {
+				ckey = mitem[1].replace(/^\s+|\s+$/g,"");	// trim all spaces
+				return true;
+			}
+		}); 
+		return ckey || false;
+	}
+
+/*  https://gist.github.com/1707631  
+  
+	Y.DataTable.prototype.getCellColumnKey = function (node) {
+	    var classRE = new RegExp('\b' + this.getClassName('col') + '-(\W+)'),
+	        name, column;
+	
+	    node = node.ancestor('.' + this.getClassName('cell'), true);
+	
+	    if (node) {
+	        name = (node.get('className').match(classRE) || [])[1];
+	
+	        column = name && this.getColumn(name);
+	    }
+	
+	    return column && column.key;
+	};
+*/
+
+
+	/**
+	 Method to scan the "columns" Array for the target and return the requested column.
+	 The requested "target" can be either of ;
+	 	a column index, 
+	 	or a TD Node, 
+	 	or a column "key", column "name" or "_yuid" (in that order). 
+	 
+	 @method getColumn
+	 @param target {Number | Node | String} Either the column index, the TD node or a column ID
+	 @returns {Object} Column
+	 **/
+	Y.DataTable.prototype.getColumn = function( target ) {
+		var cs = this.get('columns'),
+			ckey = null;
+		
+		if (Y.Lang.isNumber(target) )
+			return cs[target];  //return cs.keys[col];
+			
+		else if ( Y.Lang.isString(target) || target instanceof Y.Node ) {	// check for 'key' or then 'name', finally '_yuid'
+		
+			ckey = ( target instanceof Y.Node ) ? ckey = this.getCellColumnKey( target ) : ckey;
+		
+			col = ( ckey ) ? ckey : target;
+		
+		// Check if a column "key"
+			var cm = -1;
+			Y.Array.some( cs, function(citem) {
+				if ( citem['key'] === col ) {
+					cm = citem;
+					return true;
+				}
+			});
+			if ( cm !== -1) return cm;	// found one, bail !!
+
+		// If not found, Check if a column "name"
+			Y.Array.some( cs, function(citem) {
+				if ( citem.name === col ) {
+					cm = citem;
+					return true;
+				}
+			});
+			if ( cm!==-1 ) return cm;
+
+		// If not found, Check if a column "_yui" something
+			Y.Array.some( cs, function(citem) {
+				if ( citem._yuid === col ) {
+					cm = citem;
+					return true;
+				}
+			});
+			return cm;
+
+		} else 
+			return false;
+	}
 	
     var fmtPublished = function(o) {
 	    var published = o.value;   						
