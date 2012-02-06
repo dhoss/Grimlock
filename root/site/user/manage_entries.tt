@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
 YUI().use(  'datatable', 'datatype', 'model', 'view', 'panel', 'dd-plugin', 'button', 
-            'datasource-io', 'datatable-datasource', 'datatable-jsonschema', 'gallery-datatable-350-preview', function (Y) {
+            'datasource-io', 'datatable-datasource', 'datatable-jsonschema',  function (Y) {
 
   
 // -------------------------
@@ -34,7 +34,7 @@ YUI().use(  'datatable', 'datatype', 'model', 'view', 'panel', 'dd-plugin', 'but
 			var crow = ( Y.Lang.isString(row) ) ? row : row.get('id');	// matches based on DOM id
 			var rec = -1;
 			rs.some( function(item) {
-				if ( item.get('clientId') === crow ) {
+				if ( item.get('entryid') === crow ) {
 					rec = item;
 					return true;
 				}
@@ -208,7 +208,11 @@ YUI().use(  'datatable', 'datatype', 'model', 'view', 'panel', 'dd-plugin', 'but
     schema: {
       resultListLocator: "data_table",
       resultFields: [
-         "title" 
+        { key: "entryid" },
+        { key: "title" }, 
+        { key: "created_at" },
+        { key: "published" }, 
+        { key: "reply_count" }
       ]
     }
   });
@@ -228,7 +232,8 @@ YUI().use(  'datatable', 'datatype', 'model', 'view', 'panel', 'dd-plugin', 'but
   
   
   myDT.plug(Y.PluginDataTableDataSource, {
-    datasource: ds    
+    datasource: ds,
+    initialRequest: ""
   });
   
   
@@ -338,15 +343,12 @@ YUI().use(  'datatable', 'datatype', 'model', 'view', 'panel', 'dd-plugin', 'but
     //
     //  Define DEFAULT data for a "New" inserted row
     //
-	/*var default_data = {
-	  	valEID : 0, // em_id : 0,
-	  	valEName : 'New Employee', // ename : 'New Employee',
-	  	valTitle : ' ',	  	 // etitle : '',
-	  	valSDate : Y.DataType.Date.format( new Date(), "%F"),  // estart_date : Y.DataType.Date.format( new Date(), "%F"),
-	  	valSalary : 0, // esalary : 0.
+	var default_data = {
+	  	title : 'New Entry', 
+	  	body : "",
 	  	valRecord : 0,
 	  	valInsert : 1
-   	};*/
+   	};
    
     // position of "Insert Row" dialog
    	var default_dialog_xy = [ 220, 130 ];
@@ -435,7 +437,7 @@ YUI().use(  'datatable', 'datatype', 'model', 'view', 'panel', 'dd-plugin', 'but
     	var StatusTMPL = Y.one("#status-template").getContent();	// this retrieves HTML containing {xxx} tags for substitution 
 
     	Y.one("#idStatus").setContent( Y.Lang.sub( StatusTMPL, {	// ... do the substitution into the template using Y.Lang.sub 
-		   rec_id : 	rec.get('clientId'),
+		   rec_id : 	rec.get('entryid'),
 		   rec_index:	this.get('data').indexOf(rec),
 		   col_key :	d_ckey,
 		   col_index:	Y.Array.indexOf( this.get('columns'), col ), //this.get('columns').indexOf(col),
@@ -452,6 +454,7 @@ YUI().use(  'datatable', 'datatype', 'model', 'view', 'panel', 'dd-plugin', 'but
 				
 			case 'delete':
 				if ( confirm("Are you sure you want to delete this record ?") === true ) {
+          // DELETE CALL GOES HERE
 					myDT.removeRow( rec.get('entryid') );
 					Y.one("#idStatus").setContent("<br/><b>Row was Deleted!</b>");					
 				}
@@ -531,9 +534,9 @@ YUI().use(  'datatable', 'datatype', 'model', 'view', 'panel', 'dd-plugin', 'but
 	<form name="roweditor">
 		<fieldset id="myfieldset">
 			<table>
-				<tr><th>Title :</th><td><input type="text" name="title" value="{valTitle}" /></td></tr>
-				<tr><th>Published :</th><td><input type="select" name="published" value="{valPublished}" /></td></tr>
-        <tr><th>Body : </th><td><textarea name="body" rows=45 cols=10>{valBody}</textarea></td></tr>
+				<tr><th>Title :</th><td><input type="text" name="title" value="{title}" /></td></tr>
+				<tr><th>Published :</th><td><input type="select" name="published" value="{published}" /></td></tr>
+        <tr><th>Body : </th><td><textarea name="body" rows=10 cols=45>{body}</textarea></td></tr>
 			</table>
 		</fieldset>
 		<input type="hidden" name="frmRecord" value="{valRecord}" />
