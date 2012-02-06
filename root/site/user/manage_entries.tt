@@ -202,7 +202,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
  
    var editorPanel = new Y.Panel({
         srcNode : '#idPanel',
-        width   : 400,
+        width   : 425,
     	xy 		: [ 750, 170 ],	
     	visible : false,
         render  : true,

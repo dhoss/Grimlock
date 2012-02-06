@@ -27,7 +27,35 @@
 	    width: 8px;
 	}		
 
-	#dtable table tr td {
+	#data-table table tr td {
 		cursor: pointer;
 	}
+/*  CSS for this page display */
+	
+		table #dt_info {
+			border-collapse:collapse;
+		}
+
+		table #dt_info td {
+			border: 1px solid #444;			
+			padding: 8px 8px;
+		} 
+
+		table #dt_info th {
+			border: 1px solid #444;			
+			padding: 8px 8px;
+			background-color: #090;  
+			color: #fcfcfc;
+		} 
+
+		#myfieldset {
+			background-color:#FFF5DF;
+			border-radius: 7px;
+			-moz-border-radius: 7px;
+			-webkit-border-radius: 7px;
+		}
+
+		#myfieldset input[type=text]{
+			width: 10em;
+		}
 
