@@ -1,8 +1,9 @@
 [% page.load_scripts_at_top = 1 %]
 	
-<div id="div_table"></div>
 <script type="text/javascript">
-YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource", function (Y) {
+YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource", 
+           "datatable", "datatype", "model", 'view', 'panel', 'dd-plugin', 'button',
+    function (Y) {
 // -------------------------
 //  Define a few DataTable helper methods
 //    NOTE: These only work with the 3.5.0PR release of DataTable  
@@ -30,6 +31,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource", fun
 		else if ( row instanceof Y.Node || Y.Lang.isString(row) ) {
 			var crow = ( Y.Lang.isString(row) ) ? row : row.get('id');	// matches based on DOM id
 			var rec = -1;
+      console.log(crow);
 			rs.some( function(item) {
 				if ( item.get('clientId') === crow ) {
 					rec = item;
@@ -160,11 +162,11 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource", fun
    	}		
     
     var cols = [ 
-		  {key:"entryid", label:'ID'}, 
-		  {key:"title", label:"Title"}, 
-		  {key:"created_at", label:'Created At'}, 
-		  {key:"published", label:'Published'},
-      {key:"reply_count", label:'Replies'},
+		  {key:"entryid", label:'ID', sortable: true }, 
+		  {key:"title", label:"Title", sortable: true }, 
+		  {key:"created_at", label:'Created At', sortable: true}, 
+		  {key:"published", label:'Published', formatter: fmtPublished },
+      {key:"reply_count", label:'Replies', sortable: true},
       { name:'edit',   	 label:'- Edit -',   	formatter: fmtBlank, className:'align-center cell-edit' },	
 		  { name:'delete',   	 label:'- Delete -',   	formatter: fmtBlank, className:'align-center cell-delete' }
       
@@ -177,9 +179,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource", fun
             'Accept': 'application/json'
           }
         }
-        
-    })
-        .plug(Y.Plugin.DataSourceJSONSchema, {
+    }).plug(Y.Plugin.DataSourceJSONSchema, {
             schema: {
                 resultListLocator: "data_table",
                 resultFields: [ "entryid", "title", "created_at", "published", "reply_count" ]
@@ -240,7 +240,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource", fun
 	//    column of each record.
 	//  Uses the setting of FORM hidden value "frmInsertFlag" to determine if this is a new
 	//   record or if we are saving an existing record.  
-	//  If existing, the record "clientId" is saved in FORM hidden value "frmRecord"
+	//  If existing, the record "entryid" is saved in FORM hidden value "frmRecord"
     //-----------------
    	var saveFormData = function() {
 		var theForm = document.forms[0],
@@ -298,10 +298,12 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource", fun
 	  	title : 'New Entry', 
 	  	body : ' ',
       published : 0,
-     	record : 0,
+     	row : 0,
 	  	insert : 1
    	};
    
+  var default_dialog_xy = [ 220, 130 ];
+  
   var showDT_Dialog = function( record, xy, insert_obj ) {
 		var thePanel, DialogTMPL, body_html, header_html;
 
@@ -319,13 +321,13 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource", fun
 				entryid : 	record.get('entryid'),
 				title :	record.get('title'),
 				published :	record.get('published'),
-				record :	record.get('entryid'),
+				row :	record.get('clientId'),
 				insert :	0
 			}
 
 			xy[0] += 50;	// offset the dialog a tinch, from the Edit TD ...
 
-			header_html = 'Editing Row No. '  + (myDT.get('data').indexOf(record)+1);
+			header_html = 'Editing Row No. '  + (dt.get('data').indexOf(record)+1);
 			body_html = Y.Lang.sub( DialogTMPL, form_data );
 
 		} else {	//  we are INSERTING a new row ...
@@ -351,8 +353,108 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource", fun
 		editorPanel.hide();
 		showDT_Dialog( 0, 0, default_data );
 	});
-     
+
+
+// -------------------------
+//  Define a click handler on table cells ...
+//   Note: use Event Delegation here (instead of just .on() ) because we may be 
+//         deleting rows which may cause problems with just .on 
+// -------------------------
+	dt.delegate("click", function(e) {
+
+		var cell = e.currentTarget,					// the clicked TD
+			row  = cell.ancestor(),					// the parent of TD, which is TR
+
+			rec  = this.getRecord( cell ),			//  Call the helper method above to return the "data" record (a Model)
+			ckey = this.getCellColumnKey( cell ),	//
+			col  = this.getColumn( cell );			//
+  console.log(cell);
+
+		var d_ckey = col.key || col.name || 'not set';	// if column key returned is a yui_id, don't display it
+																		//   ... that means we are in the "Select", "Edit" or "Delete" columns
+	//
+	//  Update status box
+	//	
+    	var StatusTMPL = Y.one("#status-template").getContent();	// this retrieves HTML containing {xxx} tags for substitution 
+
+    	Y.one("#idStatus").setContent( Y.Lang.sub( StatusTMPL, {	// ... do the substitution into the template using Y.Lang.sub 
+		   rec_id : 	rec.get('clientId'),
+		   rec_index:	this.get('data').indexOf(rec),
+		   col_key :	d_ckey,
+		   col_index:	Y.Array.indexOf( this.get('columns'), col ), //this.get('columns').indexOf(col),
+		   raw_data :	rec.get(ckey) || 'No Data' 	
+		} ) );
+
+	//
+	//  If a column 'action' is available, process it
+	//	
+		switch( col.name || null ) {
+			case 'edit':
+				showDT_Dialog( rec, cell.getXY() );
+				break;
+
+			case 'delete':
+				if ( confirm("Are you sure you want to delete this record ?") === true ) {
+					dt.removeRow( rec.get('clientId') );
+					Y.one("#idStatus").setContent("<br/><b>Row was Deleted!</b>");					
+				}
+
+				break;	
+		}
+
+	}, "tbody tr td", dt);
+	//  the selector,  internal scope
+  
 
 });
 
 </script>
+
+<script type="text/x-template" id="status-template">	<!-- used in Y.delegate ... tbody tr td     -->
+	<table id="dt_info" width="250">
+		<tr><th width="50%">Record entry :</th><td>{rec_id}</td></tr>
+		<tr><th>Record Index :</th><td>{rec_index}</td></tr>
+		<tr><th>Col Key :</th><td>{col_key}</td></tr>
+		<tr><th>Col Index :</th><td>{col_index}</td></tr>
+		<tr><th>Raw Data :</th><td>{raw_data}</td></tr>
+	</table>    
+</script>
+
+<script type="text/x-template" id="dialog-template">	<!--  used in Function showDT_Dialog   -->
+	<form name="roweditor">
+		<fieldset id="myfieldset">
+			<table>
+				<tr><th>Title :</th><td><input type="text" name="title" value="{title}" /></td></tr>
+				<tr><th>Published :</th><td><input type="checkbox" name="published" value="{published}" /></td></tr>
+        <tr><th>Body : </th><td><textarea name="body" rows=10 cols=35>{body}</textarea></td></tr>
+			</table>
+		</fieldset>
+		<input type="hidden" name="frmRecord" value="{row}" />
+		<input type="hidden" name="frmInsertFlag" value="{insert}" />
+	</form>
+</script>
+<div id="main">
+
+<h2>Manage Entries</h2>
+<table>
+		<tr valign="top">
+			<td>
+				<div id="div_table"></div>
+				<br/>&nbsp; &nbsp; <button id="btnInsert">Insert New Row</button>			
+			</td>
+			<td width="300" align="center">
+				TD Click Status:<br/>
+				<div id="idStatus"></div>	
+			</td>
+		</tr>
+	</table>
+<br/>
+<div id="idPanel">
+		<div class="yui3-widget-hd"></div>
+		<div class="yui3-widget-bd"></div>
+	</div>
+
+	<div id="idCalendarBox" style="z-index:12;"></div>
+
+</div>
+
