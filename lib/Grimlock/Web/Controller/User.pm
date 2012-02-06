@@ -277,7 +277,7 @@ sub manage_entries_GET {
   my $user = $c->stash->{'user'};
   my $entry_rs = $user->entries;
   return $self->status_ok($c,
-    entity => {
+    entity =>{
       data_table => [ $entry_rs->all ],
     }
   );
