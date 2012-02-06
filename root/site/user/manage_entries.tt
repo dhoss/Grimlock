@@ -13,7 +13,14 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource", fun
     ];
 		
     var ds = new Y.DataSource.IO( { 
-        source:"[% c.uri_for_action('/user/manage_entries', [ c.user.name ] ) %]"})
+        source:"[% c.uri_for_action('/user/manage_entries', [ c.user.name ] ) %]",
+        ioConfig: {
+          headers: {
+            'Accept': 'application/json'
+          }
+        }
+        
+    })
         .plug(Y.Plugin.DataSourceJSONSchema, {
             schema: {
                 resultListLocator: "data_table",
@@ -26,13 +33,15 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource", fun
     	caption:	"Entries"
     }).plug(
     	Y.Plugin.DataTableDataSource, {
-    		datasource:	ds 
-    	//	initialRequest:"?iopt=data_prez"
+    		datasource:	ds, 
+      	initialRequest:""
     	});
 		
-	dt.render("#div_table");
 
-	dt.datasource.load({request:'?content-type=application/json'})
+   ds.after("response", function() {
+        dt.render("#div_table")}
+	 ); 
+ 
 
 		
  /* 
