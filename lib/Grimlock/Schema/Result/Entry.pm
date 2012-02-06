@@ -165,6 +165,7 @@ sub TO_JSON {
     reply_count => $self->reply_count,
     children => $self->children_TO_JSON,
     parent   => $self->parent,
+    body     => $self->body,
     %{ $self->next::method },
   }
 }
