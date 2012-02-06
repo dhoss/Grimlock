@@ -200,7 +200,158 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource", fun
         dt.render("#div_table")}
 	 ); 
  
+   var editorPanel = new Y.Panel({
+        srcNode : '#idPanel',
+        width   : 320,
+    	xy 		: [ 750, 170 ],	
+    	visible : false,
+        render  : true,
+        zIndex  : 10,
+        plugins : [Y.Plugin.Drag], 
+		buttons: [
+		        {
+		            value  : 'Save',
+		            section: Y.WidgetStdMod.FOOTER,
+		            action : function (e) {
+		                if (e) e.preventDefault();
+		             	saveFormData();
+		                this.hide();
+		            }
+		        },
+		        {
+		            value  : 'Cancel',
+		            section: Y.WidgetStdMod.FOOTER,
+		            action : function (e) {
+		                e.preventDefault();
+		                this.hide();
+		            }
+		        }
+	    ],
+	    on : {
+	    	'render' : function() { 
+	    				   Y.one("#main").show();   // render the "main" page elements, 
+	    			   } 
+	   	}
+    });
 
+    //-----------------
+	//  Function to save the FORM data, based on current values.
+	//  Define a mapping object to help us figure out how to apply INPUT[name=xxx] to what 
+	//    column of each record.
+	//  Uses the setting of FORM hidden value "frmInsertFlag" to determine if this is a new
+	//   record or if we are saving an existing record.  
+	//  If existing, the record "clientId" is saved in FORM hidden value "frmRecord"
+    //-----------------
+   	var saveFormData = function() {
+		var theForm = document.forms[0],
+			rec_id 	= theForm.frmRecord.value,	// if INSERT, this is disregarded ...
+			newData = {},
+			raw_value  = 0,
+			data_value = 0;
+	//
+	//  Define a mapping between the INPUT 'name' settings and the record "key" names ...
+	//    also, define a parser on a few numeric items
+	//		
+		var record_map = [
+			{ field:'entryid',    ckey:'entryid', parser: parseInt },	
+			{ field:'title',  ckey:'title'},
+			{ field:'published',  ckey:'created_at'},
+			{ field:'reply_count', ckey:'reply_count', parser: parseInt }
+		];
+
+
+	//
+	//  Run through the "record_map" FORM variables, inserting data values into "newData"
+	//   that will serve as the data object for DataTable
+	//	
+		Y.Array.each( record_map, function(item){
+			raw_value  = theForm[item.field].value;
+			data_value = ( item.parser && Y.Lang.isFunction(item.parser) ) ? item.parser.call(this,raw_value)  : raw_value ;
+			newData[ item.ckey ] = data_value;
+		});
+
+	//
+	//  Now insert the "newData" object into DataTable's data, 
+	//    check frmInsertFlag for whether it is "new" or "updated" data 
+	//
+		if ( parseInt( theForm.frmInsertFlag.value ) === 0 ) 
+
+			dt.modifyRow( rec_id, newData );
+
+		else
+
+			dt.addRow( newData );
+
+    }
+   
+  // trap an ENTER key on the form, save the data ...
+	editorPanel.get('srcNode').on('key', function() {  
+		saveFormData();
+		editorPanel.hide();
+	}, 'enter');	   
+   
+    //
+    //  Define DEFAULT data for a "New" inserted row
+    //
+	var default_data = {
+	  	entryid : 0,
+	  	title : 'New Entry', 
+	  	body : ' ',
+      published : 0,
+     	record : 0,
+	  	insert : 1
+   	};
+   
+  var showDT_Dialog = function( record, xy, insert_obj ) {
+		var thePanel, DialogTMPL, body_html, header_html;
+
+	//
+	//  Grab the dialog internal content from the <script> template
+	//
+    	DialogTMPL = Y.one("#dialog-template").getContent();
+    	thePanel = editorPanel;
+
+		if ( !insert_obj ) {	// we are EDITING and existing row ...
+		//
+		//  Define the substitution objects to fill in the INPUT default values
+		//
+			var form_data = {
+				entryid : 	record.get('entryid'),
+				title :	record.get('title'),
+				published :	record.get('published'),
+				record :	record.get('entryid'),
+				insert :	0
+			}
+
+			xy[0] += 50;	// offset the dialog a tinch, from the Edit TD ...
+
+			header_html = 'Editing Row No. '  + (myDT.get('data').indexOf(record)+1);
+			body_html = Y.Lang.sub( DialogTMPL, form_data );
+
+		} else {	//  we are INSERTING a new row ...
+
+			insertFlag = true;   // used 
+			xy = default_dialog_xy;
+			header_html = 'Inserting NEW Row';
+			body_html = Y.Lang.sub( DialogTMPL, insert_obj );
+
+		}
+
+	//
+	//	Fill the Panel content, position it and display it
+	//	
+		thePanel.set( 'xy', xy );
+  		thePanel.set( 'headerContent', header_html );  
+		thePanel.set( 'bodyContent', body_html );
+		thePanel.show();
+   	} 
+  
+// Button click handler for the "Insert New Row" button
+	new Y.Button({srcNode:"#btnInsert"}).on("click",function() {
+		editorPanel.hide();
+		showDT_Dialog( 0, 0, default_data );
+	});
+     
 
 });
 
