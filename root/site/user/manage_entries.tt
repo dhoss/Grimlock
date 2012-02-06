@@ -323,6 +323,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 				entryid : 	record.get('entryid'),
 				title :	record.get('title'),
 				published :	record.get('published'),
+        body : record.get('body'),
 				row :	record.get('clientId'),
 				insert :	0
 			}
@@ -345,7 +346,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 	//	Fill the Panel content, position it and display it
 	//	
 		thePanel.set( 'xy', xy );
-  		thePanel.set( 'headerContent', header_html );  
+    thePanel.set( 'headerContent', header_html );  
 		thePanel.set( 'bodyContent', body_html );
 		thePanel.show();
    	} 
