@@ -4,12 +4,29 @@
 <script type="text/javascript">
 YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource", function (Y) {
 	
+    var fmtPublished = function(o) {
+	    var published = o.value;   						
+		  return o.value == 1 ?
+           "yes"        :
+           "no";
+	  }
+
+	  var fmtBlank = function(o) {
+		  var fclass = o.column.className || null;
+		  if (fclass) 
+			  o.className += ' '+fclass;
+		  o.value = ' ';
+   	}		
+    
     var cols = [ 
 		  {key:"entryid", label:'ID'}, 
 		  {key:"title", label:"Title"}, 
 		  {key:"created_at", label:'Created At'}, 
 		  {key:"published", label:'Published'},
-      {key:"reply_count", label:'Replies'}
+      {key:"reply_count", label:'Replies'},
+      { name:'edit',   	 label:'- Edit -',   	formatter: fmtBlank, className:'align-center cell-edit' },	
+		  { name:'delete',   	 label:'- Delete -',   	formatter: fmtBlank, className:'align-center cell-delete' }
+      
     ];
 		
     var ds = new Y.DataSource.IO( { 
@@ -43,19 +60,6 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource", fun
 	 ); 
  
 
-		
- /* 
-  An alternative technique to load remote data "initially" is to define 
-  the "initialRequest" in DataTableDataSource (commented out above), 
-  remove the above .render and .load method calls 
-  
-  AND then to do the following ...
- 
-  ds.after("response", function() {
-        dt.render("#div_table")}
-	 ); 
- 
- */
 
 });
 
