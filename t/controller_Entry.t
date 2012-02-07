@@ -71,6 +71,6 @@ $mech->post('/test-title-with-spaces-/reply',
 ok $mech->success, "reply post works ok";
 
 $mech->request( DELETE '/test-title-with-spaces-' );
-ok $mech->success;
+ok $mech->success, "entry deletion works";
 
 done_testing();
