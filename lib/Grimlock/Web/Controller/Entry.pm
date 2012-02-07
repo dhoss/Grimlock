@@ -163,6 +163,20 @@ sub browse_PUT {
   );
 }
 
+sub browse_DELETE {
+  my ( $self, $c ) = @_;
+  my $entry = $c->stash->{'entry'};
+  $entry->delete || return $self->status_bad_request($c,
+    message => "Couldn't delete entry: $!"
+  );
+
+  return $self->status_ok($c,
+    entity => {
+      deleted => 1
+    }
+  );
+}
+
 =head1 AUTHOR
 
 Devin Austin

@@ -77,10 +77,6 @@ column published => {
 
 belongs_to 'author' => 'Grimlock::Schema::Result::User', {
   'foreign.userid' => 'self.author',
-},
-{
-  cascade_delete => 1,
-  cascade_update => 1
 };
 
 belongs_to 'parent' => __PACKAGE__, {
@@ -88,8 +84,6 @@ belongs_to 'parent' => __PACKAGE__, {
 },
 {
   join_type => 'LEFT',
-  cascade_delete => 1,
-  cascade_update => 1
 };
 
 has_many 'children' => __PACKAGE__, {
