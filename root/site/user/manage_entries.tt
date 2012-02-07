@@ -31,7 +31,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 		else if ( row instanceof Y.Node || Y.Lang.isString(row) ) {
 			var crow = ( Y.Lang.isString(row) ) ? row : row.get('id');	// matches based on DOM id
 			var rec = -1;
-      console.log(crow);
+                        Y.log(crow);
 			rs.some( function(item) {
 				if ( item.get('clientId') === crow ) {
 					rec = item;
@@ -243,7 +243,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 	//  If existing, the record "entryid" is saved in FORM hidden value "frmRecord"
     //-----------------
    	var saveFormData = function() {
-		var theForm = document.forms[0],
+		  var theForm = document.forms[0],
 			rec_id 	= theForm.frmRecord.value,	// if INSERT, this is disregarded ...
 			newData = {},
 			raw_value  = 0,
@@ -253,11 +253,10 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 	//    also, define a parser on a few numeric items
 	//		
 		var record_map = [
-			{ field:'entryid',    ckey:'entryid', parser: parseInt },	
-			{ field:'title',  ckey:'title'},
-			{ field:'published',  ckey:'created_at'},
-			{ field:'reply_count', ckey:'reply_count', parser: parseInt },
-      { field:'body', ckey:'body'}
+			{ field:'frmRecord', ckey:'entryid', parser: parseInt },	
+			{ field:'title',     ckey:'title'},
+			{ field:'published', ckey:'published'},
+                        { field:'body',      ckey:'body'}
 		];
 
 
@@ -266,6 +265,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 	//   that will serve as the data object for DataTable
 	//	
 		Y.Array.each( record_map, function(item){
+			Y.log(item.field);
 			raw_value  = theForm[item.field].value;
 			data_value = ( item.parser && Y.Lang.isFunction(item.parser) ) ? item.parser.call(this,raw_value)  : raw_value ;
 			newData[ item.ckey ] = data_value;
@@ -307,7 +307,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
   var default_dialog_xy = [ 220, 130 ];
   
   var showDT_Dialog = function( record, xy, insert_obj ) {
-		var thePanel, DialogTMPL, body_html, header_html;
+       var thePanel, DialogTMPL, body_html, header_html;
 
 	//
 	//  Grab the dialog internal content from the <script> template
@@ -393,7 +393,9 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 	//	
 		switch( col.name || null ) {
 			case 'edit':
+        // EDIT CALL GOES HERE
 				showDT_Dialog( rec, cell.getXY() );
+
 				break;
 
 			case 'delete':
