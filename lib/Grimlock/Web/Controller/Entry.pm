@@ -148,6 +148,21 @@ sub browse_GET {
 
 }
 
+sub browse_PUT {
+  my ( $self, $c ) = @_;
+  my $entry = $c->stash->{'entry'};
+  my $params ||= $c->req->data || $c->req->params;
+  $entry->update($params) || return $self->status_bad_request($c,
+    message => "Couldn't update entry; $!"
+  );
+
+   return $self->status_ok($c,
+    entity => {
+      entry => $entry
+    }
+  );
+}
+
 =head1 AUTHOR
 
 Devin Austin

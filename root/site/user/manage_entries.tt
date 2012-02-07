@@ -234,6 +234,17 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 	   	}
     });
 
+      var editPostCB = function(id, data) {
+
+        Y.io('/' + id, {
+          method: 'PUT',
+	  data: data,
+	  on: {
+            success: function(id, result) { Y.log(result) },
+	    failure: function(id, result) { Y.log(result) }
+	  }
+	});
+      }
     //-----------------
 	//  Function to save the FORM data, based on current values.
 	//  Define a mapping object to help us figure out how to apply INPUT[name=xxx] to what 
@@ -253,10 +264,10 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 	//    also, define a parser on a few numeric items
 	//		
 		var record_map = [
-			{ field:'frmRecord', ckey:'entryid', parser: parseInt },	
+			{ field:'entryid',   ckey:'entryid', parser: parseInt },	
 			{ field:'title',     ckey:'title'},
 			{ field:'published', ckey:'published'},
-                        { field:'body',      ckey:'body'}
+                        { field:'body',      ckey:'body'},
 		];
 
 
@@ -265,7 +276,6 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 	//   that will serve as the data object for DataTable
 	//	
 		Y.Array.each( record_map, function(item){
-			Y.log(item.field);
 			raw_value  = theForm[item.field].value;
 			data_value = ( item.parser && Y.Lang.isFunction(item.parser) ) ? item.parser.call(this,raw_value)  : raw_value ;
 			newData[ item.ckey ] = data_value;
@@ -277,7 +287,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 	//
 		if ( parseInt( theForm.frmInsertFlag.value ) === 0 ) 
 
-			dt.modifyRow( rec_id, newData );
+			dt.modifyRow( rec_id, newData, editPostCB(theForm.title.value, newData) );
 
 		else
 
@@ -296,11 +306,10 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
     //
 	var default_data = {
 
-	  	entryid : 0,
 	  	title : 'New Entry', 
 	  	body : ' ',
-      published : 0,
-     	row : 0,
+                published : 0,
+     	        row : 0,
 	  	insert : 1
    	};
    
@@ -321,10 +330,10 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 		//
 			var form_data = {
 				entryid : 	record.get('entryid'),
-				title :	record.get('title'),
+				title :	        record.get('title'),
 				published :	record.get('published'),
-        body : record.get('body'),
-				row :	record.get('clientId'),
+                                body :          record.get('body'),
+				row :	         record.get('clientId'),
 				insert :	0
 			}
 
@@ -346,7 +355,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 	//	Fill the Panel content, position it and display it
 	//	
 		thePanel.set( 'xy', xy );
-    thePanel.set( 'headerContent', header_html );  
+                thePanel.set( 'headerContent', header_html );  
 		thePanel.set( 'bodyContent', body_html );
 		thePanel.show();
    	} 
@@ -487,6 +496,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 		</fieldset>
 		<input type="hidden" name="frmRecord" value="{row}" />
 		<input type="hidden" name="frmInsertFlag" value="{insert}" />
+		<input type="hidden" name="entryid" value="{entryid}" />
 	</form>
 </script>
 <div id="main">
