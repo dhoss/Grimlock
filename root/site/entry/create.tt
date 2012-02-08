@@ -1,4 +1,7 @@
+[% page.load_scripts_at_top = 1 %]
+
 <h2>Create an entry</h2>
+<div id="demo_output_polling"></div>
 <form method="POST" action="[% c.uri_for_action('/entry/create') %]">
 <div id="form-entry-title">Title: <input type="text" name="title" /></div>
 <div id="form-entry-body">
@@ -6,3 +9,40 @@
 </div>
 <div id="form-entry-publish">Publish? <input type="checkbox" name="published" /></div>
 <div id="form-entry-submit"><input type="submit" value="Save entry" /></div>
+
+<script type="text/javascript">
+YUI().use("node", "dump", "datasource-function", "datasource-polling", "datasource", function(Y) {
+  var saveDraft = function() {
+    Y.io('/entry/save_draft', {
+      method: 'POST',
+      data: 'user=yahoo',
+      on: {
+        success: function (id, result) {
+        },
+        failure: function (id, result) {
+        }
+      }
+    })
+  },
+    
+  myDataSource = new Y.DataSource.Function({source:saveDraft}),
+        request = {
+            callback: {
+                success: function(e){
+                    Y.one("#demo_output_polling")
+                     .setContent("At the tone the time will be: " +
+                                Y.dump(e.response.results[0]));
+                },
+                failure: function(e){
+                    Y.one("#demo_output_polling")
+                     .setContent("Could not retrieve data: " + e.error.message);
+                }
+            }
+        },
+        id = myDataSource.setInterval(10000, request); // Starts polling
+
+      //  myDataSource.clearInterval(id); // Ends polling
+});
+
+</script>
+
