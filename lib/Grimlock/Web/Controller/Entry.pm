@@ -44,6 +44,7 @@ sub create_GET {
       message => "You must be logged in to create an entry"
     );
   }
+  my $user = $c->user;
   $self->status_ok( $c, entity => {} );
 }
 
