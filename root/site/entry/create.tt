@@ -13,9 +13,12 @@
 <script type="text/javascript">
 YUI().use("node", "dump", "datasource-function", "datasource-polling", "datasource", function(Y) {
   var saveDraft = function() {
-    Y.io('/entry/save_draft', {
+    Y.io('/draft', {
       method: 'POST',
-      data: 'user=yahoo',
+      data: {
+        title: document.forms[0].title.value,
+        body: document.forms[0].body.value
+      },
       on: {
         success: function (id, result) {
         },
@@ -30,7 +33,7 @@ YUI().use("node", "dump", "datasource-function", "datasource-polling", "datasour
             callback: {
                 success: function(e){
                     Y.one("#demo_output_polling")
-                     .setContent("At the tone the time will be: " +
+                     .setContent("Draft saved: " +
                                 Y.dump(e.response.results[0]));
                 },
                 failure: function(e){
