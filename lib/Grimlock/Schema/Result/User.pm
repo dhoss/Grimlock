@@ -130,4 +130,11 @@ sub entries_TO_JSON {
   return \@entry_collection;
 }
 
+sub draft_count {
+  my $self = shift;
+  return $self->drafts->count;
+}
+
+
+
 1;

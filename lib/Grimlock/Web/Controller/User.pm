@@ -284,6 +284,18 @@ sub manage_entries_GET {
 
 }
 
+sub list_drafts :  Chained('load_user') PathPart('drafts') Args(0) ActionClass('REST') {}
+
+sub list_drafts_GET {
+  my ( $self, $c ) = @_;
+  my $user = $c->stash->{'user'};
+  my $drafts = $user->drafts;
+  return $self->status_ok($c,
+    entity => {
+      drafts => [$drafts->all]
+    }
+  );
+}
 
 
 =head1 AUTHOR

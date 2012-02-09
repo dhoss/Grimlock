@@ -9,7 +9,7 @@
 posted by <a href="[% c.uri_for_action('/user/browse', [ entry.author.name ] ) %]">[% entry.author.name %]</a>
 on [% entry.created_at %]
 <a href="[% c.uri_for_action('/entry/reply', [ entry.display_title ]) %]">comments ([% entry.reply_count %])</a>
-[% IF entry.published %](Published)[% END %]</div>
+</div>
 [% END %]
 
 

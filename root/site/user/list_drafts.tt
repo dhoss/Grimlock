@@ -1,0 +1,8 @@
+[% FOR draft IN drafts %]
+  <h2><a href="[% c.uri_for_action('/draft/browse', [draft.draftid] ) %]">[% draft.title %]</a></h2>
+  <div class="body">[% draft.body %]</div>
+  <div class="info-block">
+  posted on [% draft.created_at %]
+</div>
+[% END %]
+
