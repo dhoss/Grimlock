@@ -238,23 +238,24 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 
         Y.io('/' + id, {
           method: 'PUT',
-	  data: data,
-	  on: {
+	        data: data,
+	        on: {
             success: function(id, result) { Y.log(result) },
-	    failure: function(id, result) { Y.log(result) }
-	  }
-	});
-      }
+	          failure: function(id, result) { Y.log(result) }
+	        }
+	      });
+     }
 
       var deletePostCB = function(id) {
         Y.io('/' + id, {
           method: 'DELETE',
-	  on: {
+	        on: {
             success: function(id, result) { Y.log(result) },
-	    failure: function(id, result) { Y.log(result) }
+	          failure: function(id, result) { Y.log(result) }
 
-	  }
-	});
+	        }
+	      });
+        
       }
     //-----------------
 	//  Function to save the FORM data, based on current values.
@@ -278,7 +279,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 			{ field:'entryid',   ckey:'entryid', parser: parseInt },	
 			{ field:'title',     ckey:'title'},
 			{ field:'published', ckey:'published'},
-                        { field:'body',      ckey:'body'},
+      { field:'body',      ckey:'body'},
 		];
 
 
@@ -319,8 +320,8 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 
 	  	title : 'New Entry', 
 	  	body : ' ',
-                published : 0,
-     	        row : 0,
+      published : 0,
+     	row : 0,
 	  	insert : 1
    	};
    
@@ -341,11 +342,11 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 		//
 			var form_data = {
 				entryid : 	record.get('entryid'),
-				title :	        record.get('title'),
-				published :	record.get('published'),
-                                body :          record.get('body'),
-				row :	         record.get('clientId'),
-				insert :	0
+				title :	    record.get('title'),
+				published :	 (record.get('published')=='1') ? 'checked="1"' : '',
+        body :      record.get('body'),
+				row :	      record.get('clientId'),
+				insert :	  0
 			}
 
 			xy[0] += 50;	// offset the dialog a tinch, from the Edit TD ...
@@ -366,7 +367,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 	//	Fill the Panel content, position it and display it
 	//	
 		thePanel.set( 'xy', xy );
-                thePanel.set( 'headerContent', header_html );  
+    thePanel.set( 'headerContent', header_html );  
 		thePanel.set( 'bodyContent', body_html );
 		thePanel.show();
    	} 
@@ -415,7 +416,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 			case 'edit':
         // EDIT CALL GOES HERE
 				showDT_Dialog( rec, cell.getXY() );
-
+        dt.datasource.load();
 				break;
 
 			case 'delete':
@@ -501,7 +502,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
 		<fieldset id="myfieldset">
 			<table>
 				<tr><th>Title :</th><td><input type="text" name="title" value="{title}" /></td></tr>
-				<tr><th>Published :</th><td><input type="checkbox" name="published" value="{published}" checked="{published}" /></td></tr>
+				<tr><th>Published :</th><td><input type="checkbox" name="published" {published} /></td></tr>
         <tr><th>Body : </th><td><textarea name="body" rows=10 cols=45>{body}</textarea></td></tr>
 			</table>
 		</fieldset>

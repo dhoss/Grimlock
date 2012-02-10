@@ -153,6 +153,7 @@ sub browse_PUT {
   my ( $self, $c ) = @_;
   my $entry = $c->stash->{'entry'};
   my $params ||= $c->req->data || $c->req->params;
+  $params->{'published'} = $params->{'published'} eq 'on' ? 1 : 0;
   $entry->update($params) || return $self->status_bad_request($c,
     message => "Couldn't update entry; $!"
   );
