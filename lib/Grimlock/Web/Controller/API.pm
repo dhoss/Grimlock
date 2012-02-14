@@ -2,7 +2,7 @@ package Grimlock::Web::Controller::API;
 
 use Moose;
 use namespace::autoclean;
-
+use Data::Dumper;
 BEGIN { extends 'Catalyst::Controller::REST' };
 
 __PACKAGE__->config(
@@ -14,7 +14,14 @@ __PACKAGE__->config(
   }
 );
 
-sub base : Chained('/') PathPart('') CaptureArgs(0) {}
+sub base : Chained('/') PathPart('') CaptureArgs(0) {
+  my ( $self, $c ) = @_;
+  if ( $c->debug ){
+    $c->log->debug("***** ENVIRONMENT INFO *****");
+    $c->log->debug("Config: " . $ENV{'CATALYST_CONFIG'});
+    $c->log->debug("Database connection: " . Dumper $c->model('Database')->schema->storage->connect_info);
+  }
+}
 
 
 __PACKAGE__->meta->make_immutable;
