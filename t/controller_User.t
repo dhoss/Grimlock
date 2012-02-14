@@ -2,7 +2,6 @@ use strict;
 use warnings;
 use Test::More;
 use HTTP::Request::Common qw(DELETE);
-use Grimlock::Web;
 use Test::WWW::Mechanize::PSGI;
 use FindBin qw( $Bin );
 use lib "$Bin/../t/lib";
@@ -12,8 +11,14 @@ use Test::DBIx::Class qw(:resultsets);
 
 BEGIN { 
   $ENV{EMAIL_SENDER_TRANSPORT} = 'Test' 
-};
+}
 
+BEGIN { 
+  $ENV{DBIC_TRACE} = 1;
+  $ENV{CATALYST_CONFIG} = "t/grimlock_web_test.conf"
+}
+
+use Grimlock::Web;
 # create role records
 fixtures_ok 'basic'
   => 'installed the basic fixtures from configuration files';

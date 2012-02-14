@@ -23,7 +23,9 @@ sub base : Chained('/api/base') PathPart('') CaptureArgs(0) {}
 
 sub load_draft : Chained('base') PathPart('draft') CaptureArgs(1) {
   my ( $self, $c, $draftid ) = @_;
-  my $draft = $c->model('Database::Draft')->find($draftid);
+  my $draft = $c->model('Database::Draft')->find({
+      display_title => $draftid,
+  });
   $c->stash( draft => $draft );
 }
 
@@ -60,6 +62,20 @@ sub browse_GET {
   return $self->status_ok($c,
     entity => {
       draft => $draft
+    }
+  );
+}
+
+sub browse_DELETE {
+  my ( $self, $c ) = @_;
+  my $draft = $c->stash->{'draft'};
+  $draft->delete || return $self->status_bad_request($c,
+    message => "Can't delete draft: $!"
+  );
+
+  return $self->status_ok($c,
+    entity => {
+      message => "Draft deleted"
     }
   );
 }

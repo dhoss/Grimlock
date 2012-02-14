@@ -23,6 +23,11 @@ unique_column title => {
   is_nullable => 0,
 };
 
+unique_column display_title => {
+  data_type => 'varchar',
+  size => 200,
+  is_nullable => 0
+};
 
 column body => {
   data_type => 'text',
@@ -62,6 +67,11 @@ sub insert {
   my $guard = $self->result_source->schema->txn_scope_guard;
   
   $self->clean_params([qw( title body )]);
+   # move me to a filter class
+  my $title = $self->title;
+  $title =~ s{(\W+|\s+|\_)}{-}g;
+  chomp $title if $title =~ m/\W$/;
+  $self->display_title($title);
 
   $self->next::method(@args);
   
