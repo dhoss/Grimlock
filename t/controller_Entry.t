@@ -8,8 +8,8 @@ use lib "$Bin/../t/lib";
 use Data::Dumper;
 use Test::DBIx::Class qw(:resultsets);
 
-# this doesn't do shit for some reason
 BEGIN { 
+  $ENV{DBIC_TRACE} = 1;
   $ENV{CATALYST_CONFIG} = "t/grimlock_web_test.conf"
 }
 
@@ -48,7 +48,7 @@ BAIL_OUT "can't log in" unless $mech->success;
 
 ok $mech->success, "logged in ok";
 
-$mech->post('/draft',
+$mech->post('/entry',
  Content_Type => 'application/x-www-form-urlencoded',
   Content => {
     title => 'test title with spaces! <script>alert("and javascript!")</script>',
