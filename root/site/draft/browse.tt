@@ -2,7 +2,7 @@
 
 <h2>Editing draft: [% draft.title %]</h2>
 <div id="demo_output_polling"></div>
-<form method="POST" action="[% c.uri_for_action('/draft/publish', [ draft.draftid ]) %]">
+<form method="POST" action="[% c.uri_for_action('/draft/publish', [ draft.title ]) %]">
 <div id="form-entry-title">Title: <input type="text" name="title" value="[% draft.title %]"/></div>
 <div id="form-entry-body">
 <textarea name="body" rows=15 cols=45>[% draft.body %]</textarea>
@@ -11,11 +11,14 @@
 <div id="form-entry-submit"><input type="submit" value="Save entry" /></div>
 
 <script type="text/javascript">
-YUI().use("node", "dump", "datasource-function", "datasource-polling", "datasource", function(Y) {
-  var saveDraft = function() {
+YUI().use("io-base", "node", "dump", "datasource-function", "datasource-polling", "datasource", function(Y) {
+  
+    var saveDraft = function() {
+
     Y.io('/draft', {
       method: 'POST',
-      data: {
+      headers: { 'Accept': 'application/json' },
+      /*data: {
         title: document.forms[0].title.value,
         body: document.forms[0].body.value
       },
@@ -44,7 +47,7 @@ YUI().use("node", "dump", "datasource-function", "datasource-polling", "datasour
         },
         id = myDataSource.setInterval(10000, request); // Starts polling
 
-      //  myDataSource.clearInterval(id); // Ends polling
+        myDataSource.clearInterval(id); // Ends polling*/
 });
 
 </script>

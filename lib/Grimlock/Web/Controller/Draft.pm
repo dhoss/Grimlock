@@ -42,8 +42,12 @@ sub create_POST {
   ) unless $draft;
 
   return $self->status_created($c,
-    location => $c->uri_for_action('/draft/browse', [ $draft->draftid ]),
-    entity => $draft
+    location => $c->uri_for_action('/draft/browse', [ $draft->title ]),
+    entity => {
+      draft => $draft,
+      message => "Draft saved"
+    }
+
   );
 }
 
