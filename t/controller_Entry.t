@@ -12,7 +12,7 @@ BEGIN {
   $ENV{DBIC_TRACE} = 1;
   $ENV{CATALYST_CONFIG} = "t/grimlock_web_test.conf"
 }
-
+# must be AFTER this begin statement so that these env vars take root properly
 use Grimlock::Web;
 
 # create role records
@@ -25,7 +25,7 @@ my $mech = Test::WWW::Mechanize::PSGI->new(
 );
 
 # try to create draft without auth
-$mech->post('/draft', 
+$mech->post('/entry', 
   Content_Type => 'application/x-www-form-urlencoded',
   Content => {
     title => 'test',
@@ -57,7 +57,7 @@ $mech->post('/entry',
 );
 
 ok $mech->success, "POST worked";
-$mech->get_ok('test-title-with-spaces-');
+$mech->get_ok('/test-title-with-spaces-');
 ok $mech->content_lacks('<script>alert("and javascript!")</script>'), "no scripts here";
 ok $mech->content_contains("derp"), "content is correct";
 
