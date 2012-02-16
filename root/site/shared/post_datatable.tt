@@ -161,7 +161,8 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
    	}		
     
     var cols = [ 
-		  {key:"entryid", label:'ID', sortable: true }, 
+		  {key:
+         [% IF drafts %] "draftid" [% ELSE %] "entryid"[% END %], label:'ID', sortable: true }, 
 		  {key:"title", label:"Title", sortable: true }, 
 		  {key:"created_at", label:'Created At', sortable: true}, 
 		  {key:"published", label:'Published', formatter: fmtPublished },
@@ -182,7 +183,7 @@ YUI().use( "datasource-io", "datasource-jsonschema", "datatable-datasource",
     }).plug(Y.Plugin.DataSourceJSONSchema, {
             schema: {
                 resultListLocator: "data_table",
-                resultFields: [ "entryid", "title", "created_at", "published", "reply_count", "body" ]
+                resultFields: [  [% IF drafts %] "draftid" [% ELSE %] "entryid"[% END %], "title", "created_at", "published", "reply_count", "body" ]
             }
         });
 		

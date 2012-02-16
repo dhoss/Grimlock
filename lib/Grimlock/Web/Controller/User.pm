@@ -292,7 +292,7 @@ sub list_drafts_GET {
   my $drafts = $user->drafts;
   return $self->status_ok($c,
     entity => {
-      drafts => [$drafts->all]
+      data_table => [$drafts->all]
     }
   );
 }

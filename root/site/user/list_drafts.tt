@@ -1,8 +1,1 @@
-[% FOR draft IN drafts %]
-  <h2><a href="[% c.uri_for_action('/draft/browse', [draft.display_title] ) %]">[% draft.title %]</a></h2>
-  <div class="body">[% draft.body %]</div>
-  <div class="info-block">
-  posted on [% draft.created_at %]
-</div>
-[% END %]
-
+[% INCLUDE 'shared/post_datatable.tt' source_url = '/user/list_drafts' delete_url = '/draft/' update_url = '/draft/' drafts = 1 %] 
