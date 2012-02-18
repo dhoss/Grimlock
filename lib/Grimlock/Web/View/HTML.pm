@@ -4,11 +4,13 @@ use strict;
 use base 'Catalyst::View::TT';
 use Grimlock::Web;
 use Data::Dumper;
+use File::ShareDir 'dist_dir';
 __PACKAGE__->config({
     PRE_PROCESS        => 'shared/base.tt',
     WRAPPER            => 'wrapper.tt',
     TEMPLATE_EXTENSION => '.tt',
     INCLUDE_PATH       => [
+      dist_dir('Grimlock'),
       Grimlock::Web->path_to('root','site')
     ],
     TIMER              => 0,
