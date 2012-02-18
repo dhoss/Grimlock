@@ -7,6 +7,7 @@ sub front_page_entries {
   my ($self, $limit) = @_;
   return $self->search(
     {
+      parent    => undef,
       published => 1
     }, 
     {
