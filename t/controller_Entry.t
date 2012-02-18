@@ -69,6 +69,14 @@ $mech->post('/test-title-with-spaces-/reply',
   }
 );
 
+$mech->post('/test-title-with-spaces-/reply',
+ Content_Type => 'application/x-www-form-urlencoded',
+  Content => {
+    title => 'reply test another test',
+    body => 'derpen'
+  }
+);
+
 ok $mech->success, "reply post works ok";
 
 $mech->request( DELETE '/test-title-with-spaces-' );

@@ -105,15 +105,16 @@ sub reply_POST {
 
   my $reply;
   try {
-    $c->log->debug("GOT TO CREATE IN REPLY");
+
+    my $title = "RE:" . $entry->title . rand;
+    $c->log->debug("REPLY $title");
     $reply = $c->model('Database::Entry')->create({
       author => $c->user->obj->userid,
       parent => $entry,
-      title => 'RE:' . $entry->title,
+      title => $title,
       body => $params->{'body'},
       published => 1,
     }) or die $!;
-    $c->log->debug("AFTER CREATE IN REPLY");
     return $self->status_created($c,
       location => $c->uri_for_action('/entry/browse', [ $reply->display_title ] ),
       entity   => {
