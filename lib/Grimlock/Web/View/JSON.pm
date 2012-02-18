@@ -7,7 +7,8 @@ use Try::Tiny;
 
 sub encode_json {
     my($self, $c, $data) = @_;
-    my $encoder = JSON::XS->new->ascii->pretty->allow_nonref->convert_blessed->allow_blessed;
+    my $encoder = JSON::XS->new->ascii->allow_nonref->convert_blessed->allow_blessed;
+    $encoder->pretty if $c->debug;
     my $d = $encoder->encode($data);
     return $d;
 }
