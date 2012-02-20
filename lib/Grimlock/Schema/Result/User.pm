@@ -58,8 +58,11 @@ has_many 'entries' => 'Grimlock::Schema::Result::Entry', {
   'foreign.author' => 'self.userid',
 };
 
-has_many 'drafts' => 'Grimlock::Schema::Result::Draft', {
-  'foreign.author' => 'self.userid',
+has_many 'drafts' => 'Grimlock::Schema::Result::Entry', {
+  'foreign.author'    => 'self.userid',
+},
+{
+  'foreign.published' => undef
 };
 
 has_many 'user_roles' => 'Grimlock::Schema::Result::UserRole', {

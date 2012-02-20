@@ -23,7 +23,7 @@ sub base : Chained('/api/base') PathPart('') CaptureArgs(0) {}
 
 sub load_draft : Chained('base') PathPart('draft') CaptureArgs(1) {
   my ( $self, $c, $draftid ) = @_;
-  my $draft = $c->model('Database::Draft')->find({
+  my $draft = $c->model('Database::Entry')->find({
       display_title => $draftid,
   });
   $c->stash( draft => $draft );
@@ -98,17 +98,13 @@ sub publish_POST {
   my $draft = $c->stash->{'draft'};
   my $user = $c->user;
   my $message = $params->{'published'} ? 'Published' : 'Saved';
-  my $entry = $user->update_or_create_related('entries', {
-    title => $params->{'title'},
-    body  => $params->{'body'},
+  my $entry = $draft->update({
     published => $params->{'published'} ? 1 : 0
-  }) ;
+  });
   
   return $self->status_bad_request($c,
     message => "Couldn't publish draft: $!"
   ) unless $draft;
-
-  $draft->delete if $params->{'published'};
 
   return $self->status_ok($c,
     entity => {
