@@ -320,7 +320,6 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
 	//	
 		Y.Array.each( record_map, function(item){
 			raw_value  = form[item.field].value;
-      Y.log("RAW " + raw_value);
 			data_value = ( item.parser && Y.Lang.isFunction(item.parser) ) ? item.parser.call(this,raw_value)  : raw_value ;
 			newData[ item.ckey ] = data_value;
 		});

@@ -1,4 +1,4 @@
-<p>Your masthead here</p>
+<p><img src="[% static('images/grimlock_banner') %]" alt="ME GRIMLOCK KING" /></p>
 
 [% # Include the navigation
 IF page.nav && page.nav != 'none';

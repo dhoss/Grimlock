@@ -1,4 +1,4 @@
-<p>Your footer here</p>
+<p>GRIMLOCK CMS</p>
 [% IF c.config.show_debug %]
 <pre>
 [%- USE Dumper %]

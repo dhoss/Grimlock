@@ -37,7 +37,7 @@ END;
 IF !page || !ref(page) == 'HASH';
     page = {};
 END;
-DEFAULT page.title  = c.config.name || 'Grimlock::Web';
+DEFAULT page.title  = c.config.blog.title || 'Grimlock::Web';
 DEFAULT page.layout = 'default';
 DEFAULT page.header = 'default';
 DEFAULT page.nav    = 'default';
