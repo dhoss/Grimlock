@@ -24,7 +24,7 @@ sub load_entry : Chained('base') PathPart('') CaptureArgs(1) {
   my ( $self, $c, $entry_title ) = @_;
   my $entry = $c->model('Database::Entry')->find(
   {
-    display_title => $entry_title 
+    display_title => $entry_title,
   },
   {
     prefetch => 'children'
@@ -152,8 +152,10 @@ sub browse_GET {
 
 sub browse_PUT {
   my ( $self, $c ) = @_;
-  my $entry = $c->stash->{'entry'};
   my $params ||= $c->req->data || $c->req->params;
+  use Data::Dumper;
+  $c->log->debug("PARAMS " . Dumper $params);
+  my $entry = $c->stash->{'entry'} ? $c->stash->{'entry'} : $c->user->entries->find($params->{'entryid'});
   $params->{'published'} = $params->{'published'} eq 'on' ? 1 : 0;
   delete $params->{$_} for qw( frmInsertFlag frmRecord );
   $entry->update($params) || return $self->status_bad_request($c,
