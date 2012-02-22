@@ -1,6 +1,5 @@
 /* Define the style for the default site navigation here */
 #nav {
-    width: 750px;
     margin: 0 auto 1.2em;
     border-bottom: 1px solid #eee;
     overflow: hidden;
@@ -33,6 +32,9 @@ ul#nav {
     padding: 25px 25px .2em 0;
 }
 
+#nav li a:hover {
+  color: #C9C9C9
+}
 #nav li span.search {
   padding: 25px 0 2em 15px;
   display: block

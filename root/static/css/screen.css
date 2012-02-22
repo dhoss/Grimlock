@@ -1,10 +1,7 @@
 body {
   background: #000;
   color: #eee;
-  a:link {text-decoration:none; color: #8A8A8A}
-  a:visited {text-decoration:none; color: #6B6B6B}
-  a:hover {text-decoration:underline;}
-  a:active {text-decoration:underline;}
+
   
 }
 /*	Define align-center, left, right cell classes for cell alignment   */
@@ -20,6 +17,10 @@ body {
 		text-align:center;
 	}
 
+
+  .yui3-datatable-cell {
+    color: #000
+  }
 /*  define images to be used in TD cell formatters for Edit / Delete  */
 	
 	.cell-delete {
@@ -54,7 +55,6 @@ body {
 			border: 1px solid #444;			
 			padding: 8px 8px;
 			background-color: #090;  
-			color: #fcfcfc;
 		} 
 
 		#myfieldset {
@@ -67,4 +67,15 @@ body {
 		#myfieldset input[type=text]{
 			width: 10em;
 		}
+#banner {
+  float: left;
+  margin: 0;
+}
 
+#banner-text {
+  font: bold small-caps 500%;
+  margin-left: 3em;
+  height: 235px;
+  font-size: 10em;
+  font-family: Impact;
+}
