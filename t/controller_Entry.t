@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Test::More;
-use HTTP::Request::Common qw(DELETE);
+use HTTP::Request::Common qw(DELETE PUT);
 use Test::WWW::Mechanize::PSGI;
 use FindBin qw( $Bin );
 use lib "$Bin/../t/lib";
@@ -79,7 +79,11 @@ $mech->post('/test-title-with-spaces-/reply',
 
 ok $mech->success, "reply post works ok";
 
+$mech->request( PUT '/test-title-with-spaces-',
+  Content => 'title=huehuehue'
+);
+ok $mech->success, "changing title works ok";
 $mech->request( DELETE '/test-title-with-spaces-' );
-ok $mech->success, "draft deletion works";
+ok $mech->success, "entry deletion works";
 
 done_testing();
