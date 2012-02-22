@@ -42,6 +42,12 @@ __PACKAGE__->config(
     name => 'Grimlock::Web',
     # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
+    'View::Graphics' => {
+      driver => 'Cairo',
+      driver_args => { format => 'png' },
+      content_type => 'image/png'
+    }
+    
 );
 
 # Start the application

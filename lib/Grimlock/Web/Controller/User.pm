@@ -298,6 +298,13 @@ sub list_drafts_GET {
 }
 
 
+sub stats : Chained('load_user') PathPart('stats') Args(0) ActionClass('REST') {}
+
+sub stats_GET {
+  my ( $self, $c ) = @_;
+  my $user = $c->stash->{'user'};
+}
+
 =head1 AUTHOR
 
 Devin Austin
