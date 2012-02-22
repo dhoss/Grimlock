@@ -155,6 +155,7 @@ sub browse_PUT {
   my $entry = $c->stash->{'entry'};
   my $params ||= $c->req->data || $c->req->params;
   $params->{'published'} = $params->{'published'} eq 'on' ? 1 : 0;
+  delete $params->{$_} for qw( frmInsertFlag frmRecord );
   $entry->update($params) || return $self->status_bad_request($c,
     message => "Couldn't update entry; $!"
   );

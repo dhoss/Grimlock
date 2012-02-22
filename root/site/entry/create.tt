@@ -11,7 +11,7 @@
 <div id="form-entry-submit"><input type="submit" value="Save entry" /></div>
 
 <script type="text/javascript">
-YUI().use("anim", "node", "dump", "datasource-function", "datasource-polling", "datasource", function(Y) {
+YUI().use("node", "dump", "datasource-function", "datasource-polling", "datasource", function(Y) {
   var saveDraft = function() {
     
     Y.io('/draft', {

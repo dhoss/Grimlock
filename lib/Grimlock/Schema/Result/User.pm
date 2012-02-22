@@ -108,7 +108,11 @@ sub generate_random_pass {
 
 sub create_entry {
   my ( $self, $params ) = @_;
-  $self->add_to_entries($params);
+  return $self->entries->update_or_create($params,
+    {
+      key => 'entries_title'
+    }
+  );
 }
 
 sub TO_JSON {
