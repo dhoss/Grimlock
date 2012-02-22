@@ -1,6 +1,11 @@
 body {
   background: #000;
   color: #eee;
+  a:link {text-decoration:none; color: #8A8A8A}
+  a:visited {text-decoration:none; color: #6B6B6B}
+  a:hover {text-decoration:underline;}
+  a:active {text-decoration:underline;}
+  
 }
 /*	Define align-center, left, right cell classes for cell alignment   */
 	.yui3-skin-sam .yui3-datatable td.align-right {
