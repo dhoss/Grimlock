@@ -1,3 +1,7 @@
+body {
+  background: #000;
+  color: #eee;
+}
 /*	Define align-center, left, right cell classes for cell alignment   */
 	.yui3-skin-sam .yui3-datatable td.align-right {
 		text-align:right;

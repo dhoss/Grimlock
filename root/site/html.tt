@@ -17,6 +17,7 @@ END;
   <title>[% page.title %]</title>
   <meta http-equiv="Content-Language" content="[% page.language %]">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
 [%
 # Add all javascript refs in page.head.scripts (see page.body.scripts)
@@ -41,7 +42,7 @@ FOREACH stylesheet IN page.head.stylesheets;
 [%
 END;
 %]
-<link rel="stylesheet" href="[% static( 'css/screen.css', 1 ) %]" media="screen">
+<link rel="stylesheet" href="[% static( 'css/screen.css', 1 ) %]" media="screen" />
  </head>
  <!--[if !IE]> <-->
  <body

@@ -1,4 +1,5 @@
-<p><img src="[% static('images/grimlock_banner') %]" alt="ME GRIMLOCK KING" /></p>
+<div id="banner"><img src="[% static('images/header.jpg') %]" alt="ME GRIMLOCK KING" /></div>
+<div id="banner-text">GRIMLOCK</div>
 
 [% # Include the navigation
 IF page.nav && page.nav != 'none';
