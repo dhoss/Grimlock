@@ -1,13 +1,5 @@
 package Grimlock::Web::Controller::User::Profile;
 
-use Chart::Clicker;
-use Chart::Clicker::Context;
-use Chart::Clicker::Data::DataSet;
-use Chart::Clicker::Data::Marker;
-use Chart::Clicker::Data::Series;
-use Geometry::Primitive::Rectangle;
-use Graphics::Color::RGB;
-use Geometry::Primitive::Circle;
 use Moose;
 use namespace::autoclean;
 use Try::Tiny;
