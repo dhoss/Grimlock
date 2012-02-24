@@ -3,16 +3,6 @@ use Moose;
 use namespace::autoclean;
 use Try::Tiny;
 use Data::Dumper;
-use Chart::Clicker;
-use Chart::Clicker::Context;
-use Chart::Clicker::Data::DataSet;
-use Chart::Clicker::Data::Marker;
-use Chart::Clicker::Data::Series;
-use Geometry::Primitive::Rectangle;
-use Graphics::Color::RGB;
-use Geometry::Primitive::Circle;
-use DateTime;
-use DateTime::Format::DBI;
 
 BEGIN { extends 'Grimlock::Web::Controller::API' };
 
@@ -320,34 +310,7 @@ sub list_drafts_GET {
 }
 
 
-sub stats : Chained('load_user') PathPart('stats') Args(0) ActionClass('REST') {}
 
-sub stats_GET {
-  my ( $self, $c ) = @_;
-  my $user = $c->stash->{'user'};
-  my $entries = $user->entries;
-  my $chart = $self->chart;
-  # this should go in a model
-  my $date_diff = $user->date_range_for_stats;
-  $c->log->debug("DATE DIFF " . $date_diff->days);
-  my @dates;
-  #push @dates, $today->subtract( days => 1 )->day for $date_diff->days;
-  #$c->log->debug("DATES " . join ",", @dates);
-  my @vals;
-  push @vals, $_ for $entries->get_column('created_at')->all;
-  $c->log->debug("VALUS " . Dumper \@vals);
-  my $entry_series = Chart::Clicker::Data::Series->new(
-    keys    =>      [ 1, 2, 3, 4, 5 ],
-    values  =>      \@vals,
-  );
-  
-
-  $c->stash(
-    graphics_primitive => $chart,
-    current_view_instance => 'View::Graphics'
-  );
-
-}
 
 =head1 AUTHOR
 

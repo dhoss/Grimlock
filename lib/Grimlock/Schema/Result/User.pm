@@ -154,10 +154,8 @@ sub get_all_entry_dates {
 sub date_range_for_stats {
   my $self = shift;
   my $today = DateTime->now;
-  warn "TODAY $today";
   my $from_db = DateTime::Format::DBI->new($self->result_source->schema->storage->dbh);
   my $first_post = $from_db->parse_datetime($self->entries->get_column('created_at')->func('min'));
-  warn "FIRST $first_post";
   return $today->delta_days($first_post)->in_units('days');
 }
 
