@@ -10,6 +10,7 @@ use Grimlock::Schema::Candy -components => [
 ];
 use Data::Dumper;
 use Text::Password::Pronounceable;
+use Params::Validate qw(:all);
 
 resultset_class 'Grimlock::Schema::ResultSet::User';
 
@@ -62,7 +63,7 @@ has_many 'drafts' => 'Grimlock::Schema::Result::Entry', {
   'foreign.author'    => 'self.userid',
 },
 {
-  'foreign.published' => undef
+  'foreign.published' => 0
 };
 
 has_many 'user_roles' => 'Grimlock::Schema::Result::UserRole', {
@@ -142,6 +143,31 @@ sub draft_count {
   return $self->drafts->count;
 }
 
+# this is here so we can ask for dates per user
+sub get_all_entry_dates {
+  my $self = shift;
+  return $self->entries->get_column('created_at')->all;
+}
 
+# see above
+# returns a date range in days
+sub date_range_for_stats {
+  my $self = shift;
+  my $today = DateTime->now;
+  warn "TODAY $today";
+  my $from_db = DateTime::Format::DBI->new($self->result_source->schema->storage->dbh);
+  my $first_post = $from_db->parse_datetime($self->entries->get_column('created_at')->func('min'));
+  warn "FIRST $first_post";
+  return $today->delta_days($first_post)->in_units('days');
+}
+
+sub build_graph_run {
+  my ( $self, $range ) = @_;
+  validate_pos( @_, 1, 1 );
+  my @dates;
+  my $today = DateTime->now;
+  push @dates, $today->subtract( days => 1 ) for 1..$range;
+  return \@dates
+}
 
 1;
