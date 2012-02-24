@@ -19,17 +19,6 @@ Catalyst Controller.
 =cut
 
 
-has 'chart' => (
-  is => 'ro',
-  required => 1,
-  lazy => 1,
-  default => sub { Chart::Clicker->new }
-);
-
-sub BUILD {
-  my $self = shift;
-  $self->chart;
-}
 sub base : Chained('/api/base') PathPart('') CaptureArgs(0) {}
 
 sub load_user : Chained('base') PathPart('user') CaptureArgs(1) {

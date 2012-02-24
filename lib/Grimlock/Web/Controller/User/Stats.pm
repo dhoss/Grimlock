@@ -14,6 +14,18 @@ use Try::Tiny;
 
 BEGIN { extends 'Grimlock::Web::Controller::User' };
 
+has 'chart' => (
+  is => 'ro',
+  required => 1,
+  lazy => 1,
+  default => sub { Chart::Clicker->new }
+);
+
+sub BUILD {
+  my $self = shift;
+  $self->chart;
+}
+
 sub index : Chained('load_user') PathPart('') Args(0) ActionClass('REST') {}
 
 sub index_GET {
