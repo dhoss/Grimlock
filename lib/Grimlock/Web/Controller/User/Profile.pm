@@ -17,10 +17,9 @@ sub index_GET {
 
   return $self->status_ok($c,
     entity => {
-      user = $user
+      user => $user
     }
   );
-}
 }
 
 __PACKAGE__->meta->make_immutable;
