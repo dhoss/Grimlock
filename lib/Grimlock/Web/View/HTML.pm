@@ -10,8 +10,8 @@ __PACKAGE__->config({
     WRAPPER            => 'wrapper.tt',
     TEMPLATE_EXTENSION => '.tt',
     INCLUDE_PATH       => [
-      dist_dir('Grimlock'),
-      Grimlock::Web->path_to('root','site')
+      Grimlock::Web->path_to('root', 'site')->stringify,
+      dist_dir('Grimlock') . '/site',
     ],
     TIMER              => 0,
     static_root        => '/static',

@@ -152,9 +152,19 @@ sub get_all_entry_dates {
 # returns a date range in days
 sub date_range_for_stats {
   my $self = shift;
+  my $month = shift || DateTime->now->month;
   my $today = DateTime->now;
   my $from_db = DateTime::Format::DBI->new($self->result_source->schema->storage->dbh);
-  my $first_post = $from_db->parse_datetime($self->entries->get_column('created_at')->func('min'));
+  my $first_post = $from_db->parse_datetime(
+    $self->entries->search({
+      created_at => { 
+        '>=', DateTime->last_day_of_month( month => $today->month, year => $today->year )
+      },
+      created_at => { 
+        '<=', DateTime->new( month => $today->month, year => $today->year, day => 1 )
+      }
+    })->get_column('created_at')->func('min')
+  );
   return $today->delta_days($first_post)->in_units('days');
 }
 
@@ -163,7 +173,7 @@ sub build_graph_run {
   my @dates;
   my $today = DateTime->now;
   my $range = $self->date_range_for_stats;
-  push @dates, $today->subtract( days => 1 ) for 1..$range;
+  push @dates, $today->subtract( days => 1 )->day for 1..$range;
   return \@dates
 }
 

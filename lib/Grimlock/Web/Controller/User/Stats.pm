@@ -11,6 +11,7 @@ use Geometry::Primitive::Circle;
 use Moose;
 use namespace::autoclean;
 use Try::Tiny;
+use Data::Dumper;
 
 BEGIN { extends 'Grimlock::Web::Controller::User' };
 
@@ -26,15 +27,28 @@ sub BUILD {
   $self->chart;
 }
 
-sub index : Chained('load_user') PathPart('') Args(0) ActionClass('REST') {}
+sub index : Chained('load_user') PathPart('stats') Args(0) ActionClass('REST') {}
 
 sub index_GET {
   my ( $self, $c ) = @_;
   my $user = $c->stash->{'user'};
   my $chart = $self->chart;
-  my $serires = Chart::Clicker::Data::Series->new(
-    keys => $user->build_graph_run,
-    values => $user->get_all_entry_dates
+  $c->log->debug("home " . $c->config->{home});
+  $c->log->debug("USER " . Dumper $user);
+  $c->log->debug("GRAPH RUN " . Dumper $user->build_graph_run );
+  $c->log->debug("DATES " . Dumper $user->get_all_entry_dates);
+  my $series = Chart::Clicker::Data::Series->new(
+    keys => [ 1,2, 4, 5],#$user->build_graph_run,
+    values => [ 1, 2, 3, 4, 5],#$user->get_all_entry_dates
+  );
+  my $dataset = Chart::Clicker::Data::DataSet->new(
+    series => [ $series ]
+  );
+  $chart->add_to_datasets($dataset);
+  $c->stash(
+    graphics_primitive => $chart,
+    current_view_instance => 'View::Graphics'
+  );
 }
 
 __PACKAGE__->meta->make_immutable;
