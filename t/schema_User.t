@@ -35,6 +35,5 @@ ok $date_range == 10, "date range should be 10 days";
 my @expected_array;
 my $today = DateTime->now;
 push @expected_array, $today->subtract( days => 1 ) for 1..10;
-dies_ok { $user->build_graph_run; }, "should die if called with no params";
-is_deeply $user->build_graph_run(10), \@expected_array;
+is_deeply $user->build_graph_run, \@expected_array;
 done_testing;

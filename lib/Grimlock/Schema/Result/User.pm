@@ -10,7 +10,6 @@ use Grimlock::Schema::Candy -components => [
 ];
 use Data::Dumper;
 use Text::Password::Pronounceable;
-use Params::Validate qw(:all);
 
 resultset_class 'Grimlock::Schema::ResultSet::User';
 
@@ -160,10 +159,10 @@ sub date_range_for_stats {
 }
 
 sub build_graph_run {
-  my ( $self, $range ) = @_;
-  validate_pos( @_, 1, 1 );
+  my $self = shift;
   my @dates;
   my $today = DateTime->now;
+  my $range = $self->date_range_for_stats;
   push @dates, $today->subtract( days => 1 ) for 1..$range;
   return \@dates
 }
