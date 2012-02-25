@@ -28,7 +28,7 @@ for ( 1 .. 10 ) {
   }), "created $_";
 }
 
-my @dates = $user->get_all_entry_dates;
+my @dates = @{ $user->get_all_entry_dates };
 diag Dumper \@dates;
 my $date_range = $user->date_range_for_stats;
 ok $date_range == 10, "date range should be 10 days";

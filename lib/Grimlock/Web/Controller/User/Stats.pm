@@ -30,6 +30,11 @@ sub index : Chained('load_user') PathPart('') Args(0) ActionClass('REST') {}
 
 sub index_GET {
   my ( $self, $c ) = @_;
+  my $user = $c->stash->{'user'};
+  my $chart = $self->chart;
+  my $serires = Chart::Clicker::Data::Series->new(
+    keys => $user->build_graph_run,
+    values => $user->get_all_entry_dates
 }
 
 __PACKAGE__->meta->make_immutable;

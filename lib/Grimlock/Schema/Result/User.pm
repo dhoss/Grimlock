@@ -145,7 +145,7 @@ sub draft_count {
 # this is here so we can ask for dates per user
 sub get_all_entry_dates {
   my $self = shift;
-  return $self->entries->get_column('created_at')->all;
+  return [ $self->entries->get_column('created_at')->all ];
 }
 
 # see above
