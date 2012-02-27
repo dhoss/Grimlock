@@ -38,8 +38,8 @@ sub index : Chained('../load_user') PathPart('stats') Args(0) {
   $c->log->debug("GRAPH RUN " . Dumper $user->build_graph_run );
   $c->log->debug("DATES " . Dumper $user->get_all_entry_dates);
   my $series = Chart::Clicker::Data::Series->new(
-    keys => [ 1,2, 4, 5],#$user->build_graph_run,
-    values => [ 1, 2, 3, 4,],#$user->get_all_entry_dates
+    keys => $user->build_graph_run,
+    values => $user->get_all_entry_dates
   );
   my $dataset = Chart::Clicker::Data::DataSet->new(
     series => [ $series ]
