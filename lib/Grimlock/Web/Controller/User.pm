@@ -140,6 +140,7 @@ sub browse : Chained('load_user') PathPart('') Args(0) ActionClass('REST') {
 
 sub browse_GET {
   my ( $self, $c ) = @_;
+    $c->log->debug("Templates in controller " . Dumper $c->config);
   my $user = $c->stash->{'user'};  
   if ( !$user ) {
     return $self->status_bad_request($c,
@@ -299,7 +300,9 @@ sub list_drafts_GET {
 }
 
 
+sub stats : Chained('load_user') PathPart('') CaptureArgs(0) {}
 
+sub profile : Chained('load_user') PathPart('') CaptureArgs(0) {}
 
 =head1 AUTHOR
 
