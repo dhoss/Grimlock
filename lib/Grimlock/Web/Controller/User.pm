@@ -23,15 +23,15 @@ sub base : Chained('/api/base') PathPart('') CaptureArgs(0) {}
 
 sub load_user : Chained('base') PathPart('user') CaptureArgs(1) {
   my ( $self, $c, $uid) = @_;
-  my $user = $c->model('Database::User')->find(
+  my $user = $c->model('Database::User')->search([
     {
       name => $uid
     }, 
     {
       userid => $uid
-    },
-    { prefetch => 'entries' }
-  );
+    }],
+   { prefetch => 'entries' }
+  )->first;
   $c->log->debug("FOUND IN LOAD" . $user->name);
   $c->stash( user => $user );
 }
@@ -73,7 +73,8 @@ sub login_POST {
         password => $params->{'password'}
       })
   ) {
-        $c->res->redirect(
+    $c->log->debug("AUTHED");
+        return $c->res->redirect(
           $c->uri_for_action(
             '/user/browse', [ $c->user->obj->userid ]
           )

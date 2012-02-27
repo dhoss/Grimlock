@@ -58,11 +58,17 @@ has_many 'entries' => 'Grimlock::Schema::Result::Entry', {
   'foreign.author' => 'self.userid',
 };
 
-has_many 'drafts' => 'Grimlock::Schema::Result::Entry', {
-  'foreign.author'    => 'self.userid',
-},
-{
-  'foreign.published' => 0
+has_many 'drafts' => 'Grimlock::Schema::Result::Entry', 
+  # 'foreign.userid'   => 'self.userid',
+  #'foreign.published' => 0
+  sub {
+    my $args = shift;
+    return {
+      "$args->{foreign_alias}.author"   =>  "$args->{self_alias}.userid",
+      "$args->{foreign_alias}.published" => 0
+    };
+  
+  
 };
 
 has_many 'user_roles' => 'Grimlock::Schema::Result::UserRole', {
@@ -145,7 +151,8 @@ sub draft_count {
 # this is here so we can ask for dates per user
 sub get_all_entry_dates {
   my $self = shift;
-  return [ $self->entries->get_column('created_at')->all ];
+  my @dates =  map { $_->created_at->epoch } $self->entries->all;
+  return \@dates;
 }
 
 # see above
@@ -154,6 +161,7 @@ sub date_range_for_stats {
   my $self = shift;
   my $month = shift || DateTime->now->month;
   my $today = DateTime->now;
+  warn "GOT TO DATE RANGE";
   my $from_db = DateTime::Format::DBI->new($self->result_source->schema->storage->dbh);
   my $first_post = $from_db->parse_datetime(
     $self->entries->search({
@@ -168,13 +176,32 @@ sub date_range_for_stats {
   return $today->delta_days($first_post)->in_units('days');
 }
 
-sub build_graph_run {
+sub build_graph_range {
   my $self = shift;
   my @dates;
   my $today = DateTime->now;
   my $range = $self->date_range_for_stats;
-  push @dates, $today->subtract( days => 1 )->day for 1..$range;
+  push @dates, $today->subtract( days => 1 )->epoch for 1..$range;
   return \@dates
+}
+
+sub build_graph_domain {
+  my $self = shift;
+  my $range = $self->build_graph_range;
+  warn "RANGE " . Dumper $range;
+  my @domain;
+  for my $date ( @{ $range } ) {
+    my $dt =  DateTime->from_epoch( epoch => $date);
+    warn "DATE $dt";
+    push @domain, $self->number_of_posts_for_date($dt);
+  }
+  warn "SIZE " . scalar @domain;
+  return \@domain;
+}
+
+sub number_of_posts_for_date {
+  my ( $self, $date ) = @_;
+  return $self->entries->search({ created_at => $date })->count;
 }
 
 1;

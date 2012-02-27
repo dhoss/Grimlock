@@ -35,11 +35,11 @@ sub index : Chained('../load_user') PathPart('stats') Args(0) {
   my $user = $c->stash->{'user'};
   # this should all go in its own model
   my $chart = $self->chart;
-  $c->log->debug("GRAPH RUN " . Dumper $user->build_graph_run );
-  $c->log->debug("DATES " . Dumper $user->get_all_entry_dates);
+  $c->log->debug("GRAPH RUN " . Dumper $user->build_graph_range );
+  $c->log->debug("DATES " . Dumper $user->build_graph_domain);
   my $series = Chart::Clicker::Data::Series->new(
-    keys => $user->build_graph_run,
-    values => $user->get_all_entry_dates
+    keys   => $user->build_graph_range,
+    values => $user->build_graph_domain
   );
   my $dataset = Chart::Clicker::Data::DataSet->new(
     series => [ $series ]
