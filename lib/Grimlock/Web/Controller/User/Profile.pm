@@ -6,7 +6,12 @@ use Try::Tiny;
 
 BEGIN { extends 'Grimlock::Web::Controller::API' };
 
-sub index : Chained('../load_user') PathPart('profile') Args(0) ActionClass('REST') {}
+sub index : Chained('../load_user') PathPart('profile') Args(0) ActionClass('REST') {
+  my ( $self, $c ) = @_;
+  $c->stash(
+    template => 'user/profile/browse.tt'
+  );
+}
 
 sub index_GET {
   my ( $self, $c ) = @_;

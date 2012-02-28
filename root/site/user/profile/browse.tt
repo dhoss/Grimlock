@@ -8,5 +8,6 @@
 <p>Stats:</p>
 <p>Posts: [% user.entry_count %]</p>
 <p>Replies: [% user.reply_count %]</p>
-<p>Posts per day</p>
+<p>Posts graph</p>
+<img src="[% c.uri_for_action('/user/stats/index', [ user.name ] ) %]" />
 </div>
