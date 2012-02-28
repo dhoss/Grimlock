@@ -12,8 +12,7 @@ use Moose;
 use Data::Dumper;
 use namespace::autoclean;
 use Try::Tiny;
-use Data::Dumper;
-
+use DateTime;
 BEGIN { extends 'Catalyst::Controller' };
 
 has 'chart' => (
@@ -38,6 +37,10 @@ sub index : Chained('../load_user') PathPart('stats') Args(0) {
   my $chart_config = $c->config->{'charts'}{'user_stats'};
   $chart->height( ($chart_config->{'height'} || 300 ) );
   $chart->width( ( $chart_config->{'width'}  || 500 ) );
+  $chart->title->text("Graph of posts for the month of " . DateTime->now->month_name);
+  my $context = $chart->get_context('default');
+  $context->domain_axis->label(DateTime->now->month_name);
+  $context->range_axis->label('Posts/Day');
   $c->log->debug("GRAPH RUN " . Dumper $user->build_graph_range );
   $c->log->debug("DATES " . Dumper $user->build_graph_domain);
   my $series = Chart::Clicker::Data::Series->new(
