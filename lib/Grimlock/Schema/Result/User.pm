@@ -10,6 +10,7 @@ use Grimlock::Schema::Candy -components => [
 ];
 use Data::Dumper;
 use Text::Password::Pronounceable;
+use List::AllUtils qw( :all );
 
 resultset_class 'Grimlock::Schema::ResultSet::User';
 
@@ -224,11 +225,19 @@ sub number_of_posts_for_date {
   my $count = $self->entries->search({ 
       created_at => {
         -like => $from_db->parse_datetime($date)->ymd . '%' 
-      } 
+      },
+      published => 1,
+      parent    => undef,
     }
   )->count;
   warn "COUNT DATES $count" if $count > 0;
   return $count;
+}
+
+sub max_daily_posts {
+  my $self = shift;
+  my $posts_per_day = $self->build_graph_domain;
+  return max @{ $posts_per_day };
 }
 
 sub date_from_db {

@@ -41,6 +41,11 @@ sub index : Chained('../load_user') PathPart('stats') Args(0) {
   my $context = $chart->get_context('default');
   $context->domain_axis->label(DateTime->now->month_name);
   $context->range_axis->label('Posts/Day');
+  $context->domain_axis->format('%d');
+  $context->range_axis->format('%d');
+  $context->range_axis->range->max($user->max_daily_posts);
+  $context->range_axis->range->min(0);
+  $context->range_axis->tick_values([ 0..$user->max_daily_posts ]);
   $c->log->debug("GRAPH RUN " . Dumper $user->build_graph_range );
   $c->log->debug("DATES " . Dumper $user->build_graph_domain);
   my $series = Chart::Clicker::Data::Series->new(
