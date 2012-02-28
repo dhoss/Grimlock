@@ -151,6 +151,7 @@ sub draft_count {
 # this is here so we can ask for dates per user
 sub get_all_entry_dates {
   my $self = shift;
+  warn "ENTRY DATES";
   my @dates =  map { $_->created_at->epoch } $self->entries->all;
   return \@dates;
 }
@@ -162,17 +163,25 @@ sub date_range_for_stats {
   my $month = shift || DateTime->now->month;
   my $today = DateTime->now;
   warn "GOT TO DATE RANGE";
-  my $from_db = DateTime::Format::DBI->new($self->result_source->schema->storage->dbh);
-  my $first_post = $from_db->parse_datetime(
-    $self->entries->search({
-      created_at => { 
-        '>=', DateTime->last_day_of_month( month => $today->month, year => $today->year )
-      },
-      created_at => { 
-        '<=', DateTime->new( month => $today->month, year => $today->year, day => 1 )
-      }
-    })->get_column('created_at')->func('min')
-  );
+  my $from_db = $self->date_from_db;
+  my $min =  $self->entries->search(
+    { 
+          -and => [
+            created_at => { 
+              '<=', $from_db->format_datetime(DateTime->last_day_of_month( month => $today->month, year => $today->year ))
+            },
+            created_at => { 
+              '>=', $from_db->format_datetime(DateTime->new( month => $today->month, year => $today->year, day => 1 ))
+            }
+          ]
+        })->get_column('created_at')->func('min');
+#    {
+#      select => { MIN => 'created_at' },
+#      as => [qw( min_created_at )]
+#    
+#    }
+  warn "MIN $min";
+  my $first_post = $from_db->parse_datetime($min);
   return $today->delta_days($first_post)->in_units('days');
 }
 
@@ -180,18 +189,22 @@ sub build_graph_range {
   my $self = shift;
   my @dates;
   my $today = DateTime->now;
+  warn "BUILD";
   my $range = $self->date_range_for_stats;
+  warn "RANGE $range";
   push @dates, $today->subtract( days => 1 )->epoch for 1..$range;
   return \@dates
 }
 
 sub build_graph_domain {
   my $self = shift;
+  warn "BUILD DOMAIN";
   my $range = $self->build_graph_range;
-  warn "RANGE " . Dumper $range;
+  warn "RANGE FROM BUILD " . Dumper $range;
   my @domain;
+  my $from_db = $self->date_from_db;
   for my $date ( @{ $range } ) {
-    my $dt =  DateTime->from_epoch( epoch => $date);
+    my $dt =  $from_db->format_datetime(DateTime->from_epoch( epoch => $date));
     warn "DATE $dt";
     push @domain, $self->number_of_posts_for_date($dt);
   }
@@ -201,7 +214,18 @@ sub build_graph_domain {
 
 sub number_of_posts_for_date {
   my ( $self, $date ) = @_;
-  return $self->entries->search({ created_at => $date })->count;
+  my $from_db = $self->date_from_db;
+  return $self->entries->search({ 
+      created_at => {
+        -like => $from_db->parse_datetime($date)->ymd . '%' 
+      } 
+    }
+  )->count;
+}
+
+sub date_from_db {
+  my $self = shift;
+  return DateTime::Format::DBI->new($self->result_source->schema->storage->dbh);
 }
 
 1;
