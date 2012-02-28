@@ -192,6 +192,8 @@ sub build_graph_range {
   warn "BUILD";
   my $range = $self->date_range_for_stats;
   warn "RANGE $range";
+  # seems dumb
+  push @dates, $today->epoch;
   push @dates, $today->subtract( days => 1 )->epoch for 1..$range;
   return \@dates
 }
@@ -215,12 +217,14 @@ sub build_graph_domain {
 sub number_of_posts_for_date {
   my ( $self, $date ) = @_;
   my $from_db = $self->date_from_db;
-  return $self->entries->search({ 
+  my $count = $self->entries->search({ 
       created_at => {
         -like => $from_db->parse_datetime($date)->ymd . '%' 
       } 
     }
   )->count;
+  warn "COUNT DATES $count" if $count > 0;
+  return $count;
 }
 
 sub date_from_db {

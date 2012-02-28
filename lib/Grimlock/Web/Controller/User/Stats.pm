@@ -38,6 +38,8 @@ sub index : Chained('../load_user') PathPart('stats') Args(0) {
   my $chart_config = $c->config->{'charts'}{'user_stats'};
   $chart->height( ($chart_config->{'height'} || 300 ) );
   $chart->width( ( $chart_config->{'width'}  || 500 ) );
+  $c->log->debug("GRAPH RUN " . Dumper $user->build_graph_range );
+  $c->log->debug("DATES " . Dumper $user->build_graph_domain);
   my $series = Chart::Clicker::Data::Series->new(
     keys   => $user->build_graph_range,
     values => $user->build_graph_domain
