@@ -36,7 +36,7 @@ sub create_POST {
   my $params ||= $c->req->data || $c->req->params;
   my $user = $c->user->obj;
   $c->log->debug("PARAMS " . Dumper $params);
-  my $draft = $user->update_or_create_related('drafts', $params);
+  my $draft = $user->create_draft($params);
   return $self->status_bad_request($c,
     message => "Couldn't create draft: $!"
   ) unless $draft;

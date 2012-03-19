@@ -68,8 +68,6 @@ has_many 'drafts' => 'Grimlock::Schema::Result::Entry',
       "$args->{foreign_alias}.author"   =>  "$args->{self_alias}.userid",
       "$args->{foreign_alias}.published" => 0
     };
-  
-  
 };
 
 has_many 'user_roles' => 'Grimlock::Schema::Result::UserRole', {
@@ -120,6 +118,14 @@ sub create_entry {
       key => 'entries_title'
     }
   );
+}
+
+sub create_draft { 
+  my ( $self, $params ) = @_;
+  return $self->entries->update_or_create({
+    published => 0,
+    %{ $params } 
+  });
 }
 
 sub TO_JSON {
@@ -206,38 +212,54 @@ sub build_graph_domain {
   warn "BUILD DOMAIN";
   my $range = $self->build_graph_range;
   warn "RANGE FROM BUILD " . Dumper $range;
-  my @domain;
+  my $domain;
+  my @dates;
   my $from_db = $self->date_from_db;
   for my $day ( @{ $range } ) {
     my $dt =  $from_db->format_datetime(
       DateTime->new( day => $day, year => $year, month => $month )
     );
     warn "DATE $dt";
-    push @domain, $self->number_of_posts_for_date($dt);
+    push @dates, $dt; 
   }
-  warn "SIZE " . scalar @domain;
-  return \@domain;
+  $domain = $self->number_of_posts_for_dates(\@dates);
+  warn "SIZE " . scalar @{ $domain };
+  return $domain;
 }
 
-sub number_of_posts_for_date {
-  my ( $self, $date ) = @_;
+sub number_of_posts_for_dates {
+  my ( $self, $dates ) = @_;
   my $from_db = $self->date_from_db;
-  my $count = $self->entries->search({ 
-      created_at => {
-        -like => $from_db->parse_datetime($date)->ymd . '%' 
-      },
+  my @or_arrayref = map {{ 
+    created_at => { -like =>  $from_db->parse_datetime($_)->ymd . '%' }
+    }} @{ $dates };
+
+  my $count_rs = $self->entries->search({
+      -or => \@or_arrayref,
       published => 1,
       parent    => undef,
+    },
+    {
+      select => [ 'created_at', { count => '*' }],
+      as     => [qw( created_at count )],
+      group_by => 'created_at',
+      order_by => 'created_at',
     }
-  )->count;
-  warn "COUNT DATES $count" if $count > 0;
-  return $count;
+  );
+  my @results = $count_rs->all;
+  my @mapped = map { $_->get_column('created_at') => $_->get_column('count') } @results ;
+
+  warn "COUNT DATES " . Dumper \@mapped;   
+  return \@mapped;
 }
 
 sub max_daily_posts {
   my $self = shift;
-  my $posts_per_day = $self->build_graph_domain;
-  return max @{ $posts_per_day };
+  my @posts_per_day = @{ $self->build_graph_domain };
+  warn "POSTS PER DAY " . Dumper \@posts_per_day;
+  my @counts;
+  push @counts, $_[1] for @posts_per_day;
+  return max @counts;
 }
 
 sub date_from_db {

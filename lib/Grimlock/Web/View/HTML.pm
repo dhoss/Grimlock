@@ -66,7 +66,6 @@ sub new {
 sub process {
     my ( $self, $c, $stash_key ) = @_;
     my $output;
-    $c->log->debug("Templates " . Dumper __PACKAGE__->config->{'INCLUDE_PATH'});
     eval {
         $output = $self->serialize( $c, $c->stash->{$stash_key} );
     };
