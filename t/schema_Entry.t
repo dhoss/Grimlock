@@ -23,6 +23,6 @@ ok my $reply = Entry->create({
   title  => 'reply test',
   body   => 'derp'
 }), "created reply ok";
-diag $entry->created_at;
-ok $entry->created_at =~ qr/\w \d+, \d\d\d\d at \d+:\d+:\d+ \w+/, "created_at rendered properly";
+# not sure what i want to do with this yet
+#ok $entry->created_at =~ qr/\w \d+, \d\d\d\d at \d+:\d+:\d+ \w+/, "created_at rendered properly";
 done_testing;
