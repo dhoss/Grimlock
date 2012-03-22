@@ -8,7 +8,7 @@ use Grimlock::Schema::Candy -components => [
       EncodedColumn
       )
 ];
-use Data::Dumper;
+use Data::Dump;
 use Text::Password::Pronounceable;
 use List::AllUtils qw( :all );
 
@@ -172,8 +172,8 @@ sub date_range_for_stats {
   warn "GOT TO DATE RANGE";
   my $from_db = $self->date_from_db;
   my $min =  $self->entries->search(
-    { 
-          -and => [
+     
+    [
             created_at => { 
               '<=', $from_db->format_datetime(DateTime->last_day_of_month( month => $today->month, year => $today->year ))
             },
@@ -181,7 +181,7 @@ sub date_range_for_stats {
               '>=', $from_db->format_datetime(DateTime->new( month => $today->month, year => $today->year, day => 1 ))
             }
           ]
-        })->get_column('created_at')->func('min');
+    )->get_column('created_at')->func('min');
 #    {
 #      select => { MIN => 'created_at' },
 #      as => [qw( min_created_at )]
@@ -209,54 +209,42 @@ sub build_graph_domain {
   my $self = shift;
   my $year = shift || DateTime->now->year;
   my $month = shift || DateTime->now->month;
-  warn "BUILD DOMAIN";
   my $range = $self->build_graph_range;
-  warn "RANGE FROM BUILD " . Dumper $range;
-  my $domain;
+  my @domain;
   my @dates;
   my $from_db = $self->date_from_db;
   for my $day ( @{ $range } ) {
     my $dt =  $from_db->format_datetime(
       DateTime->new( day => $day, year => $year, month => $month )
     );
-    warn "DATE $dt";
     push @dates, $dt; 
   }
-  $domain = $self->number_of_posts_for_dates(\@dates);
-  warn "SIZE " . scalar @{ $domain };
-  return $domain;
+  push @domain, $self->number_of_posts_for_date($_) for @dates;
+  dd @domain;
+  if ( scalar @domain< 1 ) {
+    my @no_post_range = map { 0 } @{ $range };
+    warn "RANGE WITH NO POSTS " .  dd \@no_post_range;
+    return \@no_post_range;
+  }
+  return \@domain;
 }
 
-sub number_of_posts_for_dates {
-  my ( $self, $dates ) = @_;
+sub number_of_posts_for_date {
+  my ( $self, $date ) = @_;
   my $from_db = $self->date_from_db;
-  my @or_arrayref = map {{ 
-    created_at => { -like =>  $from_db->parse_datetime($_)->ymd . '%' }
-    }} @{ $dates };
-
+  my $formatted_date = $from_db->parse_datetime($date)->ymd('-') ;
   my $count_rs = $self->entries->search({
-      -or => \@or_arrayref,
-      published => 1,
-      parent    => undef,
-    },
-    {
-      select => [ 'created_at', { count => '*' }],
-      as     => [qw( created_at count )],
-      group_by => 'created_at',
-      order_by => 'created_at',
-    }
-  );
-  my @results = $count_rs->all;
-  my @mapped = map { $_->get_column('created_at') => $_->get_column('count') } @results ;
-
-  warn "COUNT DATES " . Dumper \@mapped;   
-  return \@mapped;
+    created_at => { -like => $formatted_date . "%" },
+    published => 1,
+    parent    => undef,
+  });
+  return $count_rs->count;
 }
 
 sub max_daily_posts {
   my $self = shift;
   my @posts_per_day = @{ $self->build_graph_domain };
-  warn "POSTS PER DAY " . Dumper \@posts_per_day;
+  warn "POSTS PER DAY " . dd \@posts_per_day;
   my @counts;
   push @counts, $_[1] for @posts_per_day;
   return max @counts;
