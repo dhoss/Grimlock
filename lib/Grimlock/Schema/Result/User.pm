@@ -123,6 +123,12 @@ sub create_entry {
   );
 }
 
+sub create_draft {
+  my ( $self, $params ) = @_;
+  $params->{'published'} = 0;
+  return $self->create_entry($params);
+}
+
 sub TO_JSON {
   my $self = shift;
   return {
