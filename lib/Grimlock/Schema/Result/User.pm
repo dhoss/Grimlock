@@ -54,15 +54,22 @@ unique_column email => {
   is_nullable => 1,
 };
 
-has_many 'entries' => 'Grimlock::Schema::Result::Entry', {
-  'foreign.author' => 'self.userid',
+has_many 'entries' => 'Grimlock::Schema::Result::Entry',
+sub {
+  my $args = shift;
+  return {
+    "$args->{foreign_alias}.author" => { -ident => "$args->{self_alias}.userid" },
+    "$args->{foreign_alias}.published" => 1
+  }
 };
 
-has_many 'drafts' => 'Grimlock::Schema::Result::Entry', {
-  'foreign.author'    => 'self.userid',
-},
-{
-  'foreign.published' => undef
+has_many 'drafts' => 'Grimlock::Schema::Result::Entry',
+sub {
+  my $args = shift;
+  return {
+    "$args->{foreign_alias}.author" => { -ident => "$args->{self_alias}.userid" },
+    "$args->{foreign_alias}.published" => 0
+  }
 };
 
 has_many 'user_roles' => 'Grimlock::Schema::Result::UserRole', {
@@ -73,7 +80,7 @@ many_to_many 'roles' => 'user_roles', 'role';
 
 sub insert {
   my ( $self, @args ) = @_;
-  
+
   my $guard = $self->result_source->schema->txn_scope_guard;
   $self->next::method(@args);
   $self->add_to_roles({ name => "user" });
@@ -108,6 +115,7 @@ sub generate_random_pass {
 
 sub create_entry {
   my ( $self, $params ) = @_;
+  $params->{'author'} = $self->userid;
   return $self->entries->update_or_create($params,
     {
       key => 'entries_title'
@@ -133,7 +141,7 @@ sub entries_TO_JSON {
     entryid => $_->entryid,
     title   => $_->title,
   } for $entry_rs->all;
-  
+
   return \@entry_collection;
 }
 

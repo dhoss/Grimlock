@@ -8,7 +8,7 @@ use lib "$Bin/../t/lib";
 use Data::Dumper;
 use Test::DBIx::Class qw(:resultsets);
 
-BEGIN { 
+BEGIN {
   $ENV{DBIC_TRACE} = 1;
   $ENV{CATALYST_CONFIG} = "t/grimlock_web_test.conf"
 }
@@ -19,13 +19,13 @@ use Grimlock::Web;
 fixtures_ok 'user'
   => 'installed the basic fixtures from configuration files';
 
-my $mech = Test::WWW::Mechanize::PSGI->new( 
+my $mech = Test::WWW::Mechanize::PSGI->new(
   app =>  Grimlock::Web->psgi_app(@_),
   cookie_jar => {}
 );
 
 # try to create draft without auth
-$mech->post('/entry', 
+$mech->post('/entry',
   Content_Type => 'application/x-www-form-urlencoded',
   Content => {
     title => 'test',
@@ -52,7 +52,8 @@ $mech->post('/entry',
  Content_Type => 'application/x-www-form-urlencoded',
   Content => {
     title => 'test title with spaces! <script>alert("and javascript!")</script>',
-    body => 'derp'
+    body => 'derp',
+    published => 1
   }
 );
 
@@ -65,7 +66,8 @@ $mech->post('/test-title-with-spaces-/reply',
  Content_Type => 'application/x-www-form-urlencoded',
   Content => {
     title => 'reply test',
-    body => 'derpen'
+    body => 'derpen',
+    published => 1
   }
 );
 
@@ -73,7 +75,8 @@ $mech->post('/test-title-with-spaces-/reply',
  Content_Type => 'application/x-www-form-urlencoded',
   Content => {
     title => 'reply test another test',
-    body => 'derpen'
+    body => 'derpen',
+    published => 1
   }
 );
 

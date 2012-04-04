@@ -39,7 +39,7 @@ sub create : Chained('base') PathPart('entry') Args(0) ActionClass('REST') {
 
 sub create_GET {
   my ( $self, $c ) = @_;
-  unless ( $c->user_exists ) { 
+  unless ( $c->user_exists ) {
     return $self->status_bad_request($c,
       message => "You must be logged in to create an entry"
     );
@@ -48,22 +48,22 @@ sub create_GET {
   $self->status_ok( $c, entity => {} );
 }
 
-sub create_POST { 
+sub create_POST {
   my ( $self, $c ) = @_;
-  unless ( $c->user_exists ) { 
+  unless ( $c->user_exists ) {
     return $self->status_bad_request($c,
       message => "You must be logged in to create an entry"
     );
   }
- 
   my $params = $c->req->data || $c->req->params;
   my $user = $c->user->obj;
   my $entry;
   try {
     $params->{'published'} = 1 if $params->{'published'} eq 'on';
+    $c->log->debug('LOGGED IN AS ' . $user->name);
     $entry = $user->create_entry($params) || die $!;
- 
-    $self->status_created($c, 
+
+    $self->status_created($c,
       location => $c->req->uri->as_string,
       entity   => {
         message => "Entry created!",
@@ -88,7 +88,7 @@ sub reply_GET {
     message => "No such post"
   ) unless $entry;
 
-  return $self->status_ok($c, 
+  return $self->status_ok($c,
     entity => {
       entry => $entry
     }
@@ -129,7 +129,7 @@ sub reply_POST {
     );
   };
 }
-      
+
 
 sub browse : Chained('load_entry') PathPart('') Args(0) ActionClass('REST') {
   my ( $self, $c ) = @_;
