@@ -22,14 +22,15 @@ sub base : Chained('/api/base') PathPart('') CaptureArgs(0) {}
 
 sub load_user : Chained('base') PathPart('user') CaptureArgs(1) {
   my ( $self, $c, $uid) = @_;
+  my $query;
+  if ( $uid =~ /\d+/ ) {
+    $query = { userid => $uid };
+  } else {
+    $query = { name => $uid }
+  }
   my $user = $c->model('Database::User')->find(
-    {
-      name => $uid
-    }, 
-    {
-      userid => $uid
-    },
-    { prefetch => 'entries' }
+    $query
+#   { prefetch => 'entries' }
   );
   $c->log->debug("FOUND IN LOAD" . $user->name);
   $c->stash( user => $user );
@@ -50,7 +51,7 @@ sub list_GET {
 
 sub login  : Chained('base') PathPart('user/login') Args(0) ActionClass('REST') {
   my ( $self, $c, ) = @_;
-  
+
   $c->stash( template => 'user/login.tt' );
 }
 
@@ -61,13 +62,13 @@ sub login_GET  {
       user => $c->user->obj->userid
     }
   }) if $c->user_exists;
-  
+
 }
 
 sub login_POST {
   my ( $self, $c ) = @_;
   my $params ||= $c->req->data || $c->req->params;
-  if ( $c->authenticate({ 
+  if ( $c->authenticate({
         name => $params->{'name'},
         password => $params->{'password'}
       })
@@ -92,7 +93,7 @@ sub logout_GET {
   my ( $self, $c ) = @_;
   $c->logout;
   $self->status_ok($c,
-    entity => { 
+    entity => {
       message => "logged out successfully"
     }
   );
@@ -112,7 +113,7 @@ sub create_POST {
       email    => $params->{'email'} || "",
     }) || die "Can't create user: $!";
     $c->set_authenticated($c->find_user({ name => $user->name}));
-    
+
     return $self->status_created($c,
       location => $c->uri_for_action('/user/browse', [ $user->name ]),
       entity => {
@@ -120,15 +121,15 @@ sub create_POST {
         message => "User created successfully!"
       }
     );
- 
+
   } catch {
 
     return $self->status_bad_request($c,
       message => $_
     );
- 
+
   };
- 
+
 }
 
 sub browse : Chained('load_user') PathPart('') Args(0) ActionClass('REST') {
@@ -139,14 +140,14 @@ sub browse : Chained('load_user') PathPart('') Args(0) ActionClass('REST') {
 
 sub browse_GET {
   my ( $self, $c ) = @_;
-  my $user = $c->stash->{'user'};  
+  my $user = $c->stash->{'user'};
   if ( !$user ) {
     return $self->status_bad_request($c,
       message => "Can't find user with that id"
     );
   }
 
-  return $self->status_ok($c, 
+  return $self->status_ok($c,
     entity => {
       user => $user
     }
@@ -157,28 +158,28 @@ sub browse_GET {
 sub browse_PUT {
   my ( $self, $c ) = @_;
   my $user = $c->stash->{'user'};
-  return $self->status_bad_request($c, 
+  return $self->status_bad_request($c,
     message => "You don't have permission to modify this user"
   ) unless $user->has_role('admin') || ( $user->userid == $c->user->obj->userid );
-  try { 
+  try {
     my $params ||= $c->req->data || $c->req->params;
     my @columns = $user->columns;
-     
+
     for my $column ( @columns ) {
-      for my $key ( keys %{ $params } ) {  
+      for my $key ( keys %{ $params } ) {
         if ( defined $params->{$column} ) {
           $user->$column($params->{$key});
         }
       }
     }
     $user->update || die $!;
-    return $self->status_ok($c, 
+    return $self->status_ok($c,
       entity => {
-        user => $user 
+        user => $user
       }
     );
   } catch {
-    $self->status_bad_request($c, 
+    $self->status_bad_request($c,
       message => $_
     );
   };
@@ -236,7 +237,7 @@ sub forgot_password_POST {
         entity => {
           message => "Your password has been sent."
       });
-    } catch { 
+    } catch {
       return $self->status_bad_request($c,
         message => $_
       );

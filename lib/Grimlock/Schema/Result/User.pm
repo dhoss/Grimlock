@@ -57,17 +57,23 @@ unique_column email => {
 has_many 'entries' => 'Grimlock::Schema::Result::Entry',
 sub {
   my $args = shift;
-  return {
-    "$args->{foreign_alias}.author" => { -ident => "$args->{self_alias}.userid" },
-    "$args->{foreign_alias}.published" => 1
-  }
+  return (
+    {
+      "$args->{foreign_alias}.author" => "$args->{self_alias}.userid" ,
+      "$args->{foreign_alias}.published" => 1
+    },
+    $args->{self_rowobj} && {
+      "$args->{foreign_alias}.author" => $args->{self_rowobj}->userid,
+      "$args->{foreign_alias}.published" => 1
+    }
+  )
 };
 
 has_many 'drafts' => 'Grimlock::Schema::Result::Entry',
 sub {
   my $args = shift;
   return {
-    "$args->{foreign_alias}.author" => { -ident => "$args->{self_alias}.userid" },
+    "$args->{foreign_alias}.author" =>"$args->{self_alias}.userid" ,
     "$args->{foreign_alias}.published" => 0
   }
 };
