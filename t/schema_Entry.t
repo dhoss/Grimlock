@@ -10,7 +10,7 @@ fixtures_ok 'basic'
 my $user;
 my $entry;
 ok $user = User->create({ name => 'herp', password => 'derp' }), "found our user " . $user->name;
-ok $entry = $user->create_related('entries', {
+ok $entry = $user->create_entry({
     title => "title with spaces and metacharacters___! <script>alert('and javascript');</script>",
     body => "huehuheuhuehue <marquee>huehuehue</marquee>"
   }), "Created entry " . $entry->title;
@@ -19,7 +19,7 @@ ok $entry->title !~ m{<script>alert('and javascript');</script>}, "no scripts he
 ok $entry->body !~ m{<marquee>huehuehue</marquee>}, "no shit tags here";
 ok my $reply = Entry->create({
   author => $user,
-  parent => $entry, 
+  parent => $entry,
   title  => 'reply test',
   body   => 'derp'
 }), "created reply ok";
