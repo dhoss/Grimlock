@@ -1,6 +1,7 @@
+[% USE Markdown %]
 [% BLOCK entry_body %]
 <h2>[% entry.title %]</h2>
-<div id="body">[% entry.body %]</div>
+<div id="body">[% entry.body |markdown %]</div>
 <div class="info-block">
 posted by <a href="[% c.uri_for_action('/user/browse', [ entry.author.name ] ) %]">[% entry.author.name %]</a>
 on [% entry.created_at %]

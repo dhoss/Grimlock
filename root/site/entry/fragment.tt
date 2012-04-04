@@ -1,10 +1,11 @@
 [% USE Filter.String.Truncate %]
+[% USE Markdown %]
 [% BLOCK entry_body %]
 <h1><a href="[% c.uri_for_action('/entry/browse', [ entry.display_title ]) %]">[% entry.title %]</a></h1>
 [% IF entry.parent %]
 <div>(in reply to <a href="[% c.uri_for_action('/entry/browse', [ entry.parent.display_title ] ) %]">[% entry.parent.title %]</a>)</div>
 [% END %]
-<div class="entry-body">[% entry.body | elide(200) %]</div>
+<div class="entry-body">[% entry.body | markdown | elide(200) %]</div>
 <div class="info-block">
 posted by <a href="[% c.uri_for_action('/user/browse', [ entry.author.name ] ) %]">[% entry.author.name %]</a>
 on [% entry.created_at %]
