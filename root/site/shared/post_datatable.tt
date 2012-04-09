@@ -1,15 +1,15 @@
 [% page.load_scripts_at_top = 1 %]
-	
+
 <script type="text/javascript">
 YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-datasource", "datatable", "datatype", "model", 'view', 'panel', 'dd-plugin', 'button', function (Y) {
   // -------------------------
   //  Define a few DataTable helper methods
-  //    NOTE: These only work with the 3.5.0PR release of DataTable  
+  //    NOTE: These only work with the 3.5.0PR release of DataTable
   // -------------------------
   /**
-	 Method to take an existing TD or TR Node element as input "target" and scan 
+	 Method to take an existing TD or TR Node element as input "target" and scan
 	 the dataset (ModelList) for the underlying data record (a Model).
-	 
+
 	 @method getRecord
 	 @param target {Node} Either a TR or TD Node
 	 @returns {Model} Data record or false (or -1 if not found)
@@ -43,12 +43,12 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
 
   /**
 	 Helper method to return the column's key property associated with the current TD.
-	 Uses DataTable's current method of identifying a class on TD as "yui3-datatable-col-XXX" 
+	 Uses DataTable's current method of identifying a class on TD as "yui3-datatable-col-XXX"
 	 where XXX is the column 'key' (or 'name')
-	 
+
 	 @method getDTColumnKey
 	 @param tdTarget {Node} The TD cell to return column key to
-	 @returns ckey {String} column key name		  
+	 @returns ckey {String} column key name
 	 **/
   Y.DataTable.prototype.getCellColumnKey = function (tdTarget) {
     var DT_COL_CLASS = this.getClassName('col');
@@ -58,7 +58,7 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
       ckey = -1;
     //
     //  Scan through the TD class(es), checking for a match
-    //	
+    //
     Y.Array.some(tdclass, function (item) {
       var mitem = item.match(regex);
       if (mitem && mitem[1]) {
@@ -69,20 +69,20 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
     return ckey || false;
   }
 
-  /*  https://gist.github.com/1707631  
-  
+  /*  https://gist.github.com/1707631
+
 	Y.DataTable.prototype.getCellColumnKey = function (node) {
 	    var classRE = new RegExp('\b' + this.getClassName('col') + '-(\W+)'),
 	        name, column;
-	
+
 	    node = node.ancestor('.' + this.getClassName('cell'), true);
-	
+
 	    if (node) {
 	        name = (node.get('className').match(classRE) || [])[1];
-	
+
 	        column = name && this.getColumn(name);
 	    }
-	
+
 	    return column && column.key;
 	};
 */
@@ -91,10 +91,10 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
   /**
 	 Method to scan the "columns" Array for the target and return the requested column.
 	 The requested "target" can be either of ;
-	 	a column index, 
-	 	or a TD Node, 
-	 	or a column "key", column "name" or "_yuid" (in that order). 
-	 
+	 	a column index,
+	 	or a TD Node,
+	 	or a column "key", column "name" or "_yuid" (in that order).
+
 	 @method getColumn
 	 @param target {Number | Node | String} Either the column index, the TD node or a column ID
 	 @returns {Object} Column
@@ -149,7 +149,10 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
       if (fclass) o.className += ' ' + fclass;
       o.value = ' ';
     }
-
+  var fmtTruncatedBody = function (o) {
+    var body = o.value;
+    return body.substring(0, 75) + "...";
+  }
   var cols = [{
     key: "entryid",
     label: 'ID',
@@ -172,15 +175,16 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
     sortable: true
   }, {
     key: "body",
-    label: "Body Text"
+    label: "Body Text",
+    formatter: fmtTruncatedBody
   }, {
     name: 'edit',
-    label: '- Edit -',
+    label: 'Edit',
     formatter: fmtBlank,
     className: 'align-center cell-edit'
   }, {
     name: 'delete',
-    label: '- Delete -',
+    label: 'Delete',
     formatter: fmtBlank,
     className: 'align-center cell-delete'
   }
@@ -241,7 +245,7 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
     }],
     on: {
       'render': function () {
-        Y.one("#main").show(); // render the "main" page elements, 
+        Y.one("#main").show(); // render the "main" page elements,
       }
     }
   });
@@ -253,7 +257,7 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
         form: {
           id: formObject,
          },
-        
+
         headers: {
           'Accept': 'application/json'
         },
@@ -290,10 +294,10 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
     }
     //-----------------
     //  Function to save the FORM data, based on current values.
-    //  Define a mapping object to help us figure out how to apply INPUT[name=xxx] to what 
+    //  Define a mapping object to help us figure out how to apply INPUT[name=xxx] to what
     //    column of each record.
     //  Uses the setting of FORM hidden value "frmInsertFlag" to determine if this is a new
-    //   record or if we are saving an existing record.  
+    //   record or if we are saving an existing record.
     //  If existing, the record "entryid" is saved in FORM hidden value "frmRecord"
     //-----------------
   var saveFormData = function () {
@@ -305,9 +309,9 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
 	//
 	//  Define a mapping between the INPUT 'name' settings and the record "key" names ...
 	//    also, define a parser on a few numeric items
-	//		
+	//
 		var record_map = [
-			{ field:'entryid',   ckey:'entryid', parser: parseInt },	
+			{ field:'entryid',   ckey:'entryid', parser: parseInt },
 			{ field:'title',     ckey:'title' },
 			{ field:'published', ckey:'published' },
       { field:'body',      ckey:'body' },
@@ -317,16 +321,16 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
 	//
 	//  Run through the "record_map" FORM variables, inserting data values into "newData"
 	//   that will serve as the data object for DataTable
-	//	
+	//
 		Y.Array.each( record_map, function(item){
 			raw_value  = form[item.field].value;
 			data_value = ( item.parser && Y.Lang.isFunction(item.parser) ) ? item.parser.call(this,raw_value)  : raw_value ;
 			newData[ item.ckey ] = data_value;
 		});
-      
+
       //
-      //  Now insert the "newData" object into DataTable's data, 
-      //    check frmInsertFlag for whether it is "new" or "updated" data 
+      //  Now insert the "newData" object into DataTable's data,
+      //    check frmInsertFlag for whether it is "new" or "updated" data
       //
       if (parseInt(form.frmInsertFlag.value) === 0) dt.modifyRow(form.frmRecord.value, newData, editPostCB(form.title.value, form));
 
@@ -381,7 +385,7 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
         body_html = Y.Lang.sub(DialogTMPL, form_data);
 
       } else { //  we are INSERTING a new row ...
-        insertFlag = true; // used 
+        insertFlag = true; // used
         xy = default_dialog_xy;
         header_html = 'Inserting NEW Row';
         body_html = Y.Lang.sub(DialogTMPL, insert_obj);
@@ -390,7 +394,7 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
 
       //
       //	Fill the Panel content, position it and display it
-      //	
+      //
       thePanel.set('xy', xy);
       thePanel.set('headerContent', header_html);
       thePanel.set('bodyContent', body_html);
@@ -409,8 +413,8 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
 
   // -------------------------
   //  Define a click handler on table cells ...
-  //   Note: use Event Delegation here (instead of just .on() ) because we may be 
-  //         deleting rows which may cause problems with just .on 
+  //   Note: use Event Delegation here (instead of just .on() ) because we may be
+  //         deleting rows which may cause problems with just .on
   // -------------------------
   dt.delegate("click", function (e) {
 
@@ -427,9 +431,9 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
     //   ... that means we are in the "Select", "Edit" or "Delete" columns
     //
     //  Update status box
-    //	
-    var StatusTMPL = Y.one("#status-template").getContent(); // this retrieves HTML containing {xxx} tags for substitution 
-    Y.one("#idStatus").setContent(Y.Lang.sub(StatusTMPL, { // ... do the substitution into the template using Y.Lang.sub 
+    //
+    var StatusTMPL = Y.one("#status-template").getContent(); // this retrieves HTML containing {xxx} tags for substitution
+    Y.one("#idStatus").setContent(Y.Lang.sub(StatusTMPL, { // ... do the substitution into the template using Y.Lang.sub
       rec_id: rec.get('clientId'),
       rec_index: this.get('data').indexOf(rec),
       col_key: d_ckey,
@@ -440,7 +444,7 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
 
     //
     //  If a column 'action' is available, process it
-    //	
+    //
     switch (col.name || null) {
     case 'edit':
       // EDIT CALL GOES HERE
@@ -467,7 +471,7 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
     var selAll = this.get('checked'); // the checked status of the TH checkbox
     //
     //  Get a NodeList of each of INPUT with class="myCheckboxFmtr" in the TBODY
-    //	
+    //
     var chks = dt.get('srcNode').all("tbody input.myCheckboxFmtr");
     chks.each(function (item) {
       item.set('checked', selAll); // set the individual "checked" to the TH setting
@@ -483,16 +487,16 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
     srcNode: "#btnProcess"
   }).on("click", function () {
     //
-    //  Get a NodeList of all nodes on the DT which have the checkboxes I defined, 
-    //    with class="myCheckBoxFmtr" AND that are currently "checked"  
-    //  
+    //  Get a NodeList of all nodes on the DT which have the checkboxes I defined,
+    //    with class="myCheckBoxFmtr" AND that are currently "checked"
+    //
     var chks = this.get("srcNode").all("tbody tr td input.myCheckboxFmtr"); // get all checks
-    // in a perfect world ... i.e. one without IE 8-, we could just do ...	
+    // in a perfect world ... i.e. one without IE 8-, we could just do ...
     // var chkd = this.get("srcNode").all("tbody tr td input.myCheckboxFmtr:checked");
     //
-    //  Loop over the NodeList (using it's .each method) and append the employee name to the message.  
-    //	 Note: 'chkd' contains nodes of the INPUT checkboxes, step back twice to get the parent TR node  
-    //	
+    //  Loop over the NodeList (using it's .each method) and append the employee name to the message.
+    //	 Note: 'chkd' contains nodes of the INPUT checkboxes, step back twice to get the parent TR node
+    //
     var msg = "The following Employees will be processed;\n\n"; // define the beginning of our message string
     chks.each(function (item) {
       if (!item.get('checked')) return;
@@ -518,7 +522,7 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
 		<tr><th>Col Key :</th><td>{col_key}</td></tr>
 		<tr><th>Col Index :</th><td>{col_index}</td></tr>
 		<tr><th>Raw Data :</th><td>{raw_data}</td></tr>
-	</table>    
+	</table>
 </script>
 
 <script type="text/x-template" id="dialog-template">	<!--  used in Function showDT_Dialog   -->
@@ -543,11 +547,11 @@ YUI().use("datasource-io", "io-form", "datasource-jsonschema", "datatable-dataso
 			<td>
         <div id="status"></div>
 				<div id="div_table"></div>
-				<br/>&nbsp; &nbsp; <button id="btnInsert">Insert New Row</button>			
+				<br/>&nbsp; &nbsp; <button id="btnInsert">Insert New Row</button>
 			</td>
 			<td width="300" align="center">
 				TD Click Status:<br/>
-				<div id="idStatus"></div>	
+				<div id="idStatus"></div>
 			</td>
 		</tr>
 	</table>
