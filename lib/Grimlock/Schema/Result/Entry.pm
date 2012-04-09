@@ -98,24 +98,25 @@ sub insert {
 
   # move me to a filter class
   my $guard = $self->result_source->schema->txn_scope_guard;
-  
+
   $self->clean_params([qw( title body )]);
 
   # move me to a filter class
   my $title = $self->title;
   $title =~ s{(\W+|\s+|\_)}{-}g;
   chomp $title if $title =~ m/\W$/;
-  $self->display_title($title);
+  $title =~ s#(\W+)$##;
+  $self->display_title(lc $title);
   $self->next::method(@args);
-  
+
   $guard->commit;
   return $self;
 }
 
 
-sub scrubber { 
+sub scrubber {
   my $self = shift;
-  return HTML::Scrubber->new(allow => [ qw[ p b i u hr br ] ] ); 
+  return HTML::Scrubber->new(allow => [ qw[ p b i u hr br ] ] );
 }
 
 sub clean_params {
@@ -133,7 +134,7 @@ sub clean_params {
 
 sub sqlt_deploy_hook {
   my ($self, $sqlt_table) = @_;
- 
+
   $sqlt_table->add_index(name => 'tree_data', fields => ['parent']);
 }
 
@@ -145,9 +146,9 @@ sub reply_count {
 sub created_at {
   my $self = shift;
   my $created_at = $self->_created_at;
-  my $date_time = $created_at->month_name . " "  . 
-                  $created_at->day        . ", " . 
-                  $created_at->year       . " at " .   
+  my $date_time = $created_at->month_name . " "  .
+                  $created_at->day        . ", " .
+                  $created_at->year       . " at " .
                   $created_at->hms        . " "  .
                   $created_at->time_zone->name;
   return $date_time;
@@ -184,7 +185,7 @@ sub children_TO_JSON {
     children => $_->children_TO_JSON,
     parent   => $_->parent,
   } for $children_rs->all;
-  
+
   return \@child_collection;
 }
 

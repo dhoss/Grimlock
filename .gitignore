@@ -2,3 +2,5 @@
 *_local.conf
 Grimlock-*
 .DS_Store
+*.swp
+*.swo
