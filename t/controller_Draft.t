@@ -9,7 +9,7 @@ use Data::Dumper;
 use Test::DBIx::Class qw(:resultsets);
 
 
-BEGIN { 
+BEGIN {
   $ENV{DBIC_TRACE} = 1;
   $ENV{CATALYST_CONFIG} = "t/grimlock_web_test.conf"
 }
@@ -22,13 +22,13 @@ use Grimlock::Web;
 fixtures_ok 'user'
   => 'installed the basic fixtures from configuration files';
 
-my $mech = Test::WWW::Mechanize::PSGI->new( 
+my $mech = Test::WWW::Mechanize::PSGI->new(
   app =>  Grimlock::Web->psgi_app(@_),
   cookie_jar => {}
 );
 
 # try to create draft without auth
-$mech->post('/draft', 
+$mech->post('/draft',
   Content_Type => 'application/x-www-form-urlencoded',
   Content => {
     title => 'test',
@@ -60,9 +60,9 @@ $mech->post('/draft',
 );
 
 ok $mech->success, "POST worked";
-$mech->get_ok('/draft/test-title-with-spaces-');
+$mech->get_ok('/draft/test-title-with-spaces');
 
-$mech->request( DELETE '/draft/test-title-with-spaces-' );
+$mech->request( DELETE '/draft/test-title-with-spaces' );
 ok $mech->success, "draft deletion works";
 
 done_testing();
