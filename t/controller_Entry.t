@@ -82,11 +82,14 @@ $mech->post('/test-title-with-spaces/reply',
 
 ok $mech->success, "reply post works ok";
 
-$mech->request( PUT '/test-title-with-spaces',
-  Content => 'title=huehuehue'
-);
+# stolen from https://metacpan.org/source/BOBTFISH/Catalyst-Action-REST-0.99/t/lib/Test/Rest.pm
+#my $req = HTTP::Request->new( PUT => '/test-title-with-spaces' );
+#$req->content_type( 'text/plain' );
+#$req->content_length(do { use bytes; length( 'title=huehuehuehue' ) });
+#$req->add_content('title=huehuehuehue');
+$mech->put ('/test-title-with-spaces?title=huehuehue' );
 ok $mech->success, "changing title works ok";
-$mech->request( DELETE '/test-title-with-spaces' );
+$mech->request( DELETE '/huehuehue' );
 ok $mech->success, "entry deletion works";
 
 done_testing();

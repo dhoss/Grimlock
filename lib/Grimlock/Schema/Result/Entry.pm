@@ -103,8 +103,17 @@ sub insert {
 
   # move me to a filter class
   my $title = $self->title;
+
+  #replace all non-words or spaces or underscores with '-'
   $title =~ s{(\W+|\s+|\_)}{-}g;
+  # drop off the last character (and the newline char) if the
+  # last character is a non-word
   chomp $title if $title =~ m/\W$/;
+
+  # remove the last characters that are non-words from the title
+  # (since we replace everything with '-', often times we get a title
+  # that looks like "hi!!!!" -> "hi----", so we want to remove these
+  # unsightly dashes
   $title =~ s#(\W+)$##;
   $self->display_title(lc $title);
   $self->next::method(@args);
@@ -124,7 +133,6 @@ sub clean_params {
   # need to add a filter to deal with this
   my $scrubber = $self->scrubber;
   for my $column ( @{ $params } ) {
-    warn "CLEANING $column";
     my $scrubbed = $scrubber->scrub($self->$column);
     $self->$column($scrubbed);
   }

@@ -152,17 +152,22 @@ sub browse_GET {
 
 sub browse_PUT {
   my ( $self, $c ) = @_;
-  my $params ||= $c->req->data || $c->req->params;
-  use Data::Dumper;
-  $c->log->debug("PARAMS " . Dumper $params);
-  my $entry = $c->stash->{'entry'} ? $c->stash->{'entry'} : $c->user->entries->find($params->{'entryid'});
+  my $params = $c->req->data || $c->req->params;
+
+  my $entry = $c->stash->{'entry'} ?
+              $c->stash->{'entry'} :
+              $c->user->entries->find($params->{'entryid'});
   $params->{'published'} = $params->{'published'} eq 'on' ? 1 : 0;
   delete $params->{$_} for qw( frmInsertFlag frmRecord );
+  # dirty hack to update the display_title column if the title column
+  # gets changed
+  $params->{'display_title'} = $params->{'title'};
   $entry->update($params) || return $self->status_bad_request($c,
     message => "Couldn't update entry; $!"
   );
 
-   return $self->status_ok($c,
+   return $self->status_created($c,
+    location => $c->uri_for_action('/entry/browse', [ $entry->display_title ]),
     entity => {
       entry => $entry
     }
