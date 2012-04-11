@@ -34,9 +34,26 @@ sub index :Chained('base') Path :Args(0) ActionClass('REST') {}
 
 sub index_GET {
   my ( $self, $c ) = @_;
-  return $self->status_ok($c, 
+  # move me to a role
+  my $params = $c->req->data || $c->req->params;
+  my $page = $params->{'page'} =~ /\d+/ ?
+             $params->{'page'}          :
+             "";
+  my $limit = $params->{'limit'} =~ /\d+/ ?
+              $params->{'limit'}          :
+              "";
+  return $self->status_ok($c,
     entity => {
-      entries => [ $c->model('Database::Entry')->front_page_entries ]
+      entries => [
+        $c->model('Database::Entry')->front_page_entries({
+          page  => $page,
+          limit => $limit
+        }),
+      ],
+      pager => $c->model('Database::Entry')->front_page_entries({
+          page  => $page,
+          limit => $limit
+        })->pager(),
     }
   );
 }

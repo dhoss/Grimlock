@@ -2,3 +2,5 @@
 [% FOR entry IN rest.entries %]
   [% INCLUDE 'entry/fragment.tt' %]
 [% END %]
+[% INCLUDE 'shared/paginate.tt' page = '/index' pager = rest.pager %]
+

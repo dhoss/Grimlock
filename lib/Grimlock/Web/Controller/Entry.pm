@@ -107,7 +107,6 @@ sub reply_POST {
   try {
 
     my $title = "RE:" . $entry->title . rand;
-    $c->log->debug("REPLY $title");
     $reply = $c->model('Database::Entry')->create({
       author => $c->user->obj->userid,
       parent => $entry,
@@ -115,6 +114,7 @@ sub reply_POST {
       body => $params->{'body'},
       published => 1,
     }) or die $!;
+
     return $self->status_created($c,
       location => $c->uri_for_action('/entry/browse', [ $reply->display_title ] ),
       entity   => {
@@ -123,6 +123,7 @@ sub reply_POST {
         entry => $reply->parent
       }
     );
+
   } catch {
     return $self->status_bad_request($c,
       message => $_
@@ -189,7 +190,24 @@ sub browse_DELETE {
 }
 
 
+sub list : Chained('base') PathPart('') Args(0) ActionClass('REST') {}
 
+sub list_GET {
+  my ( $self, $c ) = @_;
+  my $params = $c->req->data || $c->req->params;
+  my $page = $params->{'page'} =~ /\d+/ ?
+             $params->{'page'}          :
+             1;
+  return $self->status_ok($c,
+    entity => {
+      entries => [ $c->model('Database::Entry')->published(
+        {
+          page => $page
+        }
+      )]
+    },
+  );
+}
 
 
 =head1 AUTHOR

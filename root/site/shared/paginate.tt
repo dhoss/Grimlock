@@ -1,0 +1,13 @@
+
+[% IF pager.current_page != pager.first_page %]
+<a href="[% c.uri_for_action(page, { page => pager.previous_page }) %]">&laquo; previous page</a>
+<a href="[% c.uri_for_action(page, { page => pager.first_page }) %]">&laquo;&laquo; first page</a>
+[% ELSE %]
+&laquo;&laquo; &laquo;
+[% END %]
+[% IF pager.next_page %]
+<a href="[% c.uri_for_action(page, { page => pager.next_page }) %]">next page &raquo;</a>
+<a href="[% c.uri_for_action(page, { page => pager.last_page }) %]">last page &raquo;&raquo;</a>
+[% ELSE %]
+&raquo;&raquo; &raquo;
+[% END %]
