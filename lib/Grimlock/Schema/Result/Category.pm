@@ -1,4 +1,4 @@
-package Grimlock::Schema::Result::Entry;
+package Grimlock::Schema::Result::Category;
 
 use Grimlock::Schema::Candy -components => [
   qw(
@@ -10,22 +10,16 @@ use Grimlock::Schema::Candy -components => [
 
 use HTML::Scrubber;
 
-resultset_class 'Grimlock::Schema::ResultSet::Entry';
+resultset_class 'Grimlock::Schema::ResultSet::Category';
 
-primary_column entryid => {
+primary_column categoryid => {
   data_type => 'int',
   is_nullable => 0,
   is_auto_increment => 1,
   extra => { unsigned => 1 },
 };
 
-unique_column title => {
-  data_type => 'varchar',
-  size => 200,
-  is_nullable => 0,
-};
-
-unique_column display_title => {
+unique_column name => {
   data_type => 'varchar',
   size => 200,
   is_nullable => 0,
@@ -44,17 +38,6 @@ column parent => {
   is_foreign_key => 1
 };
 
-column body => {
-  data_type => 'text',
-  is_nullable => 0,
-};
-
-column author => {
-  data_type => 'int',
-  is_nullable => 0,
-  extra => { unsigned => 1 },
-};
-
 column created_at => {
   data_type => 'datetime',
   is_nullable => 0,
@@ -69,32 +52,22 @@ column updated_at => {
   set_on_update => 1
 };
 
-column published => {
-  data_type => 'tinyint',
-  is_nullable => 0,
-  default_value => 0
-};
-
-belongs_to 'author' => 'Grimlock::Schema::Result::User', {
-  'foreign.userid' => 'self.author',
-};
-
 belongs_to 'parent' => __PACKAGE__, {
-  'foreign.entryid' => 'self.parent',
+  'foreign.categoryid' => 'self.parent',
 },
 {
   join_type => 'LEFT',
 };
 
 has_many 'children' => __PACKAGE__, {
-  'foreign.parent' => 'self.entryid'
+  'foreign.parent' => 'self.categoryid'
 };
 
-has_many 'entry_categories' => 'Grimlock::Schema::Result::CategoryEntry', {
-  'foreign.entry' => 'self.entryid'
+has_many 'category_entries' => 'Grimlock::Schema::Result::CategoryEntry', {
+  'foreign.category' => 'self.categoryid'
 };
 
-many_to_many => 'categories' => 'entry_categories', 'entry';
+many_to_many => 'entries' => 'category_entries', 'category';
 
 __PACKAGE__->mk_classdata( path_column => "path" );
 __PACKAGE__->mk_classdata( path_separator => "." );
@@ -105,23 +78,22 @@ sub insert {
   # move me to a filter class
   my $guard = $self->result_source->schema->txn_scope_guard;
 
-  $self->clean_params([qw( title body )]);
+  $self->clean_params([qw( name )]);
 
-  # move me to a filter class
-  my $title = $self->title;
+  my $name = $self->name;
 
   #replace all non-words or spaces or underscores with '-'
-  $title =~ s{(\W+|\s+|\_)}{-}g;
+  $name =~ s{(\W+|\s+|\_)}{-}g;
   # drop off the last character (and the newline char) if the
   # last character is a non-word
-  chomp $title if $title =~ m/\W$/;
+  chomp $name if $name =~ m/\W$/;
 
   # remove the last characters that are non-words from the title
   # (since we replace everything with '-', often times we get a title
   # that looks like "hi!!!!" -> "hi----", so we want to remove these
   # unsightly dashes
-  $title =~ s#(\W+)$##;
-  $self->display_title(lc $title);
+  $name =~ s#(\W+)$##;
+  $self->name(lc $name);
   $self->next::method(@args);
 
   $guard->commit;
@@ -150,32 +122,14 @@ sub sqlt_deploy_hook {
   my ($self, $sqlt_table) = @_;
 
   $sqlt_table->add_index(name => 'tree_data', fields => ['parent']);
+  $sqlt_table->add_index(name => 'category_index', fields => ['categoryid', 'name']);
 }
-
-sub reply_count {
-  my $self = shift;
-  return $self->children->count;
-}
-
-sub created_at {
-  my $self = shift;
-  my $created_at = $self->_created_at;
-  my $date_time = $created_at->month_name . " "  .
-                  $created_at->day        . ", " .
-                  $created_at->year       . " at " .
-                  $created_at->hms        . " "  .
-                  $created_at->time_zone->name;
-  return $date_time;
-}
-
 
 sub TO_JSON {
   my $self = shift;
   return {
-    reply_count => $self->reply_count,
     children => $self->children_TO_JSON,
     parent   => $self->parent,
-    body     => $self->body,
     %{ $self->next::method },
   }
 }
@@ -185,17 +139,12 @@ sub children_TO_JSON {
   my $children_rs = $self->children;
   my @child_collection;
   push @child_collection, {
-    entryid => $_->entryid,
-    title   => $_->title,
-    display_title => $_->display_title,
+    categoryid => $_->categoryid,
+    name   => $_->name,
     path    => $_->path,
     parent  => $_->parent,
-    body    => $_->body,
-    author  => $_->author,
     created_at => $_->created_at . "",
     updated_at => $_->updated_at . "",
-    published => $_->published,
-    reply_count => $_->reply_count,
     children => $_->children_TO_JSON,
     parent   => $_->parent,
   } for $children_rs->all;
