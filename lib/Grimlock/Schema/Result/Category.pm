@@ -67,7 +67,7 @@ has_many 'category_entries' => 'Grimlock::Schema::Result::CategoryEntry', {
   'foreign.category' => 'self.categoryid'
 };
 
-many_to_many => 'entries' => 'category_entries', 'category';
+many_to_many 'entries' => 'category_entries', 'category';
 
 __PACKAGE__->mk_classdata( path_column => "path" );
 __PACKAGE__->mk_classdata( path_separator => "." );

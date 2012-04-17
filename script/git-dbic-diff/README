@@ -1,0 +1,34 @@
+NAME
+    git-dbic-diff
+
+DESCRIPTION
+    git-dbic-diff is a schema management tool for applications utilizing
+    DBIx::Class and hosted in a git repository. dbic-diff will produce the
+    differences in a DBIx::Class schema between any two git revisions. the
+    diff is presented in the form of SQL statements. when applied to a
+    database deployment matching the source version, these statements will
+    yield the target version.
+
+SYNOPSIS
+        $ git dbic-diff [--db <dbtype>] <class> <treeish1> [<treeish2>]
+        $ git-dbic-diff [--db <dbtype>] <class> <treeish1> [<treeish2>]
+
+    the second form is invoking the script directly rather than via git.
+    this method may be required if you're using perlbrew and git is using
+    the system's perl.
+
+    dbtype is any database type recognized by SQL::Translator. the default
+    is "MySQL".
+
+    if the second treeish is not provided, the diff is executed against the
+    current index. note that modified files must be staged in order to
+    appear in the index.
+
+EXAMPLES
+        $ git dbic-diff MyApp::Schema 3.1.6 HEAD
+        $ git dbic-diff MyApp::Schema HEAD^1 HEAD
+        $ git dbic-diff MyApp::Schema fee00055
+
+AUTHOR
+    Mike Eldridge <diz@cpan.org>
+
