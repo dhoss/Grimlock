@@ -10,7 +10,7 @@ use Grimlock::Schema::Candy -components => [
 
 use HTML::Scrubber;
 
-resultset_class 'Grimlock::Schema::ResultSet::Category';
+#resultset_class 'Grimlock::Schema::ResultSet::Category';
 
 primary_column categoryid => {
   data_type => 'int',
@@ -20,6 +20,12 @@ primary_column categoryid => {
 };
 
 unique_column name => {
+  data_type => 'varchar',
+  size => 200,
+  is_nullable => 0,
+};
+
+unique_column display_name => {
   data_type => 'varchar',
   size => 200,
   is_nullable => 0,
@@ -93,7 +99,7 @@ sub insert {
   # that looks like "hi!!!!" -> "hi----", so we want to remove these
   # unsightly dashes
   $name =~ s#(\W+)$##;
-  $self->name(lc $name);
+  $self->display_name(lc $name);
   $self->next::method(@args);
 
   $guard->commit;

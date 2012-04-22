@@ -17,6 +17,15 @@
         ['herp', 'derp', 'herp@derp.com'],
       ],
     ],
+    'categories' => [
+      'Category' => [
+       ['name'],
+       ['test'],
+       ['test 2'],
+       ['test 3'],
+       ['test 4']
+      ]
+    ]
   }
 };
 
