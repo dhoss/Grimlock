@@ -75,6 +75,11 @@ column published => {
   default_value => 0
 };
 
+column category =>
+  data_type => 'int',
+  is_nullable => 1,
+};
+
 belongs_to 'author' => 'Grimlock::Schema::Result::User', {
   'foreign.userid' => 'self.author',
 };
@@ -90,11 +95,15 @@ has_many 'children' => __PACKAGE__, {
   'foreign.parent' => 'self.entryid'
 };
 
-has_many 'entry_categories' => 'Grimlock::Schema::Result::CategoryEntry', {
+has_many 'entry_categories' => 'Grimlock::Schema::Result::Category', {
+  'foreign.categoryid' => 'self.category'
+};
+
+has_many 'entry_tags' => 'Grimlock::Schema::Result::EntryTag', {
   'foreign.entry' => 'self.entryid'
 };
 
-many_to_many 'categories' => 'entry_categories', 'entry';
+many_to_many 'tags' => 'entry_tags', 'entry';
 
 __PACKAGE__->mk_classdata( path_column => "path" );
 __PACKAGE__->mk_classdata( path_separator => "." );

@@ -1,4 +1,4 @@
-package Grimlock::Schema::Result::CategoryEntry;
+package Grimlock::Schema::Result::Tag;
 
 use Grimlock::Schema::Candy -components => [
   qw(
@@ -9,18 +9,17 @@ use Grimlock::Schema::Candy -components => [
 
 
 
-primary_column category => {
+primary_column tagid => {
   data_type => 'int',
   is_nullable => 0,
   is_auto_increment => 1,
   extra => { unsigned => 1 },
 };
 
-primary_column entry => {
-  data_type => 'int',
+unique_column name => {
+  data_type => 'varchar',
   is_nullable => 0,
-  is_auto_increment => 1,
-  extra => { unsigned => 1 },
+  size => 255
 };
 
 column created_at => {
@@ -37,12 +36,8 @@ column updated_at => {
   set_on_update => 1
 };
 
-belongs_to 'entry' => 'Grimlock::Schema::Result::Entry', {
-  'foreign.entryid' => 'self.entry',
-};
-
-belongs_to 'category' => 'Grimlock::Schema::Result::Category', {
-  'foreign.categoryid' => 'self.category',
+has_many 'tag_entries' => 'Grimlock::Schema::Result::EntryTag', {
+  'foreign.tag' => 'self.tagid'
 };
 
 1;
