@@ -62,6 +62,7 @@ sub create_POST {
   my $entry;
   try {
     $params->{'published'} = 1 if $params->{'published'} eq 'on';
+    $params->{'categories'}{'categoryid'} = delete $params->{'category'};
     $c->log->debug('LOGGED IN AS ' . $user->name);
     $entry = $user->create_entry($params) || die $!;
 
