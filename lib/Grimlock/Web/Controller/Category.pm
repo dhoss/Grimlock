@@ -18,14 +18,14 @@ Catalyst Controller.
 
 sub base : Chained('/api/base') PathPart('') CaptureArgs(0) {}
 
-sub load_category : Chained('base') PathPart('') CaptureArgs(1) {
+sub load_category : Chained('base') PathPart('category') CaptureArgs(1) {
   my ( $self, $c, $category ) = @_;
   my $cat = $c->model('Database::Category')->find(
   {
     name => $category
   },
   {
-    prefetch => 'category_entries'
+    prefetch => 'entries'
   });
 
   $c->stash( category => $cat );
@@ -54,6 +54,23 @@ sub index_GET {
   );
 }
 
+sub browse : Chained('load_category') PathPart('') Args(0) ActionClass('REST') {
+}
+
+sub browse_GET {
+  my ( $self, $c ) = @_;
+  my $category = $c->stash->{'category'};
+  return $self->status_bad_request($c,
+    message => "no such category"
+  ) unless $category;
+
+  return $self->status_ok($c,
+    entity => {
+      category => $category
+    }
+  );
+
+}
 =head1 AUTHOR
 
 ,,,
