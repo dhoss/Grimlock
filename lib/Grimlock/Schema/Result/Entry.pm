@@ -95,7 +95,7 @@ has_many 'children' => __PACKAGE__, {
   'foreign.parent' => 'self.entryid'
 };
 
-has_many 'entry_categories' => 'Grimlock::Schema::Result::Category', {
+belongs_to 'categories' => 'Grimlock::Schema::Result::Category', {
   'foreign.categoryid' => 'self.category'
 };
 

@@ -14,14 +14,9 @@ ok my $entry = Entry->create({
   body      => 'huehuheuehuehue',
   author    => User->find(1),
   published => 1,
+  categories => {
+    name => 'test'
+  }
 }), "created stub entry";
-ok $entry->add_to_entry_categories(
-  { category => Category->find({name => 'test' }) },
-) , "added category";
-ok $entry->add_to_entry_categories(
-  { category => Category->find({name => 'test 2' }) },
-) , "added category";
-my @categories;
-push @categories, $_->category->name for $entry->entry_categories->all;
-is_deeply \@categories, [ 'test', 'test 2' ], "all categories present";
+ok $entry->categories->name eq 'test', "category exists";
 done_testing;
