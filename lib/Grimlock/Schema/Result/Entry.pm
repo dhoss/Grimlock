@@ -75,7 +75,7 @@ column published => {
   default_value => 0
 };
 
-column category =>
+column category => {
   data_type => 'int',
   is_nullable => 1,
 };

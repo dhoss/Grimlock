@@ -20,7 +20,7 @@ sub base : Chained('/api/base') PathPart('') CaptureArgs(0) {}
 
 sub load_category : Chained('base') PathPart('') CaptureArgs(1) {
   my ( $self, $c, $category ) = @_;
-  my $category = $c->model('Database::Category')->find(
+  my $cat = $c->model('Database::Category')->find(
   {
     name => $category
   },
@@ -28,7 +28,7 @@ sub load_category : Chained('base') PathPart('') CaptureArgs(1) {
     prefetch => 'category_entries'
   });
 
-  $c->stash( category => $category );
+  $c->stash( category => $cat );
 }
 
 =head2 index

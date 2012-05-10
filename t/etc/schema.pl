@@ -7,6 +7,7 @@
     'Entry',
     'Role',
     'UserRole',
+    'Category'
   ],
   'fixture_sets' => {
     'basic' => [
