@@ -1,9 +1,14 @@
 [% page.load_scripts_at_top = 1 %]
-
 <h2>Create an entry</h2>
 <div id="draft_save"></div>
 <form method="POST" action="[% c.uri_for_action('/entry/create') %]">
 <div id="form-entry-title">Title: <input type="text" name="title" /></div>
+<div id="form-entry-category">Category:
+  <select name="category">
+    [% FOR category IN categories %]
+    <option value="[% category.categoryid %]">[% category.name %]</option>
+    [% END %]
+  </select>
 <div id="form-entry-body">
 <textarea name="body" rows=15 cols=45></textarea>
 </div>
@@ -13,7 +18,7 @@
 <script type="text/javascript">
 YUI().use("node", "dump", "datasource-function", "datasource-polling", "datasource", function(Y) {
   var saveDraft = function() {
-    
+
     Y.io('/draft', {
       method: 'POST',
       headers: { 'Accept': 'application/json' },
@@ -32,7 +37,7 @@ YUI().use("node", "dump", "datasource-function", "datasource-polling", "datasour
       }
     });
   },
-  id,  
+  id,
   myDataSource = new Y.DataSource.Function({source:saveDraft}),
         request = {
             callback: {

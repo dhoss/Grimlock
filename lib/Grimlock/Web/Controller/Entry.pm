@@ -44,8 +44,10 @@ sub create_GET {
       message => "You must be logged in to create an entry"
     );
   }
-  my $user = $c->user;
-  $self->status_ok( $c, entity => {} );
+
+  $self->status_ok( $c, entity => {
+    categories =>  $c->model('Database::Category')->all
+  });
 }
 
 sub create_POST {
