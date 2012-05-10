@@ -9,14 +9,19 @@ fixtures_ok 'user'
 fixtures_ok 'categories'
   => 'installed the basic fixtures from configuration files';
 
-ok my $entry = Entry->create({
-  title     => 'tits mcgee',
+Entry->create({
+  title     => $_,
   body      => 'huehuheuehuehue',
   author    => User->find(1),
   published => 1,
   categories => {
     name => 'test'
   }
-}), "created stub entry";
+}) for qw{ first second third };
+
+my $entry = Entry->first;
 ok $entry->categories->name eq 'test', "category exists";
+my @entries_in_category;
+push @entries_in_category, $_->title for Category->find({ name => 'test' })->entries->all;
+ok scalar @entries_in_category == 3, "three entries in the 'test' category";
 done_testing;
