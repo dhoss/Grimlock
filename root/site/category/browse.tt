@@ -1,1 +1,5 @@
 <h2>Viewing [% category.name %]</h2>
+<div id="entries-in-category">Entries in this category:</div>
+[% FOR entry IN category.entries %]
+<div><a href="[% c.uri_for_action('/entry/browse', [ entry.title ] )%]">[% entry.title %]</a></div>
+[% END %]
