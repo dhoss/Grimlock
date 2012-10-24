@@ -6,3 +6,4 @@ users [appschema] 2012-10-24T21:53:06Z Devin Austin <dhoss@cpan.org> # creates a
 roles [appschema] 2012-10-24T22:01:21Z Devin Austin <dhoss@cpan.org> # creates a table to hold role names
 user_roles [users roles] 2012-10-24T22:06:49Z Devin Austin <dhoss@cpan.org> # creates a join table for user<->role
 default_user_roles_fixture [users roles user_roles] 2012-10-24T22:14:35Z Devin Austin <dhoss@cpan.org> # inserts default roles
+entries [users] 2012-10-24T22:33:17Z Devin Austin <dhoss@cpan.org> # creates an entries table
