@@ -2,6 +2,8 @@ package Grimlock::App::Web::Controller::Root;
 use Moose;
 use namespace::autoclean;
 
+# ABSTRACT: ROOT WEB APP CONTROLLER
+
 BEGIN { extends 'Catalyst::Controller' }
 
 #

@@ -2,6 +2,8 @@ package Grimlock::App::Web;
 use Moose;
 use namespace::autoclean;
 
+# ABSTRACT THIS AM BASE WEB APPLICATION CLASS
+
 use Catalyst::Runtime 5.80;
 
 # Set flags and add plugins for the application.
