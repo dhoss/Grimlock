@@ -4,3 +4,4 @@
 appschema 2012-10-24T21:43:19Z Devin Austin <devin@rws-mac-devin.local> # App schema for all grimlock objects
 users [appschema] 2012-10-24T21:53:06Z Devin Austin <dhoss@cpan.org> # creates a table to track our users
 roles [appschema] 2012-10-24T22:01:21Z Devin Austin <dhoss@cpan.org> # creates a table to hold role names
+user_roles [users roles] 2012-10-24T22:06:49Z Devin Austin <dhoss@cpan.org> # creates a join table for user<->role
