@@ -181,7 +181,7 @@ __PACKAGE__->belongs_to(
 
 # Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-10-25 13:31:23
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7Iq+UmbA5N5AjzX1A9pH0Q
-
+__PACKAGE__->load_components('MaterializedPath');
 __PACKAGE__->belongs_to( parent_entry  => 'Grimlock::App::Schema::Result::Entry', 'parent_id' );
 __PACKAGE__->has_many(   child_entries => 'Grimlock::App::Schema::Result::Entry', 'parent_id' );
 
