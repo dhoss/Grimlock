@@ -20,7 +20,13 @@ has 'schema' => (
   lifecycle    => 'Singleton',
   block        => sub {
     my $self = shift;
-    Grimlock::App::Schema->connect( @{$self->param('config')->{'Model::Database'}{connect_info}} );
+    my $db_credentials = $self->param('config')->{'Model::Database'}{'connect_info'};
+    Grimlock::App::Schema->connect( 
+      delete $db_credentials->{'dsn'},
+      delete $db_credentials->{'user'}, 
+      delete $db_credentials->{'password'} 
+      { %{ $db_credentials } }
+    );
   }
 );
   
