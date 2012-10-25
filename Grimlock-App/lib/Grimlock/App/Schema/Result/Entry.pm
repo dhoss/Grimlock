@@ -78,6 +78,17 @@ __PACKAGE__->table("entries");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 parent_id
+
+  data_type: 'integer'
+  is_nullable: 1
+
+=head2 parent_path
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -103,6 +114,10 @@ __PACKAGE__->add_columns(
   { data_type => "timestamp with time zone", is_nullable => 1 },
   "owner",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "parent_id",
+  { data_type => "integer", is_nullable => 1 },
+  "parent_path",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -164,8 +179,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-10-25 08:56:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:G/UE7yGFHEpe749lbGliUQ
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-10-25 13:31:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7Iq+UmbA5N5AjzX1A9pH0Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
