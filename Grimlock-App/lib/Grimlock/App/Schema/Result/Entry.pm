@@ -182,6 +182,25 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-10-25 13:31:23
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7Iq+UmbA5N5AjzX1A9pH0Q
 
+__PACKAGE__->belongs_to( parent_entry  => 'Grimlock::App::Schema::Result::Entry', 'parent_id' );
+__PACKAGE__->has_many(   child_entries => 'Grimlock::App::Schema::Result::Entry', 'parent_id' );
+
+sub materialized_path_columns {
+   return {
+      parent => {
+         parent_column                => 'parent_id',
+         parent_fk_column             => 'id',
+         materialized_path_column     => 'parent_path',
+         include_self_in_path         => 1,
+         include_self_in_reverse_path => 1,
+         separator                    => '.',
+         parent_relationship          => 'parent_entry',
+         children_relationship        => 'child_entries',
+         full_path                    => 'ancestors',
+         reverse_full_path            => 'descendants',
+      },
+   }
+}
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
