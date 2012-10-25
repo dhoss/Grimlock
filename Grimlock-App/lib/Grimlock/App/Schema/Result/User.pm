@@ -166,6 +166,15 @@ __PACKAGE__->add_columns(
   }
 );
 
+sub insert {
+  my ( $self, @args ) = @_;
+  my $guard = $self->result_source->schema->txn_scope_guard;
+  $self->next::method(@args);
+  $self->created_related('roles', { name => 'user' });
+  $guard->commit;
+  return $self
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;
