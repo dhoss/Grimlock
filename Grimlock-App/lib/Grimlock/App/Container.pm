@@ -6,7 +6,7 @@ use Path::Class qw(dir);
 
 has 'config' => (
   is     => 'ro',
-  isa    => 'Config::JFDI',
+  isa    => 'HashRef',
   block  => sub {
     my $cfg = Config::JFDI->new( name => 'grimlock', path => dir('.') );
     return $cfg->get;
@@ -20,7 +20,7 @@ has 'schema' => (
   lifecycle    => 'Singleton',
   block        => sub {
     my $self = shift;
-    Grimlock::App::Schema->connect( @{$self->config->{'Model::Database'}{connect_info}} );
+    Grimlock::App::Schema->connect( @{$self->param('config')->{'Model::Database'}{connect_info}} );
   }
 );
   
