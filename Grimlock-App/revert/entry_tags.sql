@@ -2,6 +2,5 @@
 
 BEGIN;
 
--- XXX Add DDLs here.
-
+DROP TABLE grimlock.entry_tags;
 COMMIT;

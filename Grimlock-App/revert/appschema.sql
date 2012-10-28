@@ -2,7 +2,6 @@
 
 BEGIN;
 
--- XXX Add DDLs here.
-DROP SCHEMA grimlock;
+DROP SCHEMA grimlock CASCADE;
 
 COMMIT;
