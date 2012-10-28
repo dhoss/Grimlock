@@ -1,0 +1,3 @@
+BEGIN;
+DROP USER grimlock CASCADE;
+COMMIT;
