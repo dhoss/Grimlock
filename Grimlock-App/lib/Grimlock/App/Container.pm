@@ -8,7 +8,7 @@ has 'config' => (
   is     => 'ro',
   isa    => 'HashRef',
   block  => sub {
-    my $cfg = Config::JFDI->new( name => 'grimlock', path => dir('.') );
+    my $cfg = Config::JFDI->new( name => 'grimlock_app_web', path => dir('.') );
     return $cfg->get;
   }
 );
@@ -24,8 +24,8 @@ has 'schema' => (
     Grimlock::App::Schema->connect( 
       delete $db_credentials->{'dsn'},
       delete $db_credentials->{'user'}, 
-      delete $db_credentials->{'password'} 
-      { %{ $db_credentials } }
+      delete $db_credentials->{'password'},
+      $db_credentials
     );
   }
 );
