@@ -2,6 +2,5 @@
 
 BEGIN;
 
--- XXX Add DDLs here.
-
+REVOKE ALL PERMISSIONS TO USER grimlock;
 COMMIT;
