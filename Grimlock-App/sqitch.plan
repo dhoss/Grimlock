@@ -11,3 +11,4 @@ entry_tags [entries] 2012-10-24T22:37:46Z Devin Austin <dhoss@cpan.org> # create
 sessions [users] 2012-10-25T17:37:40Z Devin Austin <dhoss@cpan.org> # creates the sessions table
 add_math_path_to_entries [entries] 2012-10-25T20:23:22Z Devin Austin <dhoss@cpan.org> # alter the entries table to support materialized path queries
 grimlock_user [appschema] 2012-10-28T22:39:45Z Devin Austin <dhoss@cpan.org> # add default grimlock user to postgres
+grimlock_test_schema 2012-10-28T23:03:31Z Devin Austin <dhoss@cpan.org> # creates a test schema for grimlock
