@@ -6,8 +6,8 @@ BEGIN;
 
 -- XXX Add DDLs here.
 CREATE TABLE grimlock.user_roles(
-  "user" INT NOT NULL REFERENCES grimlock.users(id) ON DELETE CASCADE,
-  role INT NOT NULL REFERENCES grimlock.roles(id) ON DELETE CASCADE,
+  "user" INT NOT NULL REFERENCES grimlock.users(id),
+  role INT NOT NULL REFERENCES grimlock.roles(id),
   PRIMARY KEY("user", role)  
 );
 
