@@ -22,17 +22,21 @@ extends 'DBIx::Class::Core';
 
 =over 4
 
-=item * L<DBIx::Class::InflateColumn::DateTime>
-
 =item * L<DBIx::Class::TimeStamp>
 
-=item * L<DBIx::Class::EncodedColumn>
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=item * L<DBIx::Class::EncodedColumn::Crypt::Eksblowfish::Bcrypt>
 
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp", "EncodedColumn");
+__PACKAGE__->load_components(
+  "TimeStamp",
+  "InflateColumn::DateTime",
+  "EncodedColumn::Crypt::Eksblowfish::Bcrypt",
+);
 
 =head1 TABLE: C<users>
 
@@ -153,8 +157,8 @@ Composing rels: L</user_roles> -> role
 __PACKAGE__->many_to_many("roles", "user_roles", "role");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-10-25 08:56:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4qtj+vV/ISbO3dDmDTVV6A
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-10-31 13:15:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iogq26oOpQmJYzz72re2zw
 __PACKAGE__->add_columns(
   'password' => {
     data_type           => 'CHAR',
