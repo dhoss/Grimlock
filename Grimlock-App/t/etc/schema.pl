@@ -18,7 +18,12 @@
         [ 'name', 'password' ],
         [ 'herschel', 'shit turd rats' ], 
       ],
-
-    ]
+     ],
+    'entry' => [
+      'Entry' => [
+        ['title'], ['body'], ['owner'],
+        ['test entry'], ['huehuehuehuehuehue'], [1],
+      ],
+    ],
   }
 }

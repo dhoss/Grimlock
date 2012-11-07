@@ -167,7 +167,20 @@ __PACKAGE__->add_columns(
     encode_class        => 'Crypt::Eksblowfish::Bcrypt',
     encode_args         => { key_nul => 0, cost => 8 },
     encode_check_method => 'check_password',
-  }
+  },
+  'created_on',
+  {
+    data_type     => "timestamp with time zone",
+    default_value => \"current_timestamp",
+    is_nullable   => 0,
+    set_on_create => 1,
+    original      => { default_value => \"now()" },
+  },
+  "updated_on",
+  { data_type => "timestamp with time zone", 
+    is_nullable => 1,
+    set_on_create => 1,
+    set_on_update => 1 },
 );
 
 sub insert {
