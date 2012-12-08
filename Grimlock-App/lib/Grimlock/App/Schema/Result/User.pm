@@ -159,6 +159,9 @@ __PACKAGE__->many_to_many("roles", "user_roles", "role");
 
 # Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-10-31 13:15:38
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iogq26oOpQmJYzz72re2zw
+
+with 'Grimlock::TraitFor::User::Credentials';
+
 __PACKAGE__->add_columns(
   'password' => {
     data_type           => 'CHAR',
@@ -177,10 +180,12 @@ __PACKAGE__->add_columns(
     original      => { default_value => \"now()" },
   },
   "updated_on",
-  { data_type => "timestamp with time zone", 
-    is_nullable => 1,
+  { 
+    data_type     => "timestamp with time zone", 
+    is_nullable   => 1,
     set_on_create => 1,
-    set_on_update => 1 },
+    set_on_update => 1 
+  },
 );
 
 sub insert {
@@ -191,6 +196,9 @@ sub insert {
   $guard->commit;
   return $self
 }
+
+
+
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
