@@ -4,7 +4,7 @@ package Grimlock::TraitFor::User::Credentials;
 
 use Moose::Role;
 use namespace::autoclean;
-use Text::Password::Pronouncable::RandomCase;
+use Text::Password::Pronounceable::RandomCase;
 
 requires 'user';
 
