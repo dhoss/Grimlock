@@ -22,21 +22,15 @@ extends 'DBIx::Class::Core';
 
 =over 4
 
-=item * L<DBIx::Class::TimeStamp>
-
 =item * L<DBIx::Class::InflateColumn::DateTime>
 
-=item * L<DBIx::Class::EncodedColumn::Crypt::Eksblowfish::Bcrypt>
+=item * L<DBIx::Class::TimeStamp>
 
 =back
 
 =cut
 
-__PACKAGE__->load_components(
-  "TimeStamp",
-  "InflateColumn::DateTime",
-  "EncodedColumn::Crypt::Eksblowfish::Bcrypt",
-);
+__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
 =head1 TABLE: C<entries>
 
@@ -51,7 +45,7 @@ __PACKAGE__->table("entries");
   data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
-  sequence: 'grimlock.entries_id_seq'
+  sequence: 'entries_id_seq'
 
 =head2 title
 
@@ -85,6 +79,7 @@ __PACKAGE__->table("entries");
 =head2 parent_id
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
 =head2 parent_path
@@ -101,7 +96,7 @@ __PACKAGE__->add_columns(
     data_type         => "integer",
     is_auto_increment => 1,
     is_nullable       => 0,
-    sequence          => "grimlock.entries_id_seq",
+    sequence          => "entries_id_seq",
   },
   "title",
   { data_type => "varchar", is_nullable => 0, size => 255 },
@@ -119,7 +114,7 @@ __PACKAGE__->add_columns(
   "owner",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "parent_id",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "parent_path",
   { data_type => "varchar", is_nullable => 1, size => 255 },
 );
@@ -152,6 +147,21 @@ __PACKAGE__->add_unique_constraint("entries_title_key", ["title"]);
 
 =head1 RELATIONS
 
+=head2 entries
+
+Type: has_many
+
+Related object: L<Grimlock::App::Schema::Result::Entry>
+
+=cut
+
+__PACKAGE__->has_many(
+  "entries",
+  "Grimlock::App::Schema::Result::Entry",
+  { "foreign.parent_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 entry_tags
 
 Type: has_many
@@ -182,15 +192,42 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
+=head2 parent
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-10-31 13:15:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zYmN3OaoTifwDvW1/YGRew
+Type: belongs_to
+
+Related object: L<Grimlock::App::Schema::Result::Entry>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "parent",
+  "Grimlock::App::Schema::Result::Entry",
+  { id => "parent_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-12-08 14:41:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NiEyAYXyA0nVmIkIP68gFg
 
 
 __PACKAGE__->load_components('MaterializedPath');
 __PACKAGE__->belongs_to( parent_entry  => 'Grimlock::App::Schema::Result::Entry', 'parent_id' );
 __PACKAGE__->has_many(   child_entries => 'Grimlock::App::Schema::Result::Entry', 'parent_id' );
 
+# not sure why this isn't working
+__PACKAGE__->belongs_to(
+  "owner",
+  "Grimlock::App::Schema::Result::User",
+  { id => "owner" },
+  { is_deferrable => 0, on_delete => "CASCADE", on_update => "CASCADE" },
+);
 
 sub materialized_path_columns {
    return {

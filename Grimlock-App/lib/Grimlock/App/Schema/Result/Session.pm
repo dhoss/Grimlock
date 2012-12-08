@@ -22,21 +22,15 @@ extends 'DBIx::Class::Core';
 
 =over 4
 
-=item * L<DBIx::Class::TimeStamp>
-
 =item * L<DBIx::Class::InflateColumn::DateTime>
 
-=item * L<DBIx::Class::EncodedColumn::Crypt::Eksblowfish::Bcrypt>
+=item * L<DBIx::Class::TimeStamp>
 
 =back
 
 =cut
 
-__PACKAGE__->load_components(
-  "TimeStamp",
-  "InflateColumn::DateTime",
-  "EncodedColumn::Crypt::Eksblowfish::Bcrypt",
-);
+__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
 =head1 TABLE: C<sessions>
 
@@ -86,8 +80,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-10-31 13:15:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AZfZKL5FHzMtEEqrixrPdw
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-12-08 14:41:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Y6H1ZLJEn0arkMRjNUdE4g
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

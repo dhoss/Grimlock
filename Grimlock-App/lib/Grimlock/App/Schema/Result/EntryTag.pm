@@ -22,21 +22,15 @@ extends 'DBIx::Class::Core';
 
 =over 4
 
-=item * L<DBIx::Class::TimeStamp>
-
 =item * L<DBIx::Class::InflateColumn::DateTime>
 
-=item * L<DBIx::Class::EncodedColumn::Crypt::Eksblowfish::Bcrypt>
+=item * L<DBIx::Class::TimeStamp>
 
 =back
 
 =cut
 
-__PACKAGE__->load_components(
-  "TimeStamp",
-  "InflateColumn::DateTime",
-  "EncodedColumn::Crypt::Eksblowfish::Bcrypt",
-);
+__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
 =head1 TABLE: C<entry_tags>
 
@@ -51,7 +45,7 @@ __PACKAGE__->table("entry_tags");
   data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
-  sequence: 'grimlock.entry_tags_id_seq'
+  sequence: 'entry_tags_id_seq'
 
 =head2 name
 
@@ -73,7 +67,7 @@ __PACKAGE__->add_columns(
     data_type         => "integer",
     is_auto_increment => 1,
     is_nullable       => 0,
-    sequence          => "grimlock.entry_tags_id_seq",
+    sequence          => "entry_tags_id_seq",
   },
   "name",
   { data_type => "varchar", is_nullable => 1, size => 200 },
@@ -111,8 +105,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-10-31 13:15:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/QVoqVCLNutKcpOLIEbvog
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-12-08 14:41:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R47BQaXrtg8UQpSVj61/yA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

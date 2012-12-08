@@ -22,21 +22,15 @@ extends 'DBIx::Class::Core';
 
 =over 4
 
-=item * L<DBIx::Class::TimeStamp>
-
 =item * L<DBIx::Class::InflateColumn::DateTime>
 
-=item * L<DBIx::Class::EncodedColumn::Crypt::Eksblowfish::Bcrypt>
+=item * L<DBIx::Class::TimeStamp>
 
 =back
 
 =cut
 
-__PACKAGE__->load_components(
-  "TimeStamp",
-  "InflateColumn::DateTime",
-  "EncodedColumn::Crypt::Eksblowfish::Bcrypt",
-);
+__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
 =head1 TABLE: C<users>
 
@@ -51,7 +45,7 @@ __PACKAGE__->table("users");
   data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
-  sequence: 'grimlock.users_id_seq'
+  sequence: 'users_id_seq'
 
 =head2 name
 
@@ -85,7 +79,7 @@ __PACKAGE__->add_columns(
     data_type         => "integer",
     is_auto_increment => 1,
     is_nullable       => 0,
-    sequence          => "grimlock.users_id_seq",
+    sequence          => "users_id_seq",
   },
   "name",
   { data_type => "varchar", is_nullable => 0, size => 255 },
@@ -157,8 +151,8 @@ Composing rels: L</user_roles> -> role
 __PACKAGE__->many_to_many("roles", "user_roles", "role");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-10-31 13:15:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iogq26oOpQmJYzz72re2zw
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-12-08 14:41:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:G9aTaZB49/ELETw2JDnyIg
 
 has 'user' => (
   is       => 'ro',
