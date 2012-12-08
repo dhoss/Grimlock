@@ -18,7 +18,7 @@ sub reset_password {
 
 sub generate_password {
   my $self = shift;
-  return Text::Password::Pronouncable::RandomCase->generate(6, 10);
+  return Text::Password::Pronounceable::RandomCase->generate(6, 10);
 }
 
 1;
