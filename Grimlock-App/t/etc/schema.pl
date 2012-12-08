@@ -21,8 +21,8 @@
      ],
     'entry' => [
       'Entry' => [
-        ['title'], ['body'], ['owner'],
-        ['test entry'], ['huehuehuehuehuehue'], [1],
+        ['title', 'body', 'owner'],
+        ['test entry', 'huehuehuehuehuehue', 1],
       ],
     ],
   }

@@ -14,3 +14,4 @@ grimlock_user [appschema] 2012-10-28T22:39:45Z Devin Austin <dhoss@cpan.org> # a
 grimlock_test_schema 2012-10-28T23:03:31Z Devin Austin <dhoss@cpan.org> # creates a test schema for grimlock
 grimlock_test_user [grimlock_test_schema] 2012-10-28T23:05:52Z Devin Austin <dhoss@cpan.org> # creates a test user
 user_on_delete_cascade [user_roles] 2012-10-30T02:54:01Z Devin Austin <dhoss@cpan.org> # adds on delete cascade to user_roles foreign key
+entry_on_delete_cascade [users] 2012-12-08T22:13:17Z Devin Austin <dhoss@cpan.org> # updates entries to on cascade delete

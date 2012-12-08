@@ -1,7 +1,7 @@
 package Grimlock::App::Schema::Result::Entry::Test;
 use strict;
 use warnings;
-use Fennec::Declare test_sort => 'ordered';
+use Fennec::Declare; # test_sort => 'ordered';
 use Data::Dump qw( ddx dump );
 use Test::DBIx::Class qw(:resultsets);
 
