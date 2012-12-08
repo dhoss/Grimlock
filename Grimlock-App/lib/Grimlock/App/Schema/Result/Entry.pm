@@ -185,9 +185,12 @@ __PACKAGE__->belongs_to(
 
 # Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-10-31 13:15:38
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zYmN3OaoTifwDvW1/YGRew
+
+
 __PACKAGE__->load_components('MaterializedPath');
 __PACKAGE__->belongs_to( parent_entry  => 'Grimlock::App::Schema::Result::Entry', 'parent_id' );
 __PACKAGE__->has_many(   child_entries => 'Grimlock::App::Schema::Result::Entry', 'parent_id' );
+
 
 sub materialized_path_columns {
    return {
