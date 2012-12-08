@@ -160,6 +160,13 @@ __PACKAGE__->many_to_many("roles", "user_roles", "role");
 # Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-10-31 13:15:38
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iogq26oOpQmJYzz72re2zw
 
+has 'user' => (
+  is       => 'ro',
+  lazy     => 1,
+  required => 1,
+  default  => sub { shift }
+);
+
 with 'Grimlock::TraitFor::User::Credentials';
 
 __PACKAGE__->add_columns(
